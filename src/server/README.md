@@ -1,6 +1,6 @@
-## Description
+# Description
 
-Flask translation server, to serve as the backend.
+Flask server translation service.
 
 </br>
 
@@ -12,22 +12,30 @@ Direct download for relevant models:
 - [Spanish => English](https://argos-net.com/v1/translate-es_en-1_9.argosmodel).
 - [English => Spanish](https://argos-net.com/v1/translate-en_es-1_0.argosmodel).
 
-Models should be placed in the *./src/server/argosmodels* folder
+> Models should be placed in the *./src/server/argosmodels* folder
 
 </br>
 
 ## Running PyInstaller
 
 ```bash
+
 pip install pyinstaller
 
-pyinstaller ./src/server/server.py --onefile --workpath ./src/server/build --specpath ./src/server --clean --windowed --name translate_server
+# Command to create binary (.EXE on windows)
+pyinstaller ./src/server/server.py
+    --onefile
+    --workpath ./src/server/build
+    --specpath ./src/server
+    --clean
+    --windowed
+    --name translate_server
 
 ```
 
 </br>
 
 ## Citations:
-
-- [Argos Translate](https://github.com/argosopentech/argos-translate)
-- [LibreTranslate](https://github.com/LibreTranslate)
+- [Argos Translate](https://github.com/argosopentech/argos-translate) - Open-source offline translation library written in
+  Python.
+- [LibreTranslate](https://github.com/LibreTranslate) - Free and Open-source Machine Translation API, entirely self-hosted.
