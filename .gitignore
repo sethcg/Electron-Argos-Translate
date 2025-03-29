@@ -27,3 +27,10 @@ node_modules/
 
 # Electron-Forge
 out/
+
+# PyInstaller
+dist/
+build/
+*.spec
+**/__pycache__
+*.argosmodel
