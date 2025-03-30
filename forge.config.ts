@@ -12,6 +12,7 @@ const config: ForgeConfig = {
     asar: true,
     icon: '.src/assets/icons/icon',
     executableName: 'spanish-dictionary-app',
+    extraResource: ['dist/translate_server.exe'],
   },
   rebuildConfig: {},
   makers: [

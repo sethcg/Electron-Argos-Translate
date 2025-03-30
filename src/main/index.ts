@@ -1,6 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import path from 'node:path'
 import started from 'electron-squirrel-startup'
+
+import path from 'node:path'
+import { ChildProcess, execFile } from 'node:child_process'
 
 // TO-DO: look into self-hosted: LibreTranslation
 //    Maybe a background server to Express running that?
@@ -22,7 +24,8 @@ const assetFolder = path.join(
 const isDarwin = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
-let mainWindow: BrowserWindow | null = null
+let mainWindow: BrowserWindow | undefined
+let flaskServer: ChildProcess | undefined
 
 // HANDLE CREATING/REMOVING SHORTCUTS ON WINDOWS WHEN INSTALLING/UNINSTALLING
 if (started) {
@@ -74,6 +77,17 @@ const createMainWindow = () => {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/windows/main/index.html`))
   }
+
+  // LOAD FLASK SERVER
+  let backend = path.join(process.resourcesPath, 'translate_server.exe')
+  if (isDevelopment) {
+    backend = path.join(__dirname, './resources/translate_server.exe')
+  }
+  flaskServer = execFile(backend, ['--host', '0.0.0.0', '--port', '8080'], (error, stdout, stderr) => {
+    if (error || stdout || stderr) {
+      console.log(`${error}\n${stdout}\n${stderr}`);
+    }
+  });
 }
 
 // This method will be called when Electron has finished
@@ -83,7 +97,7 @@ app.on('ready', () => {
   ipcMain.handle(
     'handleTranslate:translateEnglishToSpanish',
     async (event, value: string): Promise<string | undefined> => {
-      if (mainWindow !== null) {
+      if (mainWindow) {
         if (event.sender !== mainWindow.webContents) return
         if (value) {
           return translate(value, { from: 'en', to: 'es' })
@@ -97,7 +111,7 @@ app.on('ready', () => {
   ipcMain.handle(
     'handleTranslate:translateSpanishToEnglish',
     async (event, value: string): Promise<string | undefined> => {
-      if (mainWindow !== null) {
+      if (mainWindow) {
         if (event.sender !== mainWindow.webContents) return
         if (value) {
           return translate(value, { from: 'es', to: 'en' })
@@ -110,14 +124,14 @@ app.on('ready', () => {
 
   // Handle main window ipc
   ipcMain.on('mainWindow:minimize', event => {
-    if (mainWindow !== null) {
+    if (mainWindow) {
       if (event.sender !== mainWindow.webContents) return
       mainWindow.minimize()
     }
   })
 
   ipcMain.on('mainWindow:maximize', event => {
-    if (mainWindow !== null) {
+    if (mainWindow) {
       if (event.sender !== mainWindow.webContents) return
 
       mainWindow.maximize()
@@ -125,14 +139,14 @@ app.on('ready', () => {
   })
 
   ipcMain.on('mainWindow:restore', event => {
-    if (mainWindow !== null) {
+    if (mainWindow) {
       if (event.sender !== mainWindow.webContents) return
       mainWindow.restore()
     }
   })
 
   ipcMain.on('mainWindow:close', event => {
-    if (mainWindow !== null) {
+    if (mainWindow) {
       if (event.sender !== mainWindow.webContents) return
 
       if (isDarwin) {
@@ -150,7 +164,16 @@ app.on('ready', () => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (!isDarwin) app.quit()
+  if (isDarwin) return;
+    
+  app.quit()
+})
+
+app.on('before-quit', () => {
+  // END FLASK SERVER BEFORE QUITTING
+  if(flaskServer) {
+    flaskServer.kill()
+  }
 })
 
 app.on('activate', () => {

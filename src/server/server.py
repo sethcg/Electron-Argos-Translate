@@ -1,5 +1,4 @@
 import re
-import os
 import argparse
 
 from flask import Flask
@@ -91,14 +90,11 @@ def translate():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Python Flask Server")
-    parser.add_argument("--host", type = str, default = "127.0.0.1")
-    parser.add_argument("--port", type = int, default = 5000)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type = str, default = "0.0.0.0")
+    parser.add_argument("--port", type = int, default = 8080)
     args = parser.parse_args()
     
-    # USE DEBUG FOR DEVELOPMENT:
-    # app.run(host="127.0.0.1", port = args.port)
-
     # USE WAITRESS FOR PRODUCTION:
     from waitress import serve
     serve(app, host = args.host, port = args.port, threads = 1)
