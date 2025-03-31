@@ -8,7 +8,7 @@ export default defineConfig({
   },
   plugins: [
     viteStaticCopy({
-      targets: [{ src: './dist/translate_server.exe', dest: 'resources'}]
-    })
-  ]
+      targets: [{ src: './dist/translate_server.exe', dest: 'resources' }],
+    }),
+  ],
 })

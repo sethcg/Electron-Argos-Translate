@@ -1,23 +1,23 @@
-import { app, BrowserWindow, ipcMain} from 'electron'
+import path from 'node:path'
+import { app, BrowserWindow } from 'electron'
 import started from 'electron-squirrel-startup'
 
-import path from 'node:path'
-import { ChildProcess, execFile } from 'node:child_process'
-import fetch, { Response, FetchError } from 'node-fetch';
+import { windowEvents } from './ipc/window'
+import { TranslateServer } from './ipc/api'
 
-import { TranslateResponse } from '~shared/types';
+// TO-DO: Try implementing 'translate' to get different translation options;
+// allowing for more/better alternative translations
+/*
+import translate from 'translate'
+translate.engine = 'google'
 
-// TO-DO: look into self-hosted: LibreTranslation
-//    Maybe a background server to Express running that?
-// import translate from 'translate'
-// translate.engine = 'google'
+import { Translate } from "translate";
 
-// import { Translate } from "translate";
-
-// const googleTranslate = Translate({ engine: "google", key: "..." });
-// const deepLTranslate = Translate({ engine: "deepl", key: "..." });
-// const yandexTranslate = Translate({ engine: "yandex", key: "..." });
-// const libreTranslate = Translate({ engine: "libre", url: "", key: "..." });
+const googleTranslate = Translate({ engine: "google", key: "..." });
+const deepLTranslate = Translate({ engine: "deepl", key: "..." });
+const yandexTranslate = Translate({ engine: "yandex", key: "..." });
+const libreTranslate = Translate({ engine: "libre", url: "", key: "..." });
+*/
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string
 
@@ -27,23 +27,19 @@ const assetFolder = path.join(
 const isDarwin = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
-let mainWindow: BrowserWindow | undefined
-let flaskServer: ChildProcess | undefined
-
 // HANDLE CREATING/REMOVING SHORTCUTS ON WINDOWS WHEN INSTALLING/UNINSTALLING
 if (started) {
   app.quit()
 }
 
-const createMainWindow = () => {
-  // CREATE THE BROWSER WINDOW
-  mainWindow = new BrowserWindow({
+const createMainWindow = (): BrowserWindow => {
+  const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     minWidth: 156,
     minHeight: 180,
     icon: getIconPath('icon.png'),
-    show: false,
+    // show: false,
     // HIDE TITLE BAR AND FRAME
     // frame: false,
     // titleBarStyle: "hidden",
@@ -61,19 +57,6 @@ const createMainWindow = () => {
     autoHideMenuBar: true,
   })
 
-  mainWindow.on('ready-to-show', () => {
-    if (!mainWindow) throw new Error('No main window.')
-
-    mainWindow.show()
-
-    // OPEN DEV TOOLS
-    if (isDevelopment) {
-      mainWindow.webContents.openDevTools({
-        mode: 'detach',
-      })
-    }
-  })
-
   // LOAD INDEX.HTML
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
@@ -81,116 +64,34 @@ const createMainWindow = () => {
     mainWindow.loadFile(path.join(__dirname, `../renderer/windows/main/index.html`))
   }
 
-  // LOAD FLASK SERVER
-  let backend = path.join(process.resourcesPath, 'translate_server.exe')
-  if (isDevelopment) {
-    backend = path.join(__dirname, './resources/translate_server.exe')
-  }
-  // flaskServer = execFile(backend, ['--host', '127.0.0.1', '--port', '8080'], (error, stdout, stderr) => {
-    flaskServer = execFile(backend, ['--port', '8080'], (error, stdout, stderr) => {
-    if (error || stdout || stderr) {
-      console.log(`${error}\n${stdout}\n${stderr}`);
-    }
-  })
+  // OPEN DEV TOOLS ON LAUNCH
+  if (isDevelopment) mainWindow.webContents.openDevTools()
+
+  return mainWindow
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
+app.whenReady().then(() => {
+  const mainWindow = createMainWindow()
+  const translateServer = new TranslateServer(isDevelopment, '127.0.0.1', '8080')
 
+  // HANDLE IPC EVENTS
+  windowEvents(mainWindow, isDarwin)
+  translateServer.translateEvents()
 
-  ipcMain.handle(
-    'flaskApi:translate',
-    async (event: Electron.IpcMainInvokeEvent, source: string, target: string, value: string): Promise<TranslateResponse | FetchError> => {
-      console.log(BrowserWindow.getAllWindows())
-
-      // CHECK IF THE MAIN WINDOW EXISTS, AND THE EVENT CAME FROM THE MAIN WINDOW
-      if (!mainWindow || event.sender !== mainWindow.webContents) { 
-        return new FetchError('Internal error with the Window.', 'Error');
-      }
-
-      // CHECK IF THE SOURCE AND TARGET ARE VALID, LANGUAGE ISO CODES
-      const validISO = ['en', 'es'];
-      if(!validISO.includes(source) || !validISO.includes(target)) {
-        return new FetchError('Invalid source or target.', 'Error');
-      }
-      
-      const params = new URLSearchParams();
-      params.append('source', 'en');
-      params.append('target', 'es');
-      params.append('q', value);
-
-      return await fetch(`http://127.0.0.1:8080/api/translate?${params}`)
-      .then(async (response: Response): Promise<TranslateResponse> => {
-        return await response.json() as Promise<TranslateResponse>;
-      })
-      .catch((error: FetchError) => {
-        console.log(error);
-        return error
-      });
-    }
-  )
-
-  // Handle main window ipc
-  ipcMain.on('mainWindow:minimize', event => {
-    if (mainWindow) {
-      if (event.sender !== mainWindow.webContents) return
-      mainWindow.minimize()
-    }
+  // CLOSE FLASK SERVER BEFORE CLOSING APPLICATION
+  app.on('before-quit', async () => {
+    translateServer.close()
   })
-
-  ipcMain.on('mainWindow:maximize', event => {
-    if (mainWindow) {
-      if (event.sender !== mainWindow.webContents) return
-
-      mainWindow.maximize()
-    }
-  })
-
-  ipcMain.on('mainWindow:restore', event => {
-    if (mainWindow) {
-      if (event.sender !== mainWindow.webContents) return
-      mainWindow.restore()
-    }
-  })
-
-  ipcMain.on('mainWindow:close', event => {
-    if (mainWindow) {
-      if (event.sender !== mainWindow.webContents) return
-
-      if (isDarwin) {
-        mainWindow.hide()
-      } else {
-        app.quit()
-      }
-    }
-  })
-
-  createMainWindow()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (isDarwin) return;
-    
-  app.quit()
-})
-
-app.on('before-quit', async () => {
-  // END FLASK SERVER BEFORE QUITTING
-  if(flaskServer && flaskServer.pid) {
-    await fetch('http://127.0.0.1:8080/api/pid')
-      .then(async (response) => {
-        const pid = await response.json() as number;
-
-        console.log(pid)
-        process.kill(pid)
-      });
-    flaskServer.kill()
-  }
+  if (!isDarwin) app.quit()
 })
 
 app.on('activate', () => {
@@ -201,7 +102,7 @@ app.on('activate', () => {
   }
 })
 
-function getIconPath(icon: string) {
+const getIconPath = (icon: string) => {
   return path.join(assetFolder, `${process.env.NODE_ENV === 'development' ? 'icons/' : ''}${icon}`)
 }
 
