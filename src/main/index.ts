@@ -1,13 +1,16 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain} from 'electron'
 import started from 'electron-squirrel-startup'
 
 import path from 'node:path'
 import { ChildProcess, execFile } from 'node:child_process'
+import fetch, { Response, FetchError } from 'node-fetch';
+
+import { TranslateResponse } from '~shared/types';
 
 // TO-DO: look into self-hosted: LibreTranslation
 //    Maybe a background server to Express running that?
-import translate from 'translate'
-translate.engine = 'google'
+// import translate from 'translate'
+// translate.engine = 'google'
 
 // import { Translate } from "translate";
 
@@ -83,42 +86,49 @@ const createMainWindow = () => {
   if (isDevelopment) {
     backend = path.join(__dirname, './resources/translate_server.exe')
   }
-  flaskServer = execFile(backend, ['--host', '0.0.0.0', '--port', '8080'], (error, stdout, stderr) => {
+  // flaskServer = execFile(backend, ['--host', '127.0.0.1', '--port', '8080'], (error, stdout, stderr) => {
+    flaskServer = execFile(backend, ['--port', '8080'], (error, stdout, stderr) => {
     if (error || stdout || stderr) {
       console.log(`${error}\n${stdout}\n${stderr}`);
     }
-  });
+  })
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  ipcMain.handle(
-    'handleTranslate:translateEnglishToSpanish',
-    async (event, value: string): Promise<string | undefined> => {
-      if (mainWindow) {
-        if (event.sender !== mainWindow.webContents) return
-        if (value) {
-          return translate(value, { from: 'en', to: 'es' })
-        } else {
-          return
-        }
-      }
-    }
-  )
+
 
   ipcMain.handle(
-    'handleTranslate:translateSpanishToEnglish',
-    async (event, value: string): Promise<string | undefined> => {
-      if (mainWindow) {
-        if (event.sender !== mainWindow.webContents) return
-        if (value) {
-          return translate(value, { from: 'es', to: 'en' })
-        } else {
-          return
-        }
+    'flaskApi:translate',
+    async (event: Electron.IpcMainInvokeEvent, source: string, target: string, value: string): Promise<TranslateResponse | FetchError> => {
+      console.log(BrowserWindow.getAllWindows())
+
+      // CHECK IF THE MAIN WINDOW EXISTS, AND THE EVENT CAME FROM THE MAIN WINDOW
+      if (!mainWindow || event.sender !== mainWindow.webContents) { 
+        return new FetchError('Internal error with the Window.', 'Error');
       }
+
+      // CHECK IF THE SOURCE AND TARGET ARE VALID, LANGUAGE ISO CODES
+      const validISO = ['en', 'es'];
+      if(!validISO.includes(source) || !validISO.includes(target)) {
+        return new FetchError('Invalid source or target.', 'Error');
+      }
+      
+      const params = new URLSearchParams();
+      params.append('source', 'en');
+      params.append('target', 'es');
+      params.append('q', value);
+
+      return await fetch(`http://127.0.0.1:8080/api/translate?${params}`)
+      .then(async (response: Response): Promise<TranslateResponse> => {
+        return await response.json() as Promise<TranslateResponse>;
+      })
+      .catch((error: FetchError) => {
+        console.log(error);
+        return error
+      });
     }
   )
 
@@ -169,9 +179,16 @@ app.on('window-all-closed', () => {
   app.quit()
 })
 
-app.on('before-quit', () => {
+app.on('before-quit', async () => {
   // END FLASK SERVER BEFORE QUITTING
-  if(flaskServer) {
+  if(flaskServer && flaskServer.pid) {
+    await fetch('http://127.0.0.1:8080/api/pid')
+      .then(async (response) => {
+        const pid = await response.json() as number;
+
+        console.log(pid)
+        process.kill(pid)
+      });
     flaskServer.kill()
   }
 })

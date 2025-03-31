@@ -12,7 +12,7 @@ function App() {
   async function handleClick(): Promise<void> {
     let translation: string | undefined = undefined
     if (inputRef.current) {
-      translation = await window.translate.translateEnglishToSpanish(inputRef.current.value)
+      translation = await window.api.translate('en', 'es', inputRef.current.value)
       if (translation) {
         console.log(translation)
       }

@@ -6,9 +6,8 @@ export declare global {
       restoreWindow(): void
       closeWindow(): void
     }
-    translate: {
-      translateEnglishToSpanish(value: string): Promise<string | undefined>
-      translateSpanishToEnglish(value: string): Promise<string | undefined>
+    api: {
+      translate(source: string, target: string, value: string): Promise<TranslateResponse | FetchError>
     }
   }
 }

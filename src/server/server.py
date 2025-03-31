@@ -1,6 +1,8 @@
 import re
 import argparse
 
+from os import getpid
+
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -14,6 +16,11 @@ from helpers import filter_unique
 from html import unescape
 
 app = Flask(__name__)
+
+@app.route('/api/pid')
+def root():
+    # OUTPUT THE PROCESS ID (TO MANUALLY CLOSE WHEN ELECTRON CLOSES)
+    return str(getpid())
 
 # EXAMPLE ROUTE: "/api/install?path="C:/Users/[USER]/src/server/argosmodels/""
 @app.route('/api/install')
@@ -88,10 +95,9 @@ def translate():
     except:
         return "Error"
 
-
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--host", type = str, default = "0.0.0.0")
+    parser.add_argument("--host", type = str, default = "127.0.0.1")
     parser.add_argument("--port", type = int, default = 8080)
     args = parser.parse_args()
     
