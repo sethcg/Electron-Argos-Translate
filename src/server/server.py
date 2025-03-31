@@ -17,13 +17,18 @@ from html import unescape
 
 app = Flask(__name__)
 
+# FOR PROFILING THE SERVER:
+# from werkzeug.middleware.profiler import ProfilerMiddleware
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=('server/server.py',))
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=("time", "calls"), restrictions=[20])
+
 @app.route('/api/pid')
 def root():
     # OUTPUT THE PROCESS ID (TO MANUALLY CLOSE WHEN ELECTRON CLOSES)
     return str(getpid())
 
 # EXAMPLE ROUTE: "/api/install?path="C:/Users/[USER]/src/server/argosmodels/""
-@app.route('/api/install')
+@app.route('/api/install', methods=['POST'])
 def install():
     try:
         # PATH TO GET '.argosmodel' FILES,
@@ -101,9 +106,14 @@ def main():
     parser.add_argument("--port", type = int, default = 8080)
     args = parser.parse_args()
     
-    # USE WAITRESS FOR PRODUCTION:
+    # RUN THE FLASK SERVER:
     from waitress import serve
     serve(app, host = args.host, port = args.port, threads = 1)
+
+    # TESTING OTHER SERVER IMPLEMENTATIONS:
+    # from gevent.pywsgi import WSGIServer
+    # http_server = WSGIServer((args.host, args.port), app)
+    # http_server.serve_forever()
 
 if __name__ == "__main__":
     main()

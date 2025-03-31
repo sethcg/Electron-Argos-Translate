@@ -3,7 +3,7 @@
   "productName": "spanish-dictionary-app",
   "version": "0.0.1",
   "description": "An application made to help learn spanish.",
-  "main": ".vite/main/index.js",
+  "main": ".vite/main/main.js",
   "type": "commonjs",
   "scripts": {
     "start": "electron-forge start",

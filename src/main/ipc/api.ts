@@ -8,14 +8,14 @@ export class TranslateServer {
   isDevelopment: boolean
   host: string
   port: string
-  flaskServer: ChildProcess
+  serverProcess: ChildProcess
 
   constructor(isDevelopment: boolean, host: string = '127.0.0.1', port: string = '8080') {
     this.isDevelopment = isDevelopment
     this.host = host
     this.port = port
 
-    this.flaskServer = this.open()
+    this.serverProcess = this.open()
   }
 
   open = (): ChildProcess => {
@@ -32,10 +32,24 @@ export class TranslateServer {
     await fetch(`http://${this.host}:${this.port}/api/pid`).then(async response => {
       const pid = (await response.json()) as number
       process.kill(pid)
-      // console.log(`SERVER CHILD PROCESS: ${pid}`)
     })
-    // console.log(`SERVER PROCESS: ${this.flaskServer.pid}`)
-    this.flaskServer.kill()
+    this.serverProcess.kill()
+  }
+
+  ping = async (currentTime: number, timeLimit: number): Promise<boolean> => {
+    // CHECK IF THE SERVER IS ONLINE EVERY SECOND, UNTIL TIME LIMIT REACHED
+    return await new Promise(resolve => setTimeout(resolve, 125)).then(async () => {
+      return await fetch(`http://${this.host}:${this.port}/api/pid`)
+        .then(async response => {
+          const pid = (await response.json()) as number
+          console.log(`SERVER CHILD PROCESS ID: ${pid}`)
+          return response.ok
+        })
+        .catch(() => {
+          if (currentTime > timeLimit) return false
+          return this.ping(currentTime++, timeLimit)
+        })
+    })
   }
 
   translateEvents = (): void => {
@@ -53,7 +67,6 @@ export class TranslateServer {
             return (await response.json()) as Promise<TranslateResponse>
           })
           .catch((error: FetchError) => {
-            // console.log(`ERROR: ${error.message}`);
             return error
           })
       }

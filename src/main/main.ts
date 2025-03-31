@@ -19,7 +19,10 @@ const yandexTranslate = Translate({ engine: "yandex", key: "..." });
 const libreTranslate = Translate({ engine: "libre", url: "", key: "..." });
 */
 
-declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string
+// THIS IS A "MAGIC" CONSTANT THAT IS GENERATED FROM FORGE'S WEBPACK,
+// THE "ALL_WINDOWS" PORTION MATCHES THE "forge.config.ts -> vite-plugin -> renderer -> name" parameter.
+// USED TO TELL THE ELECTRON APP WHERE TO FIND THE INDEX.HTML (IF USING LOCALHOST DEVELOPMENT SERVER OR NOT)
+declare const ALL_WINDOWS_VITE_DEV_SERVER_URL: string
 
 const assetFolder = path.join(
   process.env.NODE_ENV === 'development' ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath
@@ -38,8 +41,9 @@ const createMainWindow = (): BrowserWindow => {
     height: 600,
     minWidth: 156,
     minHeight: 180,
+    backgroundColor: '#242424',
     icon: getIconPath('icon.png'),
-    // show: false,
+    show: false,
     // HIDE TITLE BAR AND FRAME
     // frame: false,
     // titleBarStyle: "hidden",
@@ -58,24 +62,60 @@ const createMainWindow = (): BrowserWindow => {
   })
 
   // LOAD INDEX.HTML
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
+  if (ALL_WINDOWS_VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(ALL_WINDOWS_VITE_DEV_SERVER_URL + '/windows/main/index.html')
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/windows/main/index.html`))
   }
 
-  // OPEN DEV TOOLS ON LAUNCH
-  if (isDevelopment) mainWindow.webContents.openDevTools()
-
   return mainWindow
+}
+
+const createSplashScreenWindow = (): BrowserWindow => {
+  const splashScreenWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    minWidth: 156,
+    minHeight: 180,
+    backgroundColor: '#242424',
+    frame: false,
+    icon: getIconPath('icon.png'),
+  })
+
+  // LOAD INDEX.HTML
+  if (ALL_WINDOWS_VITE_DEV_SERVER_URL) {
+    splashScreenWindow.loadURL(ALL_WINDOWS_VITE_DEV_SERVER_URL + '/windows/splash/index.html')
+  } else {
+    splashScreenWindow.loadFile(path.join(__dirname, `../renderer/windows/splash/index.html`))
+  }
+
+  return splashScreenWindow
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  const splashScreenWindow = createSplashScreenWindow()
   const mainWindow = createMainWindow()
   const translateServer = new TranslateServer(isDevelopment, '127.0.0.1', '8080')
+
+  // SHOW WHEN SERVER IS READY READY
+  mainWindow.on('ready-to-show', async () => {
+    // CONNECT TO SERVER OR QUIT AFTER "X" NUMBER OF SECONDS
+    const secondsBeforeError = 10
+
+    const start = performance.now()
+    await translateServer.ping(0, secondsBeforeError * 8)
+    const end = performance.now()
+    console.log(`SERVER STARTUP TOOK: ${end - start} ms\n`)
+
+    splashScreenWindow.destroy()
+    mainWindow.show()
+
+    // OPEN DEV TOOLS ON LAUNCH
+    if (isDevelopment) mainWindow.webContents.openDevTools()
+  })
 
   // HANDLE IPC EVENTS
   windowEvents(mainWindow, isDarwin)

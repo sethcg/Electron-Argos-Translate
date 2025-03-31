@@ -27,7 +27,7 @@ const config: ForgeConfig = {
       // If you are familiar with Vite configuration, it will look really familiar.
       build: [
         {
-          entry: 'src/main/index.ts',
+          entry: 'src/main/main.ts',
           config: 'viteconfig/main.ts',
           target: 'main',
         },
@@ -39,7 +39,7 @@ const config: ForgeConfig = {
       ],
       renderer: [
         {
-          name: 'main_window',
+          name: 'all_windows',
           config: 'viteconfig/renderer.mts',
         },
       ],
