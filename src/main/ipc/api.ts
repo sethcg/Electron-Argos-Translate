@@ -4,7 +4,7 @@ import { TranslateResponse } from '~shared/types'
 import { ChildProcess, execFile, ExecFileOptions } from 'node:child_process'
 import fetch, { Response, FetchError } from 'node-fetch'
 
-export class TranslateServer {
+export default class TranslateServer {
   isDevelopment: boolean
   host: string
   port: string
@@ -13,11 +13,14 @@ export class TranslateServer {
     this.isDevelopment = isDevelopment
     this.host = host
     this.port = port
+
+    // SETUP IPC EVENTS
+    this.translateEvent()
   }
 
-  open = async (): Promise<void> => {
-    // TO-DO: FIND SOLUTION TO SPEED UP FLASK SERVER START UP,
-    //        CURRENTLY TAKES AROUND 4-5 SECONDS
+  public open = async (): Promise<void> => {
+    // TO-DO: FIND SOLUTION TO SPEED UP SERVER START UP,
+    // CURRENTLY TAKES AROUND 4-5 SECONDS
 
     const filePath = this.isDevelopment
       ? path.join(__dirname, './resources/translate_server.exe')
@@ -33,14 +36,14 @@ export class TranslateServer {
     console.log(`SERVER STARTUP TOOK: ${Math.round(performance.now() - start)} ms`)
   }
 
-  close = async (): Promise<void> => {
+  public close = async (): Promise<void> => {
     await fetch(`http://${this.host}:${this.port}/api/pid`).then(async response => {
       const pid = (await response.json()) as number
       process.kill(pid)
     })
   }
 
-  ping = async (serverProcess: ChildProcess): Promise<boolean> => {
+  private ping = async (serverProcess: ChildProcess): Promise<boolean> => {
     // CHECK IF THE SERVER IS ONLINE EVERY 0.125 SECONDS, UNTIL TIME LIMIT REACHED
     return await new Promise(resolve => setTimeout(resolve, 125)).then(async () => {
       return await fetch(`http://${this.host}:${this.port}/api/pid`)
@@ -56,7 +59,7 @@ export class TranslateServer {
     })
   }
 
-  setup = async (source: string = 'en', target: string = 'es'): Promise<void> => {
+  public setup = async (source: string = 'en', target: string = 'es'): Promise<void> => {
     // SETUP THE TRANSLATOR, SO THE FIRST TRANSLATE CALL IS NOT ABNORMALLY SLOW
     const start = performance.now()
     const params = new URLSearchParams([
@@ -69,10 +72,10 @@ export class TranslateServer {
     })
   }
 
-  translateEvents = (): void => {
+  private translateEvent = (): void => {
     ipcMain.handle(
       'flaskApi:translate',
-      async (_, source: string, target: string, value: string): Promise<TranslateResponse | FetchError> => {
+      async (_, source: string, target: string, value: string): Promise<TranslateResponse | undefined> => {
         const start = performance.now()
         const params = new URLSearchParams([
           ['source', source],
@@ -86,7 +89,8 @@ export class TranslateServer {
             return (await response.json()) as Promise<TranslateResponse>
           })
           .catch((error: FetchError) => {
-            return error
+            console.log(error.message)
+            return undefined
           })
       }
     )

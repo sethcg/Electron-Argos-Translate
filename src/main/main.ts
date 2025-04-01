@@ -2,8 +2,8 @@ import path from 'node:path'
 import { app, BrowserWindow } from 'electron'
 import started from 'electron-squirrel-startup'
 
-import { windowEvents } from './ipc/window'
-import { TranslateServer } from './ipc/api'
+import MainWindow from './ipc/window'
+import TranslateServer from './ipc/api'
 
 // TO-DO: Try implementing 'translate' to get different translation options;
 // allowing for more/better alternative translations
@@ -35,8 +35,8 @@ if (started) {
   app.quit()
 }
 
-const createMainWindow = (): BrowserWindow => {
-  const mainWindow = new BrowserWindow({
+const createMainWindow = (): MainWindow => {
+  const mainWindow = new MainWindow(isDarwin, {
     width: 800,
     height: 600,
     minWidth: 156,
@@ -96,13 +96,12 @@ const createSplashScreenWindow = (): BrowserWindow => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  const splashScreenWindow = createSplashScreenWindow()
-  const mainWindow = createMainWindow()
-  const translateServer = new TranslateServer(isDevelopment, '127.0.0.1', '8080')
+  const splashScreenWindow: BrowserWindow = createSplashScreenWindow()
+  const mainWindow: MainWindow = createMainWindow()
+  const translateServer: TranslateServer = new TranslateServer(isDevelopment, '127.0.0.1', '8080')
 
   // SHOW WHEN SERVER IS READY READY
   mainWindow.on('ready-to-show', async () => {
-    const translateServer = new TranslateServer(isDevelopment, '127.0.0.1', '8080')
     await translateServer.open()
 
     splashScreenWindow.destroy()
@@ -111,12 +110,11 @@ app.whenReady().then(() => {
     await translateServer.setup('es', 'en')
 
     // OPEN DEV TOOLS ON LAUNCH
-    if (isDevelopment) mainWindow.webContents.openDevTools()
+    if (isDevelopment) {
+      // console.log(app.getPath("userData"))
+      mainWindow.webContents.openDevTools()
+    }
   })
-
-  // HANDLE IPC EVENTS
-  windowEvents(mainWindow, isDarwin)
-  translateServer.translateEvents()
 
   // CLOSE FLASK SERVER BEFORE CLOSING APPLICATION
   app.on('before-quit', async () => {

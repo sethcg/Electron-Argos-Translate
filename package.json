@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^10.0.1",
     "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

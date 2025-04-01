@@ -1,5 +1,19 @@
-// RESPONSE FROM THE FLASK SERVER ON ENDPOINT "/api/translate"
 export type TranslateResponse = {
   text: string
   alternatives: string[]
+}
+
+export type StoreType = {
+  version: number
+  language: {
+    source_code: string /* ISO language code */
+    target_code: string /* ISO language code */
+  }
+  packages: {
+    package_version: string
+    source_code: string /* ISO language code */
+    target_code: string /* ISO language code */
+    source_name: string
+    target_name: string
+  }[]
 }

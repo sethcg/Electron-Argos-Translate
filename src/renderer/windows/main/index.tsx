@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { Button, Description, Field, Input, Label } from '@headlessui/react'
+import { TranslateResponse } from '~shared/types'
 
 function App() {
   // const minimizeWindow = window.minimizeWindow;
@@ -10,14 +11,21 @@ function App() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   async function handleClick(): Promise<void> {
-    let translation: string | undefined = undefined
+    // GET THE CURRENT TARGET/SOURCE FROM SETTINGS
+
+    // window.main.store.set('language.source_code', 'en')
+    const target: string = (await window.main.store.get('language.target_code')) as string
+    const source: string = (await window.main.store.get('language.source_code')) as string
+
+    console.log(`TARGET: ${target}`)
+    console.log(`SOURCE: ${source}`)
     if (inputRef.current) {
-      translation = await window.api.translate('en', 'es', inputRef.current.value)
-      if (translation) {
-        console.log(translation)
-      }
-    } else {
-      console.log('NOT TRANSLATED')
+      const translation: TranslateResponse | undefined = await window.api.translate(
+        source,
+        target,
+        inputRef.current.value
+      )
+      if (translation) console.log(translation)
     }
   }
 

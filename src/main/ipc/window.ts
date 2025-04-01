@@ -1,35 +1,57 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
+import Store from './store/store'
 
-export const windowEvents = (mainWindow: BrowserWindow, isDarwin: boolean) => {
-  // MINIMIZE
-  ipcMain.on('mainWindow:minimize', (event: Electron.IpcMainEvent) => {
-    if (mainWindow.id === event.sender.id) {
-      mainWindow.minimize()
-    }
-  })
+export default class MainWindow extends BrowserWindow {
+  isDarwin: boolean
 
-  // MAXIMIZE
-  ipcMain.on('mainWindow:maximize', (event: Electron.IpcMainEvent) => {
-    if (mainWindow.id === event.sender.id) {
-      mainWindow.maximize()
-    }
-  })
+  constructor(isDarwin: boolean, options?: Electron.BrowserWindowConstructorOptions) {
+    super(options)
+    this.isDarwin = isDarwin
 
-  // RESTORE WINDOW FROM MINIMIZED TO PREVIOUS STATE
-  ipcMain.on('mainWindow:restore', (event: Electron.IpcMainEvent) => {
-    if (mainWindow.id === event.sender.id) {
-      mainWindow.restore()
-    }
-  })
+    new Store(this)
 
-  // CLOSE WINDOW, OR HIDE IF ON MAC
-  ipcMain.on('mainWindow:close', (event: Electron.IpcMainEvent) => {
-    if (mainWindow && event.sender === mainWindow.webContents) {
-      if (isDarwin) {
-        mainWindow.hide()
-      } else {
-        app.quit()
+    // SETUP IPC EVENTS
+    this.minimizeWindow()
+    this.maximizeWindow()
+    this.restoreWindow()
+    this.closeWindow()
+  }
+
+  minimizeWindow = (): void => {
+    ipcMain.on('mainWindow:minimize', (event: Electron.IpcMainEvent) => {
+      if (this.id === event.sender.id) {
+        this.minimize()
       }
-    }
-  })
+    })
+  }
+
+  maximizeWindow = (): void => {
+    ipcMain.on('mainWindow:maximize', (event: Electron.IpcMainEvent) => {
+      if (this.id === event.sender.id) {
+        this.maximize()
+      }
+    })
+  }
+
+  restoreWindow = (): void => {
+    // RESTORE WINDOW FROM MINIMIZED TO PREVIOUS STATE
+    ipcMain.on('mainWindow:restore', (event: Electron.IpcMainEvent) => {
+      if (this.id === event.sender.id) {
+        this.restore()
+      }
+    })
+  }
+
+  closeWindow = (): void => {
+    // CLOSE WINDOW, OR HIDE IF ON MAC
+    ipcMain.on('mainWindow:close', (event: Electron.IpcMainEvent) => {
+      if (this.id === event.sender.id) {
+        if (this.isDarwin) {
+          this.hide()
+        } else {
+          app.quit()
+        }
+      }
+    })
+  }
 }
