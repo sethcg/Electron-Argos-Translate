@@ -102,16 +102,13 @@ app.whenReady().then(() => {
 
   // SHOW WHEN SERVER IS READY READY
   mainWindow.on('ready-to-show', async () => {
-    // CONNECT TO SERVER OR QUIT AFTER "X" NUMBER OF SECONDS
-    const secondsBeforeError = 10
-
-    const start = performance.now()
-    await translateServer.ping(0, secondsBeforeError * 8)
-    const end = performance.now()
-    console.log(`SERVER STARTUP TOOK: ${end - start} ms\n`)
+    const translateServer = new TranslateServer(isDevelopment, '127.0.0.1', '8080')
+    await translateServer.open()
 
     splashScreenWindow.destroy()
     mainWindow.show()
+
+    await translateServer.setup('es', 'en')
 
     // OPEN DEV TOOLS ON LAUNCH
     if (isDevelopment) mainWindow.webContents.openDevTools()

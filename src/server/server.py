@@ -1,119 +1,66 @@
 import re
 import argparse
-
 from os import getpid
+from flask import Flask, request, jsonify
+from argostranslate.translate import get_installed_languages
 
-from flask import Flask
-from flask import request
-from flask import jsonify
-
-import argostranslate.package
-import argostranslate.translate
-
-from helpers import improve_translation_formatting
-from helpers import filter_unique
-
-from html import unescape
+from functions.install import check_and_install_language_models, initialize_default_language_translator
+from functions.main import translate
 
 app = Flask(__name__)
 
 # FOR PROFILING THE SERVER:
 # from werkzeug.middleware.profiler import ProfilerMiddleware
-# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=('server/server.py',))
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=('server/server.py', 20), sort_by=("time", "calls"))
 # app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=("time", "calls"), restrictions=[20])
 
-@app.route('/api/pid')
-def root():
+@app.route('/api/pid', methods=['GET'])
+def getProcessID():
     # OUTPUT THE PROCESS ID (TO MANUALLY CLOSE WHEN ELECTRON CLOSES)
+    # return jsonify(success = True, pid = str(getpid()))
     return str(getpid())
 
-# EXAMPLE ROUTE: "/api/install?path="C:/Users/[USER]/src/server/argosmodels/""
-@app.route('/api/install', methods=['POST'])
-def install():
-    try:
-        # PATH TO GET '.argosmodel' FILES,
-        # EXAMPLE: "C:/Users/[USER]/src/server/argosmodels/"
-        path = request.args.get('path', default = '', type = str)
-        path = re.sub('\"|\'', '', path)
+@app.route('/api/setup', methods=['GET'])
+def setupDefaultTranslator():
+    args = request.args
 
-        # GET INSTALLED LANGUAGES
-        languages = argostranslate.translate.get_installed_languages()
+    source = re.sub('\"|\'', '', args.get('source', default = 'en', type = str))
+    target = re.sub('\"|\'', '', args.get('target', default = 'es', type = str))
 
-        # CHECK WHICH LANGUAGES ARE MISSING, AND INSTALL THEM
-        if(languages is not None and len(languages) > 0):
-            for i in range(len(languages)):
-                if(("en" in languages[i].from_code ) is False):
-                    argostranslate.package.install_from_path(path + "translate-en_es-1_0.argosmodel")
-                if(("es" in languages[i].from_code ) is False):
-                    argostranslate.package.install_from_path(path + "translate-es_en-1_9.argosmodel")
-        else:
-            # NO PACKAGES, INSTALL THE SPANISH AND ENGLISH MODELS, DEFAULT LOCATION IS "C:\Users\[USER]\.local"
-            argostranslate.package.install_from_path(path + "translate-es_en-1_9.argosmodel")
-            argostranslate.package.install_from_path(path + "translate-en_es-1_0.argosmodel")
+    # GET AVAILABLE LANGUAGES, AND INSTALL IF NECESSARY
+    check_and_install_language_models(['en', 'es'])
+    initialize_default_language_translator(source, target)
+    return jsonify({"success": True})
 
-        return "Success"
-    except:
-        return "Error"
+@app.route('/api/translate', methods=['GET'])
+def translateText():
+    args = request.args
 
-# EXAMPLE ROUTE: "/api/translate?source="en"&target="es"&q="Hello, my name is Cinnamon!"
-@app.route('/api/translate')
-def translate():
-    try:
-        # GET INSTALLED LANGUAGES
-        languages = argostranslate.translate.get_installed_languages()
-        if languages is None or len(languages) == 0:
-            return "Error: No languages are installed, try running \"/api/install before calling\" \"/api/translate\""
+    q = args.get('q', default = None, type = str)
+    if(q is None or len(q) == 0):
+        return jsonify({"error": "No word or phrase was provided"})
 
-        q = request.args.get('q', default = None, type = str)
-        target = request.args.get('target', default = None, type = str)
-        source = request.args.get('source', default = None, type = str)
-        num_alternatives = request.args.get('num_alternatives', default = 3, type = int)
+    target = re.sub('\"|\'', '', args.get('target', default = None, type = str))
+    if(target is None or len(target) == 0):
+        return jsonify({"error": "No target language ISO code was provided"})
 
-        if(q is None or len(q) == 0):
-            return "Error: No word or phrase was provided."
-        
-        target = re.sub('\"|\'', '', target)
-        if(target is None or len(target) == 0):
-            return "Error: No target language ISO code was provided."
+    source = re.sub('\"|\'', '', args.get('source', default = None, type = str))
+    if(source is None or len(source) == 0):
+        return jsonify({"error": "No source language ISO code was provided"})
 
-        source = re.sub('\"|\'', '', source)
-        if(source is None or len(source) == 0):
-            return "Error: No source language ISO code was provided."
+    num_alternatives = args.get('num_alternatives', default = 3, type = int)
 
-        try:
-            target_language = list(filter(lambda lang: lang.code == target, languages))[0]
-            source_language = list(filter(lambda lang: lang.code == source, languages))[0]
-        except:
-            return "Error: Check the source and target language to make sure they are valid ISO codes."
-
-        try:
-            translator = source_language.get_translation(target_language)
-            hypotheses = translator.hypotheses(q, num_alternatives + 1)
-            translated_text = unescape(improve_translation_formatting(q, hypotheses[0].value))
-            alternatives = filter_unique([unescape(improve_translation_formatting(q, hypotheses[i].value)) for i in range(1, len(hypotheses))], translated_text)
-
-            # RETURN JSON RESULTS
-            result = jsonify({"translatedText": translated_text, "alternatives": alternatives})
-            return result
-        except:
-            return "Error: Error during the translation process."
-    except:
-        return "Error"
+    return translate(q, source, target, num_alternatives)
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type = str, default = "127.0.0.1")
     parser.add_argument("--port", type = int, default = 8080)
     args = parser.parse_args()
-    
+
     # RUN THE FLASK SERVER:
     from waitress import serve
     serve(app, host = args.host, port = args.port, threads = 1)
-
-    # TESTING OTHER SERVER IMPLEMENTATIONS:
-    # from gevent.pywsgi import WSGIServer
-    # http_server = WSGIServer((args.host, args.port), app)
-    # http_server.serve_forever()
 
 if __name__ == "__main__":
     main()
