@@ -11,14 +11,14 @@ function App() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   async function handleClick(): Promise<void> {
-    // GET THE CURRENT TARGET/SOURCE FROM SETTINGS
-
-    // window.main.store.set('language.source_code', 'en')
-    const target: string = (await window.main.store.get('language.target_code')) as string
+    window.main.store.set('language.source_code', 'en')
+    window.main.store.set('language.target_code', 'es')
     const source: string = (await window.main.store.get('language.source_code')) as string
+    const target: string = (await window.main.store.get('language.target_code')) as string
 
-    console.log(`TARGET: ${target}`)
     console.log(`SOURCE: ${source}`)
+    console.log(`TARGET: ${target}`)
+
     if (inputRef.current) {
       const translation: TranslateResponse | undefined = await window.api.translate(
         source,

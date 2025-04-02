@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "package_version": "1.9",
+    "source_code": "en",
+    "target_code": "es",
+    "source_name": "English",
+    "target_name": "Spanish",
+    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_es-1_0.argosmodel",
+    "filename": "translate-en_es-1_0.argosmodel"
+  },
+  {
+    "id": 2,
+    "package_version": "1.0",
+    "source_code": "es",
+    "target_code": "en",
+    "source_name": "Spanish",
+    "target_name": "English",
+    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-es_en-1_9.argosmodel",
+    "filename": "translate-es_en-1_9.argosmodel"
+  }
+]

@@ -1,9 +1,11 @@
 import path from 'node:path'
 import { app, BrowserWindow } from 'electron'
 import started from 'electron-squirrel-startup'
+import getPort from 'get-port'
 
 import MainWindow from './ipc/window'
-import TranslateServer from './ipc/api'
+import TranslateServer from './ipc/translate'
+import { PackageHandler } from './ipc/package'
 
 // TO-DO: Try implementing 'translate' to get different translation options;
 // allowing for more/better alternative translations
@@ -95,12 +97,17 @@ const createSplashScreenWindow = (): BrowserWindow => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   const splashScreenWindow: BrowserWindow = createSplashScreenWindow()
   const mainWindow: MainWindow = createMainWindow()
-  const translateServer: TranslateServer = new TranslateServer(isDevelopment, '127.0.0.1', '8080')
 
-  // SHOW WHEN SERVER IS READY READY
+  const port: string = `${await getPort()}`
+  const translateServer: TranslateServer = new TranslateServer(port, isDevelopment)
+  const packageHandler: PackageHandler = new PackageHandler(isDevelopment)
+
+  // DOWNLOAD ALL LANGUAGE PACKAGES
+  packageHandler.downloadPackages(true)
+
   mainWindow.on('ready-to-show', async () => {
     await translateServer.open()
 
@@ -111,12 +118,11 @@ app.whenReady().then(() => {
 
     // OPEN DEV TOOLS ON LAUNCH
     if (isDevelopment) {
-      // console.log(app.getPath("userData"))
       mainWindow.webContents.openDevTools()
     }
   })
 
-  // CLOSE FLASK SERVER BEFORE CLOSING APPLICATION
+  // CLOSE TRANSLATE SERVER BEFORE CLOSING APPLICATION
   app.on('before-quit', async () => {
     translateServer.close()
   })

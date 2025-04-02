@@ -6,19 +6,19 @@ import fetch, { Response, FetchError } from 'node-fetch'
 
 export default class TranslateServer {
   isDevelopment: boolean
-  host: string
-  port: string
+  host: string = '127.0.0.1'
+  port: string = '8080'
 
-  constructor(isDevelopment: boolean, host: string = '127.0.0.1', port: string = '8080') {
-    this.isDevelopment = isDevelopment
-    this.host = host
+  constructor(port: string, isDevelopment: boolean) {
     this.port = port
+    this.isDevelopment = isDevelopment
 
     // SETUP IPC EVENTS
     this.translateEvent()
   }
 
   public open = async (): Promise<void> => {
+    console.log(`OPENING SERVER ON PORT: ${this.port}`)
     // TO-DO: FIND SOLUTION TO SPEED UP SERVER START UP,
     // CURRENTLY TAKES AROUND 4-5 SECONDS
 
@@ -26,7 +26,7 @@ export default class TranslateServer {
       ? path.join(__dirname, './resources/translate_server.exe')
       : path.join(process.resourcesPath, 'translate_server.exe')
 
-    const args: string[] = ['--host', this.host, '--port', this.port]
+    const args: string[] = ['--host', this.host, '--port', `${this.port}`]
     const options: ExecFileOptions = { timeout: 15000 /* TIMEOUT AFTER 15 SECONDS */ }
     const serverProcess: ChildProcess = execFile(filePath, args, options)
 
@@ -66,7 +66,6 @@ export default class TranslateServer {
       ['source', source],
       ['target', target],
     ])
-
     await fetch(`http://${this.host}:${this.port}/api/setup?${params}`).then(() => {
       console.log(`SETUP API CALL TOOK: ${Math.round(performance.now() - start)} ms`)
     })
@@ -82,7 +81,6 @@ export default class TranslateServer {
           ['target', target],
           ['q', value],
         ])
-
         return await fetch(`http://${this.host}:${this.port}/api/translate?${params}`)
           .then(async (response: Response): Promise<TranslateResponse> => {
             console.log(`TRANSLATE API CALL TOOK: ${Math.round(performance.now() - start)} ms`)
