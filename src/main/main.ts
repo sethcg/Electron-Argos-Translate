@@ -5,7 +5,8 @@ import getPort from 'get-port'
 
 import MainWindow from './ipc/window'
 import TranslateServer from './ipc/translate'
-import { PackageHandler } from './ipc/package'
+import PackageHandler from './ipc/package'
+import Store from './ipc/store/store'
 
 // TO-DO: Try implementing 'translate' to get different translation options;
 // allowing for more/better alternative translations
@@ -26,9 +27,7 @@ const libreTranslate = Translate({ engine: "libre", url: "", key: "..." });
 // USED TO TELL THE ELECTRON APP WHERE TO FIND THE INDEX.HTML (IF USING LOCALHOST DEVELOPMENT SERVER OR NOT)
 declare const ALL_WINDOWS_VITE_DEV_SERVER_URL: string
 
-const assetFolder = path.join(
-  process.env.NODE_ENV === 'development' ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath
-)
+const assetFolder = path.join(process.env.NODE_ENV === 'development' ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath)
 const isDarwin = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
@@ -100,13 +99,14 @@ const createSplashScreenWindow = (): BrowserWindow => {
 app.whenReady().then(async () => {
   const splashScreenWindow: BrowserWindow = createSplashScreenWindow()
   const mainWindow: MainWindow = createMainWindow()
+  const store: Store = new Store(mainWindow)
 
   const port: string = `${await getPort()}`
   const translateServer: TranslateServer = new TranslateServer(port, isDevelopment)
-  const packageHandler: PackageHandler = new PackageHandler(isDevelopment)
+  const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)
 
-  // DOWNLOAD ALL LANGUAGE PACKAGES
-  packageHandler.downloadPackages(true)
+  // DOWNLOAD SELECTED LANGUAGE PACKAGES
+  packageHandler.downloadPackages(false, ['en', 'es', 'zt'])
 
   mainWindow.on('ready-to-show', async () => {
     await translateServer.open()

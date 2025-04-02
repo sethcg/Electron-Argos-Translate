@@ -13,7 +13,7 @@ export default class TranslateServer {
     this.port = port
     this.isDevelopment = isDevelopment
 
-    // SETUP IPC EVENTS
+    // SETUP TRANSLATE RELATED IPC EVENTS
     this.translateEvent()
   }
 

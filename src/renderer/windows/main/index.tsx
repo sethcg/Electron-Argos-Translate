@@ -20,11 +20,7 @@ function App() {
     console.log(`TARGET: ${target}`)
 
     if (inputRef.current) {
-      const translation: TranslateResponse | undefined = await window.api.translate(
-        source,
-        target,
-        inputRef.current.value
-      )
+      const translation: TranslateResponse | undefined = await window.api.translate(source, target, inputRef.current.value)
       if (translation) console.log(translation)
     }
   }
@@ -38,12 +34,7 @@ function App() {
         <Field className="mt-4 font-semibold">
           <Label>Test</Label>
           <Description>Translate a word or phrase from english to spanish.</Description>
-          <Input
-            ref={inputRef}
-            type="text"
-            placeholder="Type here..."
-            className="bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded"
-          />
+          <Input ref={inputRef} type="text" placeholder="Type here..." className="bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded" />
         </Field>
       </div>
     </>

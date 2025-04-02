@@ -1,5 +1,4 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import Store from './store/store'
 
 export default class MainWindow extends BrowserWindow {
   isDarwin: boolean
@@ -8,16 +7,14 @@ export default class MainWindow extends BrowserWindow {
     super(options)
     this.isDarwin = isDarwin
 
-    new Store(this)
-
-    // SETUP IPC EVENTS
-    this.minimizeWindow()
-    this.maximizeWindow()
-    this.restoreWindow()
-    this.closeWindow()
+    // SETUP WINDOW RELATED IPC EVENTS
+    this.minimizeWindowEvent()
+    this.maximizeWindowEvent()
+    this.restoreWindowEvent()
+    this.closeWindowEvent()
   }
 
-  minimizeWindow = (): void => {
+  private minimizeWindowEvent = (): void => {
     ipcMain.on('mainWindow:minimize', (event: Electron.IpcMainEvent) => {
       if (this.id === event.sender.id) {
         this.minimize()
@@ -25,7 +22,7 @@ export default class MainWindow extends BrowserWindow {
     })
   }
 
-  maximizeWindow = (): void => {
+  private maximizeWindowEvent = (): void => {
     ipcMain.on('mainWindow:maximize', (event: Electron.IpcMainEvent) => {
       if (this.id === event.sender.id) {
         this.maximize()
@@ -33,7 +30,7 @@ export default class MainWindow extends BrowserWindow {
     })
   }
 
-  restoreWindow = (): void => {
+  private restoreWindowEvent = (): void => {
     // RESTORE WINDOW FROM MINIMIZED TO PREVIOUS STATE
     ipcMain.on('mainWindow:restore', (event: Electron.IpcMainEvent) => {
       if (this.id === event.sender.id) {
@@ -42,7 +39,7 @@ export default class MainWindow extends BrowserWindow {
     })
   }
 
-  closeWindow = (): void => {
+  private closeWindowEvent = (): void => {
     // CLOSE WINDOW, OR HIDE IF ON MAC
     ipcMain.on('mainWindow:close', (event: Electron.IpcMainEvent) => {
       if (this.id === event.sender.id) {

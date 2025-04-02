@@ -21,15 +21,27 @@ export default class Store {
     this.canEncrypt = safeStorage.isEncryptionAvailable()
     this.store = new ElectronStore<StoreType>({ defaults: this.defaults })
 
-    // SETUP IPC EVENTS
-    this.set()
-    this.get()
-    this.reset()
-    this.encryptString()
-    this.decryptString()
+    // SETUP STORE RELATED IPC EVENTS
+    this.setEvent()
+    this.getEvent()
+    this.resetEvent()
+    this.encryptStringEvent()
+    this.decryptStringEvent()
   }
 
-  private set = (): void => {
+  public set = (key: string, value?: unknown): void => {
+    this.store.set(key, value)
+  }
+
+  public get = (key: string): unknown => {
+    return this.store.get(key)
+  }
+
+  public reset = (key: keyof StoreType): void => {
+    return this.store.reset(key)
+  }
+
+  private setEvent = (): void => {
     ipcMain.on('settings:set', (event, key: string, value?: unknown) => {
       if (this.window.id === event.sender.id && value) {
         this.store.set(key, value)
@@ -37,7 +49,7 @@ export default class Store {
     })
   }
 
-  private get = (): void => {
+  private getEvent = (): void => {
     ipcMain.handle('settings:get', (event, key: string) => {
       if (this.window.id === event.sender.id) {
         return this.store.get(key)
@@ -45,7 +57,7 @@ export default class Store {
     })
   }
 
-  private reset = (): void => {
+  private resetEvent = (): void => {
     ipcMain.handle('settings:reset', (event, key: keyof StoreType) => {
       if (this.window.id === event.sender.id) {
         this.store.reset(key)
@@ -53,7 +65,7 @@ export default class Store {
     })
   }
 
-  private encryptString = (): void => {
+  private encryptStringEvent = (): void => {
     ipcMain.handle('safeStorage:encryptString', (event, value: string) => {
       if (this.canEncrypt && this.window.id === event.sender.id) {
         return safeStorage.encryptString(value).toString('hex')
@@ -61,7 +73,7 @@ export default class Store {
     })
   }
 
-  private decryptString = (): void => {
+  private decryptStringEvent = (): void => {
     ipcMain.handle('safeStorage:decryptString', (event, value: string) => {
       if (this.canEncrypt && this.window.id === event.sender.id) {
         return safeStorage.decryptString(Buffer.from(value, 'hex'))
