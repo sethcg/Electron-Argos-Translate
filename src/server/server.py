@@ -2,10 +2,7 @@ import re
 import argparse
 from os import getpid
 from flask import Flask, request, jsonify
-from argostranslate.translate import get_installed_languages
-
-from functions.install import check_and_install_language_models, initialize_default_language_translator
-from functions.main import translate
+from functions.translate import initialize_language_translator, translate
 
 app = Flask(__name__)
 
@@ -20,21 +17,34 @@ def getProcessID():
     # return jsonify(success = True, pid = str(getpid()))
     return str(getpid())
 
+# SETUP THE TRANSLATOR, SO THE FIRST CALL IS NOT SUPER SLOW
 @app.route('/api/setup', methods=['GET'])
 def setupDefaultTranslator():
     args = request.args
 
-    source = re.sub('\"|\'', '', args.get('source', default = 'en', type = str))
-    target = re.sub('\"|\'', '', args.get('target', default = 'es', type = str))
+    path = args.get('path', default = None, type = str)
+    if(path is None or len(path) == 0):
+        return jsonify({"error": "No package path provided"})
 
-    # GET AVAILABLE LANGUAGES, AND INSTALL IF NECESSARY
-    check_and_install_language_models(['en', 'es'])
-    initialize_default_language_translator(source, target)
+    target = re.sub('\"|\'', '', args.get('target', default = None, type = str))
+    if(target is None or len(target) == 0):
+        return jsonify({"error": "No target language ISO code was provided"})
+
+    source = re.sub('\"|\'', '', args.get('source', default = None, type = str))
+    if(source is None or len(source) == 0):
+        return jsonify({"error": "No source language ISO code was provided"})
+
+    initialize_language_translator(path, source, target)
     return jsonify({"success": True})
 
+# TRANSLATE THE WORD OR PHRASE FROM SOURCE LANGUAGE TO TARGET LANGUAGE
 @app.route('/api/translate', methods=['GET'])
 def translateText():
     args = request.args
+
+    path = args.get('path', default = None, type = str)
+    if(path is None or len(path) == 0):
+        return jsonify({"error": "No package path provided"})
 
     q = args.get('q', default = None, type = str)
     if(q is None or len(q) == 0):
@@ -50,7 +60,7 @@ def translateText():
 
     num_alternatives = args.get('num_alternatives', default = 3, type = int)
 
-    return translate(q, source, target, num_alternatives)
+    return translate(path, q, source, target, num_alternatives)
 
 def main():
     parser = argparse.ArgumentParser()

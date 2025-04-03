@@ -1,9 +1,20 @@
+from argostranslate.translate import Hypothesis
+
 def filter_unique(seq, extra):
     seen = set({extra, ""})
     seen_add = seen.add
     return [x for x in seq if not (x in seen or seen_add(x))]
 
-def improve_translation_formatting(source, translation, improve_punctuation=True, remove_single_word_duplicates=True):
+def avoid_returning_original(source: str, hypotheses: list[Hypothesis]):
+    # TRY TO SWAP SAME RESPONSE ANSWERS, FIXES ISSUE LIKE:
+    # source = "test2" => { text: "test2", alternatives: ["prueba 2", "prueba2"] }
+    if(len(hypotheses) > 1 and hypotheses[0].value == source):
+        temp = hypotheses[0]
+        hypotheses[0] = hypotheses[1]
+        hypotheses[1] = temp
+    return hypotheses
+
+def improve_translation_formatting(source: str, translation: str, improve_punctuation = True, remove_single_word_duplicates = True):
     source = source.strip()
 
     if not len(source):

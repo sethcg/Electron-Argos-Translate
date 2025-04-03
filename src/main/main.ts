@@ -101,12 +101,13 @@ app.whenReady().then(async () => {
   const mainWindow: MainWindow = createMainWindow()
   const store: Store = new Store(mainWindow)
 
-  const port: string = `${await getPort()}`
-  const translateServer: TranslateServer = new TranslateServer(port, isDevelopment)
   const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)
 
+  const port: string = `${await getPort()}`
+  const translateServer: TranslateServer = new TranslateServer(port, packageHandler.fileLocation, isDevelopment)
+
   // DOWNLOAD SELECTED LANGUAGE PACKAGES
-  packageHandler.downloadPackages(false, ['en', 'es', 'zt'])
+  packageHandler.installPackages(false, ['en', 'es', 'zt'])
 
   mainWindow.on('ready-to-show', async () => {
     await translateServer.open()
@@ -114,6 +115,7 @@ app.whenReady().then(async () => {
     splashScreenWindow.destroy()
     mainWindow.show()
 
+    // TO-DO: STORE LAST SESSION SOURCE/TARGET
     await translateServer.setup('es', 'en')
 
     // OPEN DEV TOOLS ON LAUNCH

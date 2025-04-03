@@ -6,11 +6,13 @@ import fetch, { Response, FetchError } from 'node-fetch'
 
 export default class TranslateServer {
   isDevelopment: boolean
+  fileLocation: string
   host: string = '127.0.0.1'
   port: string = '8080'
 
-  constructor(port: string, isDevelopment: boolean) {
+  constructor(port: string, fileLocation: string, isDevelopment: boolean) {
     this.port = port
+    this.fileLocation = fileLocation
     this.isDevelopment = isDevelopment
 
     // SETUP TRANSLATE RELATED IPC EVENTS
@@ -63,6 +65,7 @@ export default class TranslateServer {
     // SETUP THE TRANSLATOR, SO THE FIRST TRANSLATE CALL IS NOT ABNORMALLY SLOW
     const start = performance.now()
     const params = new URLSearchParams([
+      ['path', this.fileLocation],
       ['source', source],
       ['target', target],
     ])
@@ -77,9 +80,10 @@ export default class TranslateServer {
       async (_, source: string, target: string, value: string): Promise<TranslateResponse | undefined> => {
         const start = performance.now()
         const params = new URLSearchParams([
+          ['path', this.fileLocation],
+          ['q', value],
           ['source', source],
           ['target', target],
-          ['q', value],
         ])
         return await fetch(`http://${this.host}:${this.port}/api/translate?${params}`)
           .then(async (response: Response): Promise<TranslateResponse> => {
