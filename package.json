@@ -23,13 +23,15 @@
     "@fontsource-variable/noto-sans-sc": "^5.2.5",
     "@fontsource-variable/noto-serif-sc": "^5.2.5",
     "@fontsource-variable/roboto-flex": "^5.2.5",
+    "@heroicons/react": "^2.2.0",
     "adm-zip": "^0.5.16",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.1",
     "get-port": "^7.1.0",
     "node-fetch": "^3.3.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-feather": "^2.0.10"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.8.0",

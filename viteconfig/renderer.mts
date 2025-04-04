@@ -19,6 +19,7 @@ export default defineConfig({
     alias: {
       '~shared': path.resolve(__dirname, '../src/shared'),
       '~assets': path.resolve(__dirname, '../src/assets'),
+      '~components': path.resolve(__dirname, '../src/renderer/components')
     },
   },
   plugins: [tailwindcss(), react()],

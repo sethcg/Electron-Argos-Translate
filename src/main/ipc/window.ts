@@ -25,7 +25,11 @@ export default class MainWindow extends BrowserWindow {
   private maximizeWindowEvent = (): void => {
     ipcMain.on('mainWindow:maximize', (event: Electron.IpcMainEvent) => {
       if (this.id === event.sender.id) {
-        this.maximize()
+        if (this.isMaximized()) {
+          this.restore()
+        } else {
+          this.maximize()
+        }
       }
     })
   }

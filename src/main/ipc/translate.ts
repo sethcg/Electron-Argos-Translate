@@ -80,11 +80,10 @@ export default class TranslateServer {
 
   private setupEvent = (): void => {
     ipcMain.handle('flaskApi:setup', async (): Promise<void> => {
-        const source: string = (await this.store.get('language.source_code')) as string
-        const target: string = (await this.store.get('language.target_code')) as string
-        await this.setup(source, target)
-      }
-    )
+      const source: string = (await this.store.get('language.source_code')) as string
+      const target: string = (await this.store.get('language.target_code')) as string
+      await this.setup(source, target)
+    })
   }
 
   private translateEvent = (): void => {

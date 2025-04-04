@@ -38,21 +38,15 @@ if (started) {
 
 const createMainWindow = (): MainWindow => {
   const mainWindow = new MainWindow(isDarwin, {
-    width: 800,
-    height: 600,
-    minWidth: 156,
-    minHeight: 180,
+    width: 1000,
+    height: 800,
+    minWidth: 700,
+    minHeight: 400,
     backgroundColor: '#242424',
     icon: getIconPath('icon.png'),
     show: false,
-    // HIDE TITLE BAR AND FRAME
-    // frame: false,
-    // titleBarStyle: "hidden",
-    // titleBarOverlay: {
-    //   color: "#BBBBBB",
-    //   symbolColor: "#000000",
-    //   height: 36
-    // },
+    frame: false,
+    transparent: true,
     webPreferences: {
       sandbox: true,
       contextIsolation: true,

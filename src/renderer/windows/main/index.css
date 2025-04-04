@@ -4,20 +4,25 @@
 @import '@fontsource-variable/noto-serif-sc';
 
 #root {
-  /* DEFAULT WINDOW BACKGROUND COLOR */
+  /* DEFAULT WINDOW PROPERTIES */
+  font-family: var(--font-sans);
   background-color: var(--color-gray-800);
-
-  /* DEFAULT WINDOW BORDER */
-  border-style: var(--tw-border-style);
-  border-width: 2px;
-  border-color: var(--color-gray-900);
-  border-radius: var(--radius-2xl);
-
   min-height: 100vh;
 }
 
 @theme {
   --font-sans: 'Noto Sans SC Variable', sans-serif;
   --font-serif: 'Noto Serif SC Variable', serif;
+
+  /* CUSTOM DEFAULTS */
   --font-roboto: "Roboto Flex Variable", sans-serif;
+}
+
+.splash-screen {
+  font-family: var(--font-roboto);
+  border-radius: var(--radius-2xl);
+}
+
+.window-drag {
+  -webkit-app-region: drag;
 }

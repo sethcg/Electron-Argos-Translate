@@ -1,12 +1,12 @@
 import { Field, Textarea } from '@headlessui/react'
 import { FunctionComponent, RefObject } from 'react'
-import { LanguageSelect } from './language-select'
+import { LanguageSelect } from './LanguageSelect'
 import clsx from 'clsx'
 
 interface Props {
-  textRef: RefObject<HTMLInputElement | null>,
-  isSource: boolean,
-  storeKey: string,
+  textRef: RefObject<HTMLInputElement | null>
+  isSource: boolean
+  storeKey: string
   title: string
 }
 
