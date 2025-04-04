@@ -3,20 +3,24 @@ import { ipcMain } from 'electron'
 import { TranslateResponse } from '~shared/types'
 import { ChildProcess, execFile, ExecFileOptions } from 'node:child_process'
 import fetch, { Response, FetchError } from 'node-fetch'
+import Store from './store/store'
 
 export default class TranslateServer {
   isDevelopment: boolean
   fileLocation: string
   host: string = '127.0.0.1'
   port: string = '8080'
+  store: Store
 
-  constructor(port: string, fileLocation: string, isDevelopment: boolean) {
+  constructor(store: Store, port: string, fileLocation: string, isDevelopment: boolean) {
     this.port = port
+    this.store = store
     this.fileLocation = fileLocation
     this.isDevelopment = isDevelopment
 
     // SETUP TRANSLATE RELATED IPC EVENTS
     this.translateEvent()
+    this.setupEvent()
   }
 
   public open = async (): Promise<void> => {
@@ -72,6 +76,15 @@ export default class TranslateServer {
     await fetch(`http://${this.host}:${this.port}/api/setup?${params}`).then(() => {
       console.log(`SETUP API CALL TOOK: ${Math.round(performance.now() - start)} ms`)
     })
+  }
+
+  private setupEvent = (): void => {
+    ipcMain.handle('flaskApi:setup', async (): Promise<void> => {
+        const source: string = (await this.store.get('language.source_code')) as string
+        const target: string = (await this.store.get('language.target_code')) as string
+        await this.setup(source, target)
+      }
+    )
   }
 
   private translateEvent = (): void => {

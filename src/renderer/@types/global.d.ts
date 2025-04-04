@@ -17,6 +17,7 @@ export declare global {
     }
     api: {
       translate(source: string, target: string, value: string): Promise<TranslateResponse | FetchError>
+      setup(): Promise<void>
     }
   }
 }

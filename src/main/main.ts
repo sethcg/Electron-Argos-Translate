@@ -74,12 +74,10 @@ const createMainWindow = (): MainWindow => {
 
 const createSplashScreenWindow = (): BrowserWindow => {
   const splashScreenWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    minWidth: 156,
-    minHeight: 180,
-    backgroundColor: '#242424',
+    width: 320,
+    height: 320,
     frame: false,
+    transparent: true,
     icon: getIconPath('icon.png'),
   })
 
@@ -104,10 +102,10 @@ app.whenReady().then(async () => {
   const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)
 
   const port: string = `${await getPort()}`
-  const translateServer: TranslateServer = new TranslateServer(port, packageHandler.fileLocation, isDevelopment)
+  const translateServer: TranslateServer = new TranslateServer(store, port, packageHandler.fileLocation, isDevelopment)
 
-  // DOWNLOAD SELECTED LANGUAGE PACKAGES
-  packageHandler.installPackages(false, ['en', 'es', 'zt'])
+  // DOWNLOAD AND INSTALL DEFAULT LANGUAGE PACKAGES (SPANISH AND ENGLISH)
+  packageHandler.installPackages(false, ['en', 'es'])
 
   mainWindow.on('ready-to-show', async () => {
     await translateServer.open()
@@ -115,8 +113,10 @@ app.whenReady().then(async () => {
     splashScreenWindow.destroy()
     mainWindow.show()
 
-    // TO-DO: STORE LAST SESSION SOURCE/TARGET
-    await translateServer.setup('es', 'en')
+    // GET THE LAST USED SOURCE AND TARGET, AND SETUP TRANSLATOR
+    const source: string = (await store.get('language.source_code')) as string
+    const target: string = (await store.get('language.target_code')) as string
+    await translateServer.setup(source, target)
 
     // OPEN DEV TOOLS ON LAUNCH
     if (isDevelopment) {
