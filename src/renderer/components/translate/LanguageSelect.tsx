@@ -1,11 +1,13 @@
-import { Label, Select } from '@headlessui/react'
-import { FunctionComponent, ReactElement, useEffect, useState } from 'react'
+import { Select } from '@headlessui/react'
+import { FunctionComponent, ReactElement, Ref, useEffect, useState } from 'react'
 import { LanguagePackage } from '~shared/types'
 
 interface Props {
+  className: string,
   isSource: boolean
   storeKey: string
   title: string
+  selectRef: Ref<HTMLElement>
 }
 
 type SimpleLanguage = {
@@ -13,7 +15,7 @@ type SimpleLanguage = {
   name: string
 }
 
-export const LanguageSelect: FunctionComponent<Props> = ({ isSource, storeKey, title }) => {
+export const LanguageSelect: FunctionComponent<Props> = ({ className, isSource, storeKey, title, selectRef }) => {
   const [selectOptions, setSelectOptions] = useState<ReactElement[]>()
   const [selectedOption, setSelectedOption] = useState<string>('')
 
@@ -73,9 +75,9 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, storeKey, t
   }, [isSource, storeKey])
 
   return (
-    <div className="flex flex-row gap-2">
-      <Label className="text-sm/6 font-medium text-white">{title}</Label>
-      <Select className={`bg-white`} onChange={selectChange}>
+    <div className={`${className} flex flex-row gap-2`}>
+      <span className="text-sm/6 font-medium text-white">{title}</span>
+      <Select ref={selectRef} className={`bg-white`} onChange={selectChange}>
         {selectOptions}
       </Select>
     </div>

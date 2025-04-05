@@ -3,6 +3,7 @@ import { Sidebar, NavBarItem } from '~components/global/Sidebar.tsx'
 import { TranslatePage } from '~components/pages/TranslatePage'
 
 function App() {
+  
   // const handleClick = (_event, navItems: NavBarItem[]) => {
   const handleClick = (navItems: NavBarItem[]) => {
     console.log(navItems)
@@ -12,9 +13,9 @@ function App() {
     <>
       <div className="flex flex-col w-full min-h-[inherit]">
         <WindowBar />
-        <div className="grow flex flex-row overflow-hidden">
+        <div className="grow flex flex-row">
           <Sidebar pageChange={handleClick} />
-          <div className="grow p-2 overflow-auto">
+          <div className="grow flex flex-col">
             {/* CONTENT AREA */}
             <TranslatePage />
           </div>

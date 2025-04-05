@@ -1,18 +1,34 @@
 import { FunctionComponent, useRef } from 'react'
-import { TextArea } from '~components/translate/TextArea.tsx'
+import { LanguageSelect } from '~components/translate/LanguageSelect'
+import { LanguageSwapButton } from '~components/translate/LanguageSwap'
+import { SourceTextArea, TargetTextArea } from '~components/translate/TextArea'
 import { TranslateButton } from '~components/translate/TranslateButton'
 
 export const TranslatePage: FunctionComponent = () => {
   const inputTextRef = useRef<HTMLInputElement>(null)
   const outputTextRef = useRef<HTMLInputElement>(null)
 
+  const inputSelectRef = useRef<HTMLInputElement>(null)
+  const outputSelectRef = useRef<HTMLInputElement>(null)
+
   return (
-    <div className="grow flex flex-col gap-6 px-4 pt-2">
-      <div className="flex flex-row w-full h-64 gap-4">
-        <TextArea title={'Translate from'} isSource={true} storeKey={'language.source_code'} textRef={inputTextRef} />
-        <TextArea title={'Translate to'} isSource={false} storeKey={'language.target_code'} textRef={outputTextRef} />
+    <div className="grow flex flex-col w-full h-64 p-2">
+      <div className='flex flex-row grow px-4'>
+        <div className='flex flex-col grow max-w-xl'>
+          <LanguageSelect className={'grow-0 pl-2 '} selectRef={inputSelectRef} isSource={true} title={'Translate from'} storeKey={'language.source_code'} />
+          <SourceTextArea className={'grow max-w-xl h-48'} title={'Translate from'} storeKey={'language.source_code'} textRef={inputTextRef} />
+        </div>
+        <div className='flex justify-center w-[64px] w-max-[64px] w-min-[64px]'>
+          <LanguageSwapButton className={''} inputSelectRef={inputSelectRef} outputSelectRef={outputSelectRef} inputTextRef={inputTextRef} outputTextRef={outputTextRef} />
+        </div>
+        <div className='flex flex-col grow max-w-xl'>
+          <LanguageSelect className={'grow-0 pl-2'} selectRef={outputSelectRef} isSource={false} title={'Translate to'} storeKey={'language.target_code'} />
+          <TargetTextArea className={'grow max-w-xl h-48'} title={'Translate to'} storeKey={'language.target_code'} textRef={outputTextRef} />
+        </div>
       </div>
-      <TranslateButton className={'self-start'} inputTextRef={inputTextRef} outputTextRef={outputTextRef} />
+
+      {/* TO-DO: FIX TRANSLATION TO BE ON TEXT CHANGE, OR MAKE THIS BUTTON LOOK BETTER */}
+      <TranslateButton className={''} inputTextRef={inputTextRef} outputTextRef={outputTextRef} />
     </div>
   )
 }
