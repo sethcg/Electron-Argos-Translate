@@ -99,7 +99,7 @@ app.whenReady().then(async () => {
   const translateServer: TranslateServer = new TranslateServer(store, port, packageHandler.fileLocation, isDevelopment)
 
   // DOWNLOAD AND INSTALL DEFAULT LANGUAGE PACKAGES (SPANISH AND ENGLISH)
-  packageHandler.installPackages(false, ['en', 'es'])
+  packageHandler.installPackages(false, ['en', 'es', 'zt', 'ru'])
 
   mainWindow.on('ready-to-show', async () => {
     await translateServer.open()

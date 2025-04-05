@@ -6,7 +6,7 @@
 #root {
   /* DEFAULT WINDOW PROPERTIES */
   font-family: var(--font-sans);
-  background-color: var(--color-gray-800);
+  background-color: var(--color-neutral-800);
   min-height: 100vh;
 }
 
