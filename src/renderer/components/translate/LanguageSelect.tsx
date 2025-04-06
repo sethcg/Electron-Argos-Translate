@@ -3,7 +3,7 @@ import { FunctionComponent, ReactElement, Ref, useEffect, useState } from 'react
 import { LanguagePackage } from '~shared/types'
 
 interface Props {
-  className: string,
+  className: string
   isSource: boolean
   storeKey: string
   title: string

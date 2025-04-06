@@ -4,24 +4,23 @@ import { TranslateResponse } from '~shared/types'
 
 interface Props {
   className: string
+  defaultTargetValue: string
   inputTextRef: RefObject<HTMLInputElement | null>
   outputTextRef: RefObject<HTMLInputElement | null>
 }
 
-export const TranslateButton: FunctionComponent<Props> = ({ className, inputTextRef, outputTextRef }) => {
+export const TranslateButton: FunctionComponent<Props> = ({ className, defaultTargetValue, inputTextRef, outputTextRef }) => {
   async function translate(): Promise<void> {
-    const source: string = (await window.main.store.get('language.source_code')) as string
-    const target: string = (await window.main.store.get('language.target_code')) as string
-
-    console.log(`SOURCE: ${source}\tTARGET: ${target}`)
-
     if (inputTextRef.current) {
+      const source: string = (await window.main.store.get('language.source_code')) as string
+      const target: string = (await window.main.store.get('language.target_code')) as string
+
       const translation: TranslateResponse | undefined = await window.api.translate(source, target, inputTextRef.current.value)
-      if (translation) {
-        if (outputTextRef.current) {
-          outputTextRef.current.value = translation.text
-        }
-        console.log(translation)
+      const text: string = translation?.text ?? defaultTargetValue
+
+      if (outputTextRef.current) {
+        outputTextRef.current.value = text
+        console.log(text)
       }
     }
   }

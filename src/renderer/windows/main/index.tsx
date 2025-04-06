@@ -3,7 +3,6 @@ import { Sidebar, NavBarItem } from '~components/global/Sidebar.tsx'
 import { TranslatePage } from '~components/pages/TranslatePage'
 
 function App() {
-  
   // const handleClick = (_event, navItems: NavBarItem[]) => {
   const handleClick = (navItems: NavBarItem[]) => {
     console.log(navItems)
