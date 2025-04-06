@@ -4,20 +4,20 @@ import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   className: string
-  defaultTargetValue: string
   inputSelectRef: RefObject<HTMLInputElement | null>
   outputSelectRef: RefObject<HTMLInputElement | null>
   inputTextRef: RefObject<HTMLInputElement | null>
   outputTextRef: RefObject<HTMLInputElement | null>
+  translateCallback: () => void
 }
 
 export const LanguageSwapButton: FunctionComponent<Props> = ({
-  defaultTargetValue,
   className,
   inputSelectRef,
   outputSelectRef,
   inputTextRef,
   outputTextRef,
+  translateCallback,
 }) => {
   async function swapLanguages(): Promise<void> {
     if (inputSelectRef.current && outputSelectRef.current && inputTextRef.current && outputTextRef.current) {
@@ -27,7 +27,7 @@ export const LanguageSwapButton: FunctionComponent<Props> = ({
         outputSelectRef.current.value,
         inputTextRef.current.value,
         outputTextRef.current.value,
-      ].some((value: string) => value.length <= 0 || value == defaultTargetValue)
+      ].some((value: string) => value.length <= 0)
       if (anyDefaultOrEmpty) return
 
       const source: string = (await window.main.store.get('language.source_code')) as string
@@ -49,6 +49,9 @@ export const LanguageSwapButton: FunctionComponent<Props> = ({
 
       // SOURCE OR TARGET CHANGED, SETUP TRANSLATOR
       window.api.setup()
+
+      // CALL TRANSLATE, TO UPDATE OUTPUT AFTER SWAP
+      translateCallback()
     }
   }
   return (

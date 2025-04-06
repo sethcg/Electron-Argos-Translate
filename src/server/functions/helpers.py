@@ -6,9 +6,9 @@ def filter_unique(seq, extra):
     return [x for x in seq if not (x in seen or seen_add(x))]
 
 def avoid_returning_original(source: str, hypotheses: list[Hypothesis]):
-    # TRY TO SWAP SAME RESPONSE ANSWERS, FIXES ISSUE LIKE:
+    # TRY TO SWAP SAME RESPONSE ANSWERS (IF SOURCE IS A WORD/PHRASE NOT A LETTER), FIXES ISSUE LIKE:
     # source = "test2" => { text: "test2", alternatives: ["prueba 2", "prueba2"] }
-    if(len(hypotheses) > 1 and hypotheses[0].value == source):
+    if(len(hypotheses) > 1 and len(source) > 1 and hypotheses[0].value == source):
         temp = hypotheses[0]
         hypotheses[0] = hypotheses[1]
         hypotheses[1] = temp

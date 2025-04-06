@@ -8,6 +8,7 @@ interface Props {
   storeKey: string
   title: string
   selectRef: Ref<HTMLElement>
+  translateCallback: () => void
 }
 
 type SimpleLanguage = {
@@ -15,7 +16,7 @@ type SimpleLanguage = {
   name: string
 }
 
-export const LanguageSelect: FunctionComponent<Props> = ({ className, isSource, storeKey, title, selectRef }) => {
+export const LanguageSelect: FunctionComponent<Props> = ({ className, isSource, storeKey, title, selectRef, translateCallback }) => {
   const [selectOptions, setSelectOptions] = useState<ReactElement[]>()
   const [selectedOption, setSelectedOption] = useState<string>('')
 
@@ -26,6 +27,9 @@ export const LanguageSelect: FunctionComponent<Props> = ({ className, isSource, 
     if (selectedOption !== value) {
       window.main.store.set(storeKey, value)
       window.api.setup()
+
+      // CALL TRANSLATE, TO UPDATE AFTER LANGUAGE CHANGE
+      translateCallback()
     }
     setSelectedOption(value)
   }
@@ -34,7 +38,6 @@ export const LanguageSelect: FunctionComponent<Props> = ({ className, isSource, 
     getPackages()
     async function getPackages() {
       const selectedCode: string = (await window.main.store.get(storeKey)) as string
-      console.log(`storeKey: ${storeKey} \t selectedCode: ${selectedCode}`)
 
       const packages: LanguagePackage[] = (await window.main.store.get('packages')) as LanguagePackage[]
       let languages: SimpleLanguage[] = packages.map((lang: LanguagePackage) => {
