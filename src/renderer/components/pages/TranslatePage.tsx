@@ -1,5 +1,5 @@
-import { FunctionComponent, useCallback, useRef } from 'react'
-import { LanguageSelect } from '~components/translate/LanguageSelect'
+import { FunctionComponent, useCallback, useRef, useState } from 'react'
+import { LanguageSelect, SimpleLanguage } from '~components/translate/LanguageSelect'
 import { LanguageSwapButton } from '~components/translate/LanguageSwap'
 import { SourceTextArea, TargetTextArea } from '~components/translate/TextArea'
 import { TranslateResponse } from '~shared/types'
@@ -8,8 +8,8 @@ export const TranslatePage: FunctionComponent = () => {
   const inputTextRef = useRef<HTMLInputElement>(null)
   const outputTextRef = useRef<HTMLInputElement>(null)
 
-  const inputSelectRef = useRef<HTMLInputElement>(null)
-  const outputSelectRef = useRef<HTMLInputElement>(null)
+  const [inputSelectState, setInputSelectState] = useState<SimpleLanguage>({ code: '', name: '' })
+  const [outputSelectState, setOutputSelectState] = useState<SimpleLanguage>({ code: '', name: '' })
 
   const translate = useCallback(async (): Promise<void> => {
     if (inputTextRef.current) {
@@ -21,45 +21,45 @@ export const TranslatePage: FunctionComponent = () => {
 
       if (outputTextRef.current) {
         outputTextRef.current.value = text
-        console.log(text)
       }
     }
   }, [inputTextRef])
 
   return (
-    <div className="grow flex flex-col w-full h-64 p-2">
-      <div className="flex flex-row grow px-4">
-        <div className="flex flex-col grow max-w-xl">
+    <div className="grow flex flex-col size-full px-2 py-4">
+      <div className="flex max-[900px]:flex-col flex-row grow px-4">
+        <div className="flex flex-col min-[900px]:max-w-2xl max-h-96 grow">
           <LanguageSelect
-            className={'grow-0 pl-2 '}
-            selectRef={inputSelectRef}
             isSource={true}
             title={'Translate from'}
             storeKey={'language.source_code'}
+            selectState={inputSelectState}
+            setSelectState={setInputSelectState}
             translateCallback={translate}
           />
-          <SourceTextArea className={'grow max-w-xl h-48'} textRef={inputTextRef} translateCallback={translate} />
+          <SourceTextArea className={'flex grow'} textRef={inputTextRef} translateCallback={translate} />
         </div>
-        <div className="flex justify-center w-[64px] w-max-[64px] w-min-[64px]">
+        <div className="flex m-3 justify-end">
           <LanguageSwapButton
-            className={''}
             translateCallback={translate}
-            inputSelectRef={inputSelectRef}
-            outputSelectRef={outputSelectRef}
+            inputSelectState={inputSelectState}
+            setInputSelectState={setInputSelectState}
+            outputSelectState={outputSelectState}
+            setOutputSelectState={setOutputSelectState}
             inputTextRef={inputTextRef}
             outputTextRef={outputTextRef}
           />
         </div>
-        <div className="flex flex-col grow max-w-xl">
+        <div className="flex flex-col min-[900px]:max-w-2xl max-h-96 grow">
           <LanguageSelect
-            className={'grow-0 pl-2'}
-            selectRef={outputSelectRef}
             isSource={false}
             title={'Translate to'}
             storeKey={'language.target_code'}
+            selectState={outputSelectState}
+            setSelectState={setOutputSelectState}
             translateCallback={translate}
           />
-          <TargetTextArea className={'grow max-w-xl h-48'} textRef={outputTextRef} />
+          <TargetTextArea className={'flex grow'} textRef={outputTextRef} />
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, handleUp
             className={`relative flex flex-row cursor-pointer items-center rounded-md p-2 
           ${
             active
-              ? 'text-black bg-gradient-to-tr from-0% from-gray-700 to-gray-600'
+              ? 'text-neutral-950 bg-gradient-to-tr from-0% from-gray-700 to-gray-600'
               : 'text-white hover:bg-gray-500 hover:text-neutral-900'
           }
           `}

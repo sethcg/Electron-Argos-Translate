@@ -6,11 +6,11 @@ export const WindowBar: FunctionComponent = () => {
     <div className="flex h-[32px] bg-neutral-900 border-b-2 border-neutral-950 shadow-sm">
       <div className="grow window-drag" /> {/* Draggable Bar */}
       <div className="grid grid-cols-3 h-full w-[96px]">
-        <button className="flex justify-center items-center outline-none hover:bg-neutral-800" onClick={window.main.minimizeWindow}>
+        <button className="flex justify-center items-center outline-none hover:bg-neutral-700" onClick={window.main.minimizeWindow}>
           <Icon.Minus size="20" />
         </button>
 
-        <button className="flex justify-center items-center outline-none hover:bg-neutral-800" onClick={window.main.maximizeWindow}>
+        <button className="flex justify-center items-center outline-none hover:bg-neutral-700" onClick={window.main.maximizeWindow}>
           <Icon.Square size="16" className="justify-center" />
         </button>
 
