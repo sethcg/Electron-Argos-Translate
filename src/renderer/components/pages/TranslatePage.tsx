@@ -18,9 +18,11 @@ export const TranslatePage: FunctionComponent = () => {
 
       const translation: TranslateResponse | undefined = await window.api.translate(source, target, inputTextRef.current.value)
       const text: string = translation?.text ?? ''
+      // console.log(translation)
 
       if (outputTextRef.current) {
         outputTextRef.current.value = text
+        // console.log(text)
       }
     }
   }, [inputTextRef])
@@ -39,7 +41,7 @@ export const TranslatePage: FunctionComponent = () => {
           />
           <SourceTextArea className={'flex grow'} textRef={inputTextRef} translateCallback={translate} />
         </div>
-        <div className="flex m-3 justify-end">
+        <div className="flex m-4 justify-center">
           <LanguageSwapButton
             translateCallback={translate}
             inputSelectState={inputSelectState}
