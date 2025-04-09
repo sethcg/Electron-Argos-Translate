@@ -7,20 +7,19 @@ import Store from './store/store'
 
 export default class TranslateServer {
   isDevelopment: boolean
-  fileLocation: string
+  languageFileLocation: string
   host: string = '127.0.0.1'
   port: string = '8080'
   store: Store
 
-  constructor(store: Store, port: string, fileLocation: string, isDevelopment: boolean) {
+  constructor(store: Store, port: string, isDevelopment: boolean, languageFileLocation: string) {
     this.port = port
     this.store = store
-    this.fileLocation = fileLocation
     this.isDevelopment = isDevelopment
+    this.languageFileLocation = languageFileLocation
 
     // SETUP TRANSLATE RELATED IPC EVENTS
     this.translateEvent()
-    this.setupEvent()
   }
 
   public open = async (): Promise<void> => {
@@ -65,24 +64,18 @@ export default class TranslateServer {
     })
   }
 
-  public setup = async (source: string = 'en', target: string = 'es'): Promise<void> => {
-    // SETUP THE TRANSLATOR, SO THE FIRST TRANSLATE CALL IS NOT ABNORMALLY SLOW
+  public setCache = async (): Promise<void> => {
+    // CACHE THE INSTALLED TRANSLATORS, SO THE FIRST TRANSLATE CALL IS NOT ABNORMALLY SLOW
     const start = performance.now()
+    const sentencizerFileLocation: string = this.isDevelopment
+      ? path.join(__dirname, './resources/xx_sent_ud_sm')
+      : path.join(process.resourcesPath, '/xx_sent_ud_sm')
     const params = new URLSearchParams([
-      ['path', this.fileLocation],
-      ['source', source],
-      ['target', target],
+      ['languagePath', this.languageFileLocation],
+      ['sentencizerPath', sentencizerFileLocation],
     ])
     await fetch(`http://${this.host}:${this.port}/api/setup?${params}`).then(() => {
       console.log(`SETUP API CALL TOOK: ${Math.round(performance.now() - start)} ms`)
-    })
-  }
-
-  private setupEvent = (): void => {
-    ipcMain.handle('flaskApi:setup', async (): Promise<void> => {
-      const source: string = (await this.store.get('language.source_code')) as string
-      const target: string = (await this.store.get('language.target_code')) as string
-      await this.setup(source, target)
     })
   }
 
@@ -92,7 +85,6 @@ export default class TranslateServer {
       async (_, source: string, target: string, value: string): Promise<TranslateResponse | undefined> => {
         const start = performance.now()
         const params = new URLSearchParams([
-          ['path', this.fileLocation],
           ['q', value],
           ['source', source],
           ['target', target],

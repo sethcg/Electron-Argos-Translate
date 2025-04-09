@@ -38,9 +38,8 @@ export const LanguageSelect: FunctionComponent<Props> = ({
     setSelectState(language)
     setLanguages(sortLanguages(languages))
 
-    // SOURCE OR TARGET CHANGED, SETUP TRANSLATOR
+    // SOURCE OR TARGET CHANGED
     window.main.store.set(storeKey, language.code)
-    window.api.setup()
 
     // CALL TRANSLATE, TO UPDATE AFTER LANGUAGE CHANGE
     translateCallback()

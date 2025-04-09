@@ -52,9 +52,6 @@ export const LanguageSwapButton: FunctionComponent<Props> = ({
       inputTextRef.current.value = outputTextRef.current.value
       outputTextRef.current.value = tempText
 
-      // SOURCE OR TARGET CHANGED, SETUP TRANSLATOR
-      window.api.setup()
-
       // CALL TRANSLATE, TO UPDATE OUTPUT AFTER SWAP
       translateCallback()
     }

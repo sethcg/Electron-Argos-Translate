@@ -2,7 +2,7 @@ import re
 import argparse
 from os import getpid
 from flask import Flask, request, jsonify
-from functions.translate import initialize_language_translator, translate
+from functions.translate import setup_cached_languages, translate
 
 app = Flask(__name__)
 
@@ -22,29 +22,21 @@ def getProcessID():
 def setupDefaultTranslator():
     args = request.args
 
-    path = args.get('path', default = None, type = str)
-    if(path is None or len(path) == 0):
+    str_package_path = args.get('languagePath', default = None, type = str)
+    if(str_package_path is None or len(str_package_path) == 0):
         return jsonify({"error": "No package path provided"})
+    
+    str_sentencizer_path = args.get('sentencizerPath', default = None, type = str)
+    if(str_sentencizer_path is None or len(str_sentencizer_path) == 0):
+        return jsonify({"error": "No sentencizer path provided"})
 
-    target = re.sub('\"|\'', '', args.get('target', default = None, type = str))
-    if(target is None or len(target) == 0):
-        return jsonify({"error": "No target language ISO code was provided"})
-
-    source = re.sub('\"|\'', '', args.get('source', default = None, type = str))
-    if(source is None or len(source) == 0):
-        return jsonify({"error": "No source language ISO code was provided"})
-
-    initialize_language_translator(path, source, target)
+    setup_cached_languages(str_package_path, str_sentencizer_path)
     return jsonify({"success": True})
 
 # TRANSLATE THE WORD OR PHRASE FROM SOURCE LANGUAGE TO TARGET LANGUAGE
 @app.route('/api/translate', methods=['GET'])
 def translateText():
     args = request.args
-
-    path = args.get('path', default = None, type = str)
-    if(path is None or len(path) == 0):
-        return jsonify({"error": "No package path provided"})
 
     q = args.get('q', default = None, type = str)
     if(q is None or len(q) == 0):
@@ -60,7 +52,7 @@ def translateText():
 
     num_alternatives = args.get('num_alternatives', default = 3, type = int)
 
-    return translate(path, q, source, target, num_alternatives)
+    return translate(q, source, target, num_alternatives)
 
 def main():
     parser = argparse.ArgumentParser()

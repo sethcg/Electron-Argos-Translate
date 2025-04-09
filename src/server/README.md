@@ -8,12 +8,6 @@ Flask server translation service.
 
 The models can be found here at the [argospm index](https://www.argosopentech.com/argospm/index/).
 
-Direct download for relevant models:
-- [Spanish => English](https://argos-net.com/v1/translate-es_en-1_9.argosmodel).
-- [English => Spanish](https://argos-net.com/v1/translate-en_es-1_0.argosmodel).
-
-> Models should be placed in the *./src/server/argosmodels* folder
-
 </br>
 
 ## Running PyInstaller
@@ -36,6 +30,6 @@ pyinstaller ./src/server/server.py
 </br>
 
 ## Citations:
-- [Argos Translate](https://github.com/argosopentech/argos-translate) - Open-source offline translation library written in
-  Python.
+- [Argos Translate](https://github.com/argosopentech/argos-translate) - Open-source offline translation library written in Python.
+- [Spacy](https://github.com/explosion/spaCy) - SpaCy is a library for advanced Natural Language Processing in Python.
 - [LibreTranslate](https://github.com/LibreTranslate) - Free and Open-source Machine Translation API, entirely self-hosted.

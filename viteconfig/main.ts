@@ -10,7 +10,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         { src: './dist/translate_server.exe', dest: 'resources' },
-        { src: './src/assets/packages.json', dest: 'resources' },
+        { src: './src/assets/packages/argos-packages.json', dest: 'resources' },
+        { src: './src/assets/xx_sent_ud_sm', dest: 'resources' },
       ],
     }),
   ],

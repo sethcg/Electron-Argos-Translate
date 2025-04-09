@@ -1,89 +1,352 @@
-from argostranslate import settings, translate
+# FOR PYTHON TYPES
+from __future__ import annotations
+
+from pathlib import Path
+from typing import List, Optional
+
+# https://github.com/OpenNMT/CTranslate2
+# Python library for efficient inference with Transformer models
+import ctranslate2
+
+# https://spacy.io/models/xx#xx_sent_ud_sm
+# Multi-language pipeline optimized for CPU
+# import xx_sent_ud_sm
+from spacy.util import load_model_from_path
+
 from functions import package
 
-def get_installed_languages(str_path: str) -> list[translate.Language]:
-    # GET LOCALLY INSTALLED LANGUAGE PACKAGES
-    packages = package.get_installed_packages(str_path)
+class Hypothesis:
+    """
+    Represents a translation hypothesis
+    Attributes:
+        value: The hypothetical translation value
+        score: The score representing the quality of the translation
+    """
 
-    # If stanza not available filter for sbd available
-    if not settings.stanza_available:
-        sbd_packages = list(filter(lambda x: x.type == "sbd", packages))
-        sbd_available_codes = set()
-        for sbd_package in sbd_packages:
-            sbd_available_codes = sbd_available_codes.union(sbd_package.from_codes)
-        packages = list(filter(lambda x: x.from_code in sbd_available_codes, packages))
+    value: str
+    score: float
 
-    # Filter for translate packages
-    packages = list(filter(lambda x: x.type == "translate", packages))
+    def __init__(self, value: str, score: float):
+        self.value = value
+        self.score = score
 
-    # Load languages and translations from packages
-    language_of_code = dict()
-    for pkg in packages:
-        if pkg.from_code not in language_of_code:
-            language_of_code[pkg.from_code] = translate.Language(pkg.from_code, pkg.from_name)
-        if pkg.to_code not in language_of_code:
-            language_of_code[pkg.to_code] = translate.Language(pkg.to_code, pkg.to_name)
-        from_lang = language_of_code[pkg.from_code]
-        to_lang = language_of_code[pkg.to_code]
+    def __lt__(self, other):
+        return self.score < other.score
 
-        package_key = f"{pkg.from_code}-{pkg.to_code}"
-        contain = list(
-            filter(lambda x: x.package_key == package_key, translate.installed_translates)
-        )
-        translation_to_add: translate.CachedTranslation
-        if len(contain) == 0:
-            translation_to_add = translate.CachedTranslation(
-                translate.PackageTranslation(from_lang, to_lang, pkg)
+    def __repr__(self):
+        return f"({repr(self.value)}, {self.score})"
+
+    def __str__(self):
+        return repr(self)
+
+class Language:
+    """
+    Represents a language that can be translated from/to.
+    Attributes:
+        code: The code representing the language.
+        name: The human readable name of the language.
+        translations_from: A list of the translations that translate from this language.
+        translations_to: A list of the translations that translate to this language
+    """
+
+    translations_from: list[ITranslation] = []
+    translations_to: list[ITranslation] = []
+
+    def __init__(self, code: str, name: str):
+        self.code = code
+        self.name = name
+        self.translations_from = []
+        self.translations_to = []
+
+    def __str__(self):
+        return self.name
+
+    def get_translation(self, to: Language) -> ITranslation | None:
+        """
+        Gets a translation from this Language to another Language.
+        Args:
+            to: The Language to look for a Translation to.
+        Returns:
+            A valid Translation if there is one in translations_from else None.
+        """
+        valid_translations = list(filter(lambda x: x.to_lang.code == to.code, self.translations_from))
+        if len(valid_translations) > 0:
+            return valid_translations[0]
+        return None
+
+class ITranslation:
+    """
+    Represents a translation between two Languages
+    Attributes:
+        from_lang: The Language this Translation translates from.
+        to_lang: The Language this Translation translates to.
+    """
+
+    from_lang: Language
+    to_lang: Language
+
+    def translate(self, input_text: str) -> str:
+        """
+        Translates a string from self.from_lang to self.to_lang
+        Args:
+            input_text: The text to be translated.
+        Returns:
+            input_text translated.
+        """
+        return self.hypotheses(input_text, num_hypotheses = 1)[0].value
+
+    @staticmethod
+    def split_into_paragraphs(input_text: str) -> list[str]:
+        """
+        Splits input_text into paragraphs and returns a list of paragraphs.
+        Args:
+            input_text: The text to be split.
+        Returns:
+            A list of paragraphs.
+        """
+        return input_text.split("\n")
+
+    @staticmethod
+    def combine_paragraphs(paragraphs: list[str]) -> str:
+        """
+        Combines a list of paragraphs together.
+        Args:
+            paragraphs: A list of paragraphs.
+        Returns:
+            list of n paragraphs combined into one string.
+        """
+        return "\n".join(paragraphs)
+
+class PackageTranslation(ITranslation):
+    """A Translation that is installed with a package"""
+
+    def __init__(self, from_lang: Language, to_lang: Language, pkg: package.Package, sentencizer: SpacySentencizerSmall):
+        self.from_lang = from_lang
+        self.to_lang = to_lang
+        self.pkg = pkg
+        self.translator = None
+        self.sentencizer = sentencizer
+
+    def hypotheses(self, input_text: str, num_hypotheses: int = 4) -> list[Hypothesis]:
+        if self.translator is None:
+            model_path = str(self.pkg.package_path / "model")
+            self.translator = ctranslate2.Translator(
+                model_path,
+                # "cpu" or "cuda"
+                device = "cpu",
+                inter_threads = 1,
+                intra_threads = 0,
             )
-            saved_cache = translate.InstalledTranslate()
-            saved_cache.package_key = package_key
-            saved_cache.cached_translation = translation_to_add
-            translate.installed_translates.append(saved_cache)
-        else:
-            translation_to_add = contain[0].cached_translation
+        paragraphs = ITranslation.split_into_paragraphs(input_text)
+        translated_paragraphs = []
+        for paragraph in paragraphs:
+            translated_paragraphs.append(
+                apply_packaged_translation(
+                    self.pkg,
+                    paragraph,
+                    self.translator,
+                    self.sentencizer,
+                    num_hypotheses,
+                )
+            )
 
-        from_lang.translations_from.append(translation_to_add)
-        to_lang.translations_to.append(translation_to_add)
+        # Construct new hypotheses using all paragraphs
+        hypotheses_to_return = [Hypothesis("", 0) for i in range(num_hypotheses)]
+        for i in range(num_hypotheses):
+            for translated_paragraph in translated_paragraphs:
+                value = ITranslation.combine_paragraphs(
+                    [hypotheses_to_return[i].value, translated_paragraph[i].value]
+                )
+                score = hypotheses_to_return[i].score + translated_paragraph[i].score
+                hypotheses_to_return[i] = Hypothesis(value, score)
+            hypotheses_to_return[i].value = hypotheses_to_return[i].value.lstrip("\n")
+        return hypotheses_to_return
 
-    languages = list(language_of_code.values())
+class IdentityTranslation(ITranslation):
+    """A Translation that doesn't modify input_text."""
 
-    # Add translations so everything can translate to itself
-    for language in languages:
-        identity_translation = translate.IdentityTranslation(language)
-        language.translations_from.append(identity_translation)
-        language.translations_to.append(identity_translation)
+    def __init__(self, lang: Language):
+        """
+        Creates an IdentityTranslation.
+        Args:
+            lang: The Language this Translation translates from and to.
+        """
+        self.from_lang = lang
+        self.to_lang = lang
 
-    # Pivot through intermediate languages to add translations
-    # that don't already exist
-    for language in languages:
-        keep_adding_translations = True
-        while keep_adding_translations:
-            keep_adding_translations = False
-            for translation in language.translations_from:
-                for translation_2 in translation.to_lang.translations_from:
-                    if language.get_translation(translation_2.to_lang) is None:
-                        # The language currently doesn't have a way to translate
-                        # to this language
-                        keep_adding_translations = True
-                        composite_translation = translate.CompositeTranslation(
-                            translation, translation_2
-                        )
-                        language.translations_from.append(composite_translation)
-                        translation_2.to_lang.translations_to.append(
-                            composite_translation
-                        )
+    def hypotheses(self, input_text: str, num_hypotheses: int = 4):
+        return [Hypothesis(input_text, 0) for i in range(num_hypotheses)]
 
-    # Put English first if available so it shows up as the from language in the gui
-    en_index = None
-    for i, language in enumerate(languages):
-        if language.code == "en":
-            en_index = i
-            break
-    english = None
-    if en_index is not None:
-        english = languages.pop(en_index)
-    languages.sort(key=lambda x: x.name)
-    if english is not None:
-        languages = [english] + languages
+class CompositeTranslation(ITranslation):
+    """
+    A ITranslation that is performed by chaining two Translations
+    Attributes:
+        t1: The first Translation to apply.
+        t2: The second Translation to apply.
+    """
 
-    return languages
+    t1: ITranslation
+    t2: ITranslation
+    from_lang: Language
+    to_lang: Language
+
+    def __init__(self, t1: ITranslation, t2: ITranslation):
+        """
+        Creates a CompositeTranslation.
+        Args:
+            t1: The first Translation to apply.
+            t2: The second Translation to apply.
+        """
+        self.t1 = t1
+        self.t2 = t2
+        self.from_lang = t1.from_lang
+        self.to_lang = t2.to_lang
+
+    def hypotheses(self, input_text: str, num_hypotheses: int = 4) -> list[Hypothesis]:
+        t1_hypotheses = self.t1.hypotheses(input_text, num_hypotheses)
+
+        # Combine hypotheses
+        # O(n^2)
+        to_return = []
+        for t1_hypothesis in t1_hypotheses:
+            t2_hypotheses = self.t2.hypotheses(t1_hypothesis.value, num_hypotheses)
+            for t2_hypothesis in t2_hypotheses:
+                to_return.append(
+                    Hypothesis(
+                        t2_hypothesis.value, t1_hypothesis.score + t2_hypothesis.score
+                    )
+                )
+        to_return.sort(reverse=True)
+        return to_return[0:num_hypotheses]
+
+class CachedTranslation(ITranslation):
+    """
+    Caches a translation to improve performance.
+
+    This is done by splitting up the text passed for translation
+    into paragraphs and translating each paragraph individually.
+    A hash of the paragraphs and their corresponding translations
+    are saved from the previous translation and used to improve
+    performance on the next one. This is especially useful if you
+    are repeatedly translating nearly identical text with a small
+    change at the end of it.
+    """
+
+    underlying: ITranslation
+    from_lang: Language
+    to_lang: Language
+    cache: dict
+
+    def __init__(self, underlying: ITranslation):
+        """Creates a CachedTranslation.
+
+        Args:
+            underlying: The underlying translation to cache.
+        """
+        self.underlying = underlying
+        self.from_lang = underlying.from_lang
+        self.to_lang = underlying.to_lang
+        self.cache = dict()
+
+    def hypotheses(self, input_text: str, num_hypotheses: int = 4) -> list[Hypothesis]:
+        new_cache = dict()  # 'text': ['t1'...('tN')]
+        paragraphs = ITranslation.split_into_paragraphs(input_text)
+        translated_paragraphs = []
+        for paragraph in paragraphs:
+            translated_paragraph = self.cache.get(paragraph)
+            # If len() of our cached items are different than `num_hypotheses` it means that
+            # the search parameter is changed by caller, so we can't re-use cache, and should update it.
+            if (
+                translated_paragraph is None
+                or len(translated_paragraph) != num_hypotheses
+            ):
+                translated_paragraph = self.underlying.hypotheses(
+                    paragraph, num_hypotheses
+                )
+            new_cache[paragraph] = translated_paragraph
+            translated_paragraphs.append(translated_paragraph)
+        self.cache = new_cache
+
+        # Construct hypotheses
+        hypotheses_to_return = [Hypothesis("", 0) for i in range(num_hypotheses)]
+        for i in range(num_hypotheses):
+            for j in range(len(translated_paragraphs)):
+                value = ITranslation.combine_paragraphs(
+                    [hypotheses_to_return[i].value, translated_paragraphs[j][i].value]
+                )
+                score = (
+                    hypotheses_to_return[i].score + translated_paragraphs[j][i].score
+                )
+                hypotheses_to_return[i] = Hypothesis(value, score)
+            hypotheses_to_return[i].value = hypotheses_to_return[i].value.lstrip("\n")
+        return hypotheses_to_return
+
+class ISentenceBoundaryDetectionModel:
+    # https://github.com/argosopentech/sbd/blob/main/main.py
+    def split_sentences(self, text: str, lang_code: Optional[str] = None) -> List[str]:
+        raise NotImplementedError
+
+class SpacySentencizerSmall(ISentenceBoundaryDetectionModel):
+    def __init__(self, sentencizer_path: Path):
+        self.nlp = load_model_from_path(sentencizer_path, exclude = ["parser"])
+        self.nlp.add_pipe("sentencizer")
+
+    def split_sentences(self, text: str, lang_code: Optional[str] = None) -> List[str]:
+        doc = self.nlp(text)
+        return [sent.text for sent in doc.sents]
+
+def apply_packaged_translation(
+    pkg: package.Package,
+    input_text: str,
+    translator: ctranslate2.Translator,
+    sentencizer: ISentenceBoundaryDetectionModel,
+    num_hypotheses: int = 4,
+) -> list[Hypothesis]:
+    """
+    Applies the translation in pkg to translate input_text.
+    Args:
+        pkg: The package that provides the translation.
+        input_text: The text to be translated.
+        translator: The CTranslate2 Translator
+        sentencizer: The Spacy sentencizer,
+        num_hypotheses: The number of hypotheses to generate
+    Returns:
+        A list of Hypothesis's for translating input_text
+    """
+    sentences = sentencizer.split_sentences(input_text)
+
+    # Tokenization
+    tokenized = [pkg.tokenizer.encode(sentence) for sentence in sentences]
+
+    # Translation
+    BATCH_SIZE = 32
+
+    translated_batches = translator.translate_batch(
+        tokenized,
+        target_prefix = None,
+        replace_unknowns = True,
+        max_batch_size = BATCH_SIZE,
+        beam_size = max(num_hypotheses, 4),
+        num_hypotheses = num_hypotheses,
+        length_penalty = 0.2,
+        return_scores = True,
+    )
+
+    # Build hypotheses
+    value_hypotheses = []
+    for i in range(num_hypotheses):
+        translated_tokens = []
+        cumulative_score = 0
+        for translated_batch in translated_batches:
+            translated_tokens += translated_batch.hypotheses[i]
+            cumulative_score += translated_batch.scores[i]
+
+        value = pkg.tokenizer.decode(translated_tokens)
+
+        if len(value) > 0 and value[0] == " ":
+            # Remove space at the beginning of the translation added by the tokenizer.
+            value = value[1:]
+
+        hypothesis = Hypothesis(value, cumulative_score)
+        value_hypotheses.append(hypothesis)
+    return value_hypotheses

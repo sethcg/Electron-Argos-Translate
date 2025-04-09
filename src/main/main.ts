@@ -96,7 +96,8 @@ app.whenReady().then(async () => {
   const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)
 
   const port: string = `${await getPort()}`
-  const translateServer: TranslateServer = new TranslateServer(store, port, packageHandler.fileLocation, isDevelopment)
+  const fileLocation: string = packageHandler.languageFileLocation
+  const translateServer: TranslateServer = new TranslateServer(store, port, isDevelopment, fileLocation)
 
   // DOWNLOAD AND INSTALL DEFAULT LANGUAGE PACKAGES (SPANISH AND ENGLISH)
   packageHandler.installPackages(false, ['en', 'es', 'zt', 'ru'])
@@ -104,13 +105,10 @@ app.whenReady().then(async () => {
   mainWindow.on('ready-to-show', async () => {
     await translateServer.open()
 
+    translateServer.setCache()
+
     splashScreenWindow.destroy()
     mainWindow.show()
-
-    // GET THE LAST USED SOURCE AND TARGET, AND SETUP TRANSLATOR
-    const source: string = (await store.get('language.source_code')) as string
-    const target: string = (await store.get('language.target_code')) as string
-    await translateServer.setup(source, target)
 
     // OPEN DEV TOOLS ON LAUNCH
     if (isDevelopment) {

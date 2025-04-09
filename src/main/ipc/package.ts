@@ -7,34 +7,34 @@ import Store from './store/store'
 
 export default class PackageHandler {
   isDevelopment: boolean
-  fileLocation: string
+  languageFileLocation: string
   store: Store
 
   constructor(store: Store, isDevelopment: boolean) {
     this.store = store
     this.isDevelopment = isDevelopment
 
-    this.fileLocation = this.getFileLocation()
+    this.languageFileLocation = this.getLanguageFileLocation()
 
     // CHECK FOR MISSING FILES, AND UPDATE SETTINGS CONFIG
     this.updateConfig()
   }
 
-  public getFileLocation = (): string => {
-    const location = path.join(app.getPath('userData'), '/languages')
+  public getLanguageFileLocation = (): string => {
+    const location = path.join(app.getPath('userData'), '/languages/')
     if (!existsSync(location)) mkdirSync(location)
     return location
   }
 
   public getInstalledPackages = (availablePackages: LanguagePackage[]): LanguagePackage[] => {
-    const files: string[] = readdirSync(this.fileLocation)
+    const files: string[] = readdirSync(this.languageFileLocation)
     return availablePackages.filter((lang: LanguagePackage) => files.includes(lang.filename))
   }
 
   public getAvailablePackages = (): LanguagePackage[] => {
     const filePath: string = this.isDevelopment
-      ? path.join(__dirname, './resources/packages.json')
-      : path.join(process.resourcesPath, 'packages.json')
+      ? path.join(__dirname, './resources/argos-packages.json')
+      : path.join(process.resourcesPath, '/argos-packages.json')
 
     return JSON.parse(readFileSync(filePath, 'utf8'))
   }
@@ -87,10 +87,10 @@ export default class PackageHandler {
     const buffer = await response.arrayBuffer()
     const zip = new AdmZip(Buffer.from(buffer))
     const folderName = zip.getEntries()[0].entryName.replace(/(\\)|(\/)/g, '')
-    zip.extractAllTo(this.fileLocation, true)
+    zip.extractAllTo(this.languageFileLocation, true)
     // RENAME THE FOLDER, BECAUSE IT IS NOT ALWAYS MATCHING THE PACKAGE JSON
     if (folderName != languagePackage.filename) {
-      renameSync(`${this.fileLocation}/${folderName}`, `${this.fileLocation}/${languagePackage.filename}`)
+      renameSync(`${this.languageFileLocation}/${folderName}`, `${this.languageFileLocation}/${languagePackage.filename}`)
     }
     console.log(`DOWNLOADED AND DECOMPRESSED ${languagePackage.filename} IN: ${performance.now() - start} ms`)
 

@@ -1,4 +1,4 @@
-from argostranslate.translate import Hypothesis
+from functions.languages import Hypothesis
 
 def filter_unique(seq, extra):
     seen = set({extra, ""})

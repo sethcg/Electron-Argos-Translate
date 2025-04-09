@@ -21,5 +21,4 @@ contextBridge.exposeInMainWorld('main', {
 contextBridge.exposeInMainWorld('api', {
   translate: async (source: string, target: string, value: string): Promise<TranslateResponse | FetchError> =>
     await ipcRenderer.invoke('flaskApi:translate', source, target, value),
-  setup: () => ipcRenderer.send('flaskApi:setup'),
 })
