@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, safeStorage } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
 import { StoreType } from '~shared/types'
 import ElectronStore from 'electron-store'
 
@@ -13,20 +13,16 @@ export default class Store {
   }
   store: ElectronStore<StoreType>
 
-  canEncrypt: boolean
   window: BrowserWindow
 
   constructor(window: BrowserWindow) {
     this.window = window
-    this.canEncrypt = safeStorage.isEncryptionAvailable()
     this.store = new ElectronStore<StoreType>({ defaults: this.defaults })
 
     // SETUP STORE RELATED IPC EVENTS
     this.setEvent()
     this.getEvent()
     this.resetEvent()
-    this.encryptStringEvent()
-    this.decryptStringEvent()
   }
 
   public set = (key: string, value?: unknown): void => {
@@ -61,22 +57,6 @@ export default class Store {
     ipcMain.handle('settings:reset', (event, key: keyof StoreType) => {
       if (this.window.id === event.sender.id) {
         this.store.reset(key)
-      }
-    })
-  }
-
-  private encryptStringEvent = (): void => {
-    ipcMain.handle('safeStorage:encryptString', (event, value: string) => {
-      if (this.canEncrypt && this.window.id === event.sender.id) {
-        return safeStorage.encryptString(value).toString('hex')
-      }
-    })
-  }
-
-  private decryptStringEvent = (): void => {
-    ipcMain.handle('safeStorage:decryptString', (event, value: string) => {
-      if (this.canEncrypt && this.window.id === event.sender.id) {
-        return safeStorage.decryptString(Buffer.from(value, 'hex'))
       }
     })
   }

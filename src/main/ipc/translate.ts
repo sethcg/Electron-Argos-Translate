@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { ipcMain } from 'electron'
+import { app, ipcMain } from 'electron'
 import { TranslateResponse } from '~shared/types'
 import { ChildProcess, execFile, ExecFileOptions } from 'node:child_process'
 import fetch, { Response, FetchError } from 'node-fetch'
@@ -12,11 +12,11 @@ export default class TranslateServer {
   port: string = '8080'
   store: Store
 
-  constructor(store: Store, port: string, isDevelopment: boolean, languageFileLocation: string) {
+  constructor(store: Store, port: string, isDevelopment: boolean, fileLocation: string) {
     this.port = port
     this.store = store
     this.isDevelopment = isDevelopment
-    this.languageFileLocation = languageFileLocation
+    this.languageFileLocation = fileLocation
 
     // SETUP TRANSLATE RELATED IPC EVENTS
     this.translateEvent()
@@ -68,14 +68,14 @@ export default class TranslateServer {
     // CACHE THE INSTALLED TRANSLATORS, SO THE FIRST TRANSLATE CALL IS NOT ABNORMALLY SLOW
     const start = performance.now()
     const sentencizerFileLocation: string = this.isDevelopment
-      ? path.join(__dirname, './resources/xx_sent_ud_sm')
+      ? path.join(app.getAppPath(), 'src/assets/xx_sent_ud_sm')
       : path.join(process.resourcesPath, '/xx_sent_ud_sm')
     const params = new URLSearchParams([
       ['languagePath', this.languageFileLocation],
       ['sentencizerPath', sentencizerFileLocation],
     ])
     await fetch(`http://${this.host}:${this.port}/api/setup?${params}`).then(() => {
-      console.log(`SETUP API CALL TOOK: ${Math.round(performance.now() - start)} ms`)
+      console.log(`SERVER SETUP CALL TOOK: ${Math.round(performance.now() - start)} ms`)
     })
   }
 

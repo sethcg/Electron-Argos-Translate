@@ -5,16 +5,11 @@ import { StoreType, TranslateResponse } from '~shared/types'
 contextBridge.exposeInMainWorld('main', {
   minimizeWindow: () => ipcRenderer.send('mainWindow:minimize'),
   maximizeWindow: () => ipcRenderer.send('mainWindow:maximize'),
-  restoreWindow: () => ipcRenderer.send('mainWindow:restore'),
   closeWindow: () => ipcRenderer.send('mainWindow:close'),
   store: {
     set: (key: string, value: unknown) => ipcRenderer.send('settings:set', key, value),
     get: async (key: string) => await ipcRenderer.invoke('settings:get', key),
     reset: (key: keyof StoreType) => ipcRenderer.send('settings:reset', key),
-  },
-  safeStorage: {
-    decryptString: async (value: string) => await ipcRenderer.invoke('safeStorage:decryptString', value),
-    encryptString: async (value: string) => await ipcRenderer.invoke('safeStorage:encryptString', value),
   },
 })
 

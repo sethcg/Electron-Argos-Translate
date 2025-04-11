@@ -6,7 +6,7 @@
     "target_code": "en",
     "source_name": "Albanian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-sq_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-sq_en-1_9.argosmodel",
     "filename": "translate-sq_en-1_9"
   },
   {
@@ -16,7 +16,7 @@
     "target_code": "en",
     "source_name": "Arabic",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ar_en-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ar_en-1_0.argosmodel",
     "filename": "translate-ar_en-1_0"
   },
   {
@@ -26,7 +26,7 @@
     "target_code": "en",
     "source_name": "Azerbaijani",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-az_en-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-az_en-1_5.argosmodel",
     "filename": "translate-az_en-1_5"
   },
   {
@@ -36,7 +36,7 @@
     "target_code": "en",
     "source_name": "Basque",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-eu_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-eu_en-1_9.argosmodel",
     "filename": "translate-eu_en-1_9"
   },
   {
@@ -46,7 +46,7 @@
     "target_code": "en",
     "source_name": "Bengali",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-bn_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-bn_en-1_9.argosmodel",
     "filename": "translate-bn_en-1_9"
   },
   {
@@ -56,7 +56,7 @@
     "target_code": "en",
     "source_name": "Bulgarian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-bg_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-bg_en-1_9.argosmodel",
     "filename": "translate-bg_en-1_9"
   },
   {
@@ -66,7 +66,7 @@
     "target_code": "en",
     "source_name": "Catalan",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ca_en-1_7.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ca_en-1_7.argosmodel",
     "filename": "translate-ca_en-1_7"
   },
   {
@@ -76,7 +76,7 @@
     "target_code": "en",
     "source_name": "Chinese (traditional)",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-zt_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-zt_en-1_9.argosmodel",
     "filename": "translate-zt_en-1_9"
   },
   {
@@ -86,7 +86,7 @@
     "target_code": "en",
     "source_name": "Chinese",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-zh_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-zh_en-1_9.argosmodel",
     "filename": "translate-zh_en-1_9"
   },
   {
@@ -96,7 +96,7 @@
     "target_code": "en",
     "source_name": "Czech",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-cs_en-1_9_6.argosmodel",
+    "link": "https://argos-net.com/v1/translate-cs_en-1_9_6.argosmodel",
     "filename": "translate-cs_en-1_9_6"
   },
   {
@@ -106,7 +106,7 @@
     "target_code": "en",
     "source_name": "Danish",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-da_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-da_en-1_9.argosmodel",
     "filename": "translate-da_en-1_9"
   },
   {
@@ -116,7 +116,7 @@
     "target_code": "en",
     "source_name": "Dutch",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-nl_en-1_8.argosmodel",
+    "link": "https://argos-net.com/v1/translate-nl_en-1_8.argosmodel",
     "filename": "translate-nl_en-1_8"
   },
   {
@@ -126,7 +126,7 @@
     "target_code": "sq",
     "source_name": "English",
     "target_name": "Albanian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_sq-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_sq-1_9.argosmodel",
     "filename": "translate-en_sq-1_9"
   },
   {
@@ -136,7 +136,7 @@
     "target_code": "ar",
     "source_name": "English",
     "target_name": "Arabic",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ar-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ar-1_0.argosmodel",
     "filename": "translate-en_ar-1_0"
   },
   {
@@ -146,7 +146,7 @@
     "target_code": "az",
     "source_name": "English",
     "target_name": "Azerbaijani",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_az-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_az-1_5.argosmodel",
     "filename": "translate-en_az-1_5"
   },
   {
@@ -156,7 +156,7 @@
     "target_code": "eu",
     "source_name": "English",
     "target_name": "Basque",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_eu-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_eu-1_9.argosmodel",
     "filename": "translate-en_eu-1_9"
   },
   {
@@ -166,7 +166,7 @@
     "target_code": "bn",
     "source_name": "English",
     "target_name": "Bengali",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_bn-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_bn-1_9.argosmodel",
     "filename": "translate-en_bn-1_9"
   },
   {
@@ -176,7 +176,7 @@
     "target_code": "bg",
     "source_name": "English",
     "target_name": "Bulgarian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_bg-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_bg-1_9.argosmodel",
     "filename": "translate-en_bg-1_9"
   },
   {
@@ -186,7 +186,7 @@
     "target_code": "ca",
     "source_name": "English",
     "target_name": "Catalan",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ca-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ca-1_9.argosmodel",
     "filename": "translate-en_ca-1_9"
   },
   {
@@ -196,7 +196,7 @@
     "target_code": "zh",
     "source_name": "English",
     "target_name": "Chinese",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_zh-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_zh-1_9.argosmodel",
     "filename": "translate-en_zh-1_9"
   },
   {
@@ -206,7 +206,7 @@
     "target_code": "zt",
     "source_name": "English",
     "target_name": "Chinese (traditional)",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_zt-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_zt-1_9.argosmodel",
     "filename": "translate-en_zt-1_9"
   },
   {
@@ -216,7 +216,7 @@
     "target_code": "cs",
     "source_name": "English",
     "target_name": "Czech",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_cs-1_9_6.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_cs-1_9_6.argosmodel",
     "filename": "translate-en_cs-1_9_6"
   },
   {
@@ -226,7 +226,7 @@
     "target_code": "da",
     "source_name": "English",
     "target_name": "Danish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_da-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_da-1_9.argosmodel",
     "filename": "translate-en_da-1_9"
   },
   {
@@ -236,7 +236,7 @@
     "target_code": "nl",
     "source_name": "English",
     "target_name": "Dutch",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_nl-1_8.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_nl-1_8.argosmodel",
     "filename": "translate-en_nl-1_8"
   },
   {
@@ -246,7 +246,7 @@
     "target_code": "eo",
     "source_name": "English",
     "target_name": "Esperanto",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_eo-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_eo-1_5.argosmodel",
     "filename": "translate-en_eo-1_5"
   },
   {
@@ -256,7 +256,7 @@
     "target_code": "et",
     "source_name": "English",
     "target_name": "Estonian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_et-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_et-1_9.argosmodel",
     "filename": "translate-en_et-1_9"
   },
   {
@@ -266,7 +266,7 @@
     "target_code": "fi",
     "source_name": "English",
     "target_name": "Finnish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_fi-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_fi-1_9.argosmodel",
     "filename": "translate-en_fi-1_9"
   },
   {
@@ -276,7 +276,7 @@
     "target_code": "fr",
     "source_name": "English",
     "target_name": "French",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_fr-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_fr-1_9.argosmodel",
     "filename": "translate-en_fr-1_9"
   },
   {
@@ -286,7 +286,7 @@
     "target_code": "gl",
     "source_name": "English",
     "target_name": "Galician",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_gl-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_gl-1_9.argosmodel",
     "filename": "translate-en_gl-1_9"
   },
   {
@@ -296,7 +296,7 @@
     "target_code": "de",
     "source_name": "English",
     "target_name": "German",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_de-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_de-1_0.argosmodel",
     "filename": "translate-en_de-1_0"
   },
   {
@@ -306,7 +306,7 @@
     "target_code": "el",
     "source_name": "English",
     "target_name": "Greek",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_el-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_el-1_9.argosmodel",
     "filename": "translate-en_el-1_9"
   },
   {
@@ -316,7 +316,7 @@
     "target_code": "he",
     "source_name": "English",
     "target_name": "Hebrew",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_he-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_he-1_5.argosmodel",
     "filename": "translate-en_he-1_5"
   },
   {
@@ -326,7 +326,7 @@
     "target_code": "hi",
     "source_name": "English",
     "target_name": "Hindi",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_hi-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_hi-1_1.argosmodel",
     "filename": "translate-en_hi-1_1"
   },
   {
@@ -336,7 +336,7 @@
     "target_code": "hu",
     "source_name": "English",
     "target_name": "Hungarian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_hu-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_hu-1_9.argosmodel",
     "filename": "translate-en_hu-1_9"
   },
   {
@@ -346,7 +346,7 @@
     "target_code": "id",
     "source_name": "English",
     "target_name": "Indonesian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_id-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_id-1_9.argosmodel",
     "filename": "translate-en_id-1_9"
   },
   {
@@ -356,7 +356,7 @@
     "target_code": "ga",
     "source_name": "English",
     "target_name": "Irish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ga-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ga-1_1.argosmodel",
     "filename": "translate-en_ga-1_1"
   },
   {
@@ -366,7 +366,7 @@
     "target_code": "it",
     "source_name": "English",
     "target_name": "Italian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_it-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_it-1_0.argosmodel",
     "filename": "translate-en_it-1_0"
   },
   {
@@ -376,7 +376,7 @@
     "target_code": "ja",
     "source_name": "English",
     "target_name": "Japanese",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ja-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ja-1_1.argosmodel",
     "filename": "translate-en_ja-1_1"
   },
   {
@@ -386,7 +386,7 @@
     "target_code": "ko",
     "source_name": "English",
     "target_name": "Korean",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ko-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ko-1_1.argosmodel",
     "filename": "translate-en_ko-1_1"
   },
   {
@@ -396,7 +396,7 @@
     "target_code": "lv",
     "source_name": "English",
     "target_name": "Latvian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_lv-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_lv-1_9.argosmodel",
     "filename": "translate-en_lv-1_9"
   },
   {
@@ -406,7 +406,7 @@
     "target_code": "lt",
     "source_name": "English",
     "target_name": "Lithuanian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_lt-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_lt-1_9.argosmodel",
     "filename": "translate-en_lt-1_9"
   },
   {
@@ -416,7 +416,7 @@
     "target_code": "ms",
     "source_name": "English",
     "target_name": "Malay",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ms-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ms-1_9.argosmodel",
     "filename": "translate-en_ms-1_9"
   },
   {
@@ -426,7 +426,7 @@
     "target_code": "nb",
     "source_name": "English",
     "target_name": "Norwegian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_nb-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_nb-1_9.argosmodel",
     "filename": "translate-en_nb-1_9"
   },
   {
@@ -436,7 +436,7 @@
     "target_code": "fa",
     "source_name": "English",
     "target_name": "Persian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_fa-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_fa-1_5.argosmodel",
     "filename": "translate-en_fa-1_5"
   },
   {
@@ -446,7 +446,7 @@
     "target_code": "pl",
     "source_name": "English",
     "target_name": "Polish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_pl-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_pl-1_9.argosmodel",
     "filename": "translate-en_pl-1_9"
   },
   {
@@ -456,7 +456,7 @@
     "target_code": "pt",
     "source_name": "English",
     "target_name": "Portuguese",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_pt-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_pt-1_9.argosmodel",
     "filename": "translate-en_pt-1_9"
   },
   {
@@ -466,7 +466,7 @@
     "target_code": "pb",
     "source_name": "English",
     "target_name": "Portuguese (Brazil)",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_pb-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_pb-1_9.argosmodel",
     "filename": "translate-en_pb-1_9"
   },
   {
@@ -476,7 +476,7 @@
     "target_code": "ro",
     "source_name": "English",
     "target_name": "Romanian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ro-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ro-1_9.argosmodel",
     "filename": "translate-en_ro-1_9"
   },
   {
@@ -486,7 +486,7 @@
     "target_code": "ru",
     "source_name": "English",
     "target_name": "Russian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ru-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ru-1_9.argosmodel",
     "filename": "translate-en_ru-1_9"
   },
   {
@@ -496,7 +496,7 @@
     "target_code": "sk",
     "source_name": "English",
     "target_name": "Slovak",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_sk-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_sk-1_9.argosmodel",
     "filename": "translate-en_sk-1_9"
   },
   {
@@ -506,7 +506,7 @@
     "target_code": "sl",
     "source_name": "English",
     "target_name": "Slovenian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_sl-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_sl-1_9.argosmodel",
     "filename": "translate-en_sl-1_9"
   },
   {
@@ -516,7 +516,7 @@
     "target_code": "es",
     "source_name": "English",
     "target_name": "Spanish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_es-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_es-1_0.argosmodel",
     "filename": "translate-en_es-1_0"
   },
   {
@@ -526,7 +526,7 @@
     "target_code": "sv",
     "source_name": "English",
     "target_name": "Swedish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_sv-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_sv-1_5.argosmodel",
     "filename": "translate-en_sv-1_5"
   },
   {
@@ -536,7 +536,7 @@
     "target_code": "tl",
     "source_name": "English",
     "target_name": "Tagalog",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_tl-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_tl-1_9.argosmodel",
     "filename": "translate-en_tl-1_9"
   },
   {
@@ -546,7 +546,7 @@
     "target_code": "th",
     "source_name": "English",
     "target_name": "Thai",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_th-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_th-1_9.argosmodel",
     "filename": "translate-en_th-1_9"
   },
   {
@@ -556,7 +556,7 @@
     "target_code": "tr",
     "source_name": "English",
     "target_name": "Turkish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_tr-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_tr-1_5.argosmodel",
     "filename": "translate-en_tr-1_5"
   },
   {
@@ -566,7 +566,7 @@
     "target_code": "uk",
     "source_name": "English",
     "target_name": "Ukranian",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_uk-1_4.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_uk-1_4.argosmodel",
     "filename": "translate-en_uk-1_4"
   },
   {
@@ -576,7 +576,7 @@
     "target_code": "ur",
     "source_name": "English",
     "target_name": "Urdu",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-en_ur-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-en_ur-1_9.argosmodel",
     "filename": "translate-en_ur-1_9"
   },
   {
@@ -586,7 +586,7 @@
     "target_code": "en",
     "source_name": "Esperanto",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-eo_en-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-eo_en-1_5.argosmodel",
     "filename": "translate-eo_en-1_5"
   },
   {
@@ -596,7 +596,7 @@
     "target_code": "en",
     "source_name": "Estonian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-et_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-et_en-1_9.argosmodel",
     "filename": "translate-et_en-1_9"
   },
   {
@@ -606,7 +606,7 @@
     "target_code": "en",
     "source_name": "Finnish",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-fi_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-fi_en-1_9.argosmodel",
     "filename": "translate-fi_en-1_9"
   },
   {
@@ -616,7 +616,7 @@
     "target_code": "en",
     "source_name": "French",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-fr_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-fr_en-1_9.argosmodel",
     "filename": "translate-fr_en-1_9"
   },
   {
@@ -626,7 +626,7 @@
     "target_code": "en",
     "source_name": "Galician",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-gl_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-gl_en-1_9.argosmodel",
     "filename": "translate-gl_en-1_9"
   },
   {
@@ -636,7 +636,7 @@
     "target_code": "en",
     "source_name": "German",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-de_en-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-de_en-1_0.argosmodel",
     "filename": "translate-de_en-1_0"
   },
   {
@@ -646,7 +646,7 @@
     "target_code": "en",
     "source_name": "Greek",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-el_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-el_en-1_9.argosmodel",
     "filename": "translate-el_en-1_9"
   },
   {
@@ -656,7 +656,7 @@
     "target_code": "en",
     "source_name": "Hebrew",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-he_en-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-he_en-1_5.argosmodel",
     "filename": "translate-he_en-1_5"
   },
   {
@@ -666,7 +666,7 @@
     "target_code": "en",
     "source_name": "Hindi",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-hi_en-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-hi_en-1_1.argosmodel",
     "filename": "translate-hi_en-1_1"
   },
   {
@@ -676,7 +676,7 @@
     "target_code": "en",
     "source_name": "Hungarian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-hu_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-hu_en-1_9.argosmodel",
     "filename": "translate-hu_en-1_9"
   },
   {
@@ -686,7 +686,7 @@
     "target_code": "en",
     "source_name": "Indonesian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-id_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-id_en-1_9.argosmodel",
     "filename": "translate-id_en-1_9"
   },
   {
@@ -696,7 +696,7 @@
     "target_code": "en",
     "source_name": "Irish",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ga_en-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ga_en-1_1.argosmodel",
     "filename": "translate-ga_en-1_1"
   },
   {
@@ -706,7 +706,7 @@
     "target_code": "en",
     "source_name": "Italian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-it_en-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-it_en-1_0.argosmodel",
     "filename": "translate-it_en-1_0"
   },
   {
@@ -716,7 +716,7 @@
     "target_code": "en",
     "source_name": "Japanese",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ja_en-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ja_en-1_1.argosmodel",
     "filename": "translate-ja_en-1_1"
   },
   {
@@ -726,7 +726,7 @@
     "target_code": "en",
     "source_name": "Korean",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ko_en-1_1.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ko_en-1_1.argosmodel",
     "filename": "translate-ko_en-1_1"
   },
   {
@@ -736,7 +736,7 @@
     "target_code": "en",
     "source_name": "Latvian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-lv_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-lv_en-1_9.argosmodel",
     "filename": "translate-lv_en-1_9"
   },
   {
@@ -746,7 +746,7 @@
     "target_code": "en",
     "source_name": "Lithuanian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-lt_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-lt_en-1_9.argosmodel",
     "filename": "translate-lt_en-1_9"
   },
   {
@@ -756,7 +756,7 @@
     "target_code": "en",
     "source_name": "Malay",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ms_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ms_en-1_9.argosmodel",
     "filename": "translate-ms_en-1_9"
   },
   {
@@ -766,7 +766,7 @@
     "target_code": "en",
     "source_name": "Norwegian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-nb_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-nb_en-1_9.argosmodel",
     "filename": "translate-nb_en-1_9"
   },
   {
@@ -776,7 +776,7 @@
     "target_code": "en",
     "source_name": "Persian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-fa_en-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-fa_en-1_5.argosmodel",
     "filename": "translate-fa_en-1_5"
   },
   {
@@ -786,7 +786,7 @@
     "target_code": "en",
     "source_name": "Polish",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-pl_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-pl_en-1_9.argosmodel",
     "filename": "translate-pl_en-1_9"
   },
   {
@@ -796,7 +796,7 @@
     "target_code": "en",
     "source_name": "Portuguese (Brazil)",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-pb_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-pb_en-1_9.argosmodel",
     "filename": "translate-pb_en-1_9"
   },
   {
@@ -806,7 +806,7 @@
     "target_code": "en",
     "source_name": "Portuguese",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-pt_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-pt_en-1_9.argosmodel",
     "filename": "translate-pt_en-1_9"
   },
   {
@@ -816,7 +816,7 @@
     "target_code": "es",
     "source_name": "Portuguese",
     "target_name": "Spanish",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-pt_es-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-pt_es-1_0.argosmodel",
     "filename": "translate-pt_es-1_0"
   },
   {
@@ -826,7 +826,7 @@
     "target_code": "en",
     "source_name": "Romanian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ro_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ro_en-1_9.argosmodel",
     "filename": "translate-ro_en-1_9"
   },
   {
@@ -836,7 +836,7 @@
     "target_code": "en",
     "source_name": "Russian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ru_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ru_en-1_9.argosmodel",
     "filename": "translate-ru_en-1_9"
   },
   {
@@ -846,7 +846,7 @@
     "target_code": "en",
     "source_name": "Slovak",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-sk_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-sk_en-1_9.argosmodel",
     "filename": "translate-sk_en-1_9"
   },
   {
@@ -856,7 +856,7 @@
     "target_code": "en",
     "source_name": "Slovenian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-sl_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-sl_en-1_9.argosmodel",
     "filename": "translate-sl_en-1_9"
   },
   {
@@ -866,7 +866,7 @@
     "target_code": "en",
     "source_name": "Spanish",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-es_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-es_en-1_9.argosmodel",
     "filename": "translate-es_en-1_9"
   },
   {
@@ -876,7 +876,7 @@
     "target_code": "pt",
     "source_name": "Spanish",
     "target_name": "Portuguese",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-es_pt-1_0.argosmodel",
+    "link": "https://argos-net.com/v1/translate-es_pt-1_0.argosmodel",
     "filename": "translate-es_pt-1_0"
   },
   {
@@ -886,7 +886,7 @@
     "target_code": "en",
     "source_name": "Swedish",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-sv_en-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-sv_en-1_5.argosmodel",
     "filename": "translate-sv_en-1_5"
   },
   {
@@ -896,7 +896,7 @@
     "target_code": "en",
     "source_name": "Tagalog",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-tl_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-tl_en-1_9.argosmodel",
     "filename": "translate-tl_en-1_9"
   },
   {
@@ -906,7 +906,7 @@
     "target_code": "en",
     "source_name": "Thai",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-th_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-th_en-1_9.argosmodel",
     "filename": "translate-th_en-1_9"
   },
   {
@@ -916,7 +916,7 @@
     "target_code": "en",
     "source_name": "Turkish",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-tr_en-1_5.argosmodel",
+    "link": "https://argos-net.com/v1/translate-tr_en-1_5.argosmodel",
     "filename": "translate-tr_en-1_5"
   },
   {
@@ -926,7 +926,7 @@
     "target_code": "en",
     "source_name": "Ukrainian",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-uk_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-uk_en-1_9.argosmodel",
     "filename": "translate-uk_en-1_9"
   },
   {
@@ -936,7 +936,7 @@
     "target_code": "en",
     "source_name": "Urdu",
     "target_name": "English",
-    "link": "https://github.com/sethcg/language-models/releases/download/models/translate-ur_en-1_9.argosmodel",
+    "link": "https://argos-net.com/v1/translate-ur_en-1_9.argosmodel",
     "filename": "translate-ur_en-1_9"
   }
 ]

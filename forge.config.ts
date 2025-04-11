@@ -11,8 +11,8 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: '.src/assets/icons/icon',
-    executableName: 'spanish-dictionary-app',
-    extraResource: ['dist/translate_server.exe', './src/assets/packages/argos-packages.json', './src/assets/xx_sent_ud_sm'],
+    executableName: 'electron-argos-translate',
+    extraResource: ['dist/translate_server.exe', './src/assets/package-index.json', './src/assets/xx_sent_ud_sm', './src/assets/models'],
   },
   rebuildConfig: {},
   makers: [
@@ -27,20 +27,18 @@ const config: ForgeConfig = {
       // If you are familiar with Vite configuration, it will look really familiar.
       build: [
         {
-          entry: 'src/main/main.ts',
-          config: 'viteconfig/main.ts',
-          target: 'main',
+          entry: './src/main/main.ts',
+          config: './viteconfig/vite.main.config.ts',
         },
         {
-          entry: 'src/renderer/windows/main/preload.ts',
-          config: 'viteconfig/preload/main_window.ts',
-          target: 'preload',
+          entry: './src/renderer/windows/main/preload.ts',
+          config: './viteconfig/vite.preload.config.ts',
         },
       ],
       renderer: [
         {
-          name: 'all_windows',
-          config: 'viteconfig/renderer.mts',
+          name: 'main_window',
+          config: './viteconfig/vite.renderer.config.mts',
         },
       ],
     }),

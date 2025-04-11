@@ -10,7 +10,6 @@ export default class MainWindow extends BrowserWindow {
     // SETUP WINDOW RELATED IPC EVENTS
     this.minimizeWindowEvent()
     this.maximizeWindowEvent()
-    this.restoreWindowEvent()
     this.closeWindowEvent()
   }
 
@@ -30,15 +29,6 @@ export default class MainWindow extends BrowserWindow {
         } else {
           this.maximize()
         }
-      }
-    })
-  }
-
-  private restoreWindowEvent = (): void => {
-    // RESTORE WINDOW FROM MINIMIZED TO PREVIOUS STATE
-    ipcMain.on('mainWindow:restore', (event: Electron.IpcMainEvent) => {
-      if (this.id === event.sender.id) {
-        this.restore()
       }
     })
   }

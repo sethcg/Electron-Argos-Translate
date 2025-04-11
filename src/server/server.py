@@ -22,11 +22,11 @@ def getProcessID():
 def setupDefaultTranslator():
     args = request.args
 
-    str_package_path = args.get('languagePath', default = None, type = str)
+    str_package_path = args.get('languagePath', default = 'C:/Users/sethcg/VS-CODE/electron-argos-translate/src/assets/models', type = str)
     if(str_package_path is None or len(str_package_path) == 0):
         return jsonify({"error": "No package path provided"})
     
-    str_sentencizer_path = args.get('sentencizerPath', default = None, type = str)
+    str_sentencizer_path = args.get('sentencizerPath', default = 'C:/Users/sethcg/VS-CODE/electron-argos-translate/src/assets/xx_sent_ud_sm', type = str)
     if(str_sentencizer_path is None or len(str_sentencizer_path) == 0):
         return jsonify({"error": "No sentencizer path provided"})
 

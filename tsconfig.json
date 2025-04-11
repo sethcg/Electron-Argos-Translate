@@ -1,4 +1,3 @@
-// THIS IS THE DEFAULT TYPESCRIPT CONFIG
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -27,10 +26,5 @@
       "~components/*": ["src/renderer/components/*"]
     }
   },
-  "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "include": ["src/**/*"]
 }

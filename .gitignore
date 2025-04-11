@@ -18,7 +18,7 @@ node_modules/
 # Output of 'npm pack'
 *.tgz
 
-# dotenv environment variables file
+# Env
 .env
 .env.test
 
@@ -33,4 +33,7 @@ dist/
 build/
 *.spec
 **/__pycache__
+
+# Argos Translate Models
+src/assets/models/translate*/
 *.argosmodel

@@ -1,13 +1,13 @@
 import path from 'node:path'
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import react from "@vitejs/plugin-react-swc"
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config
 export default defineConfig({
   root: 'src/renderer',
   build: {
-    outDir: '../../.vite/renderer',
+    outDir: '.vite/renderer',
     rollupOptions: {
       input: {
         main_window: 'src/renderer/windows/main/index.html',

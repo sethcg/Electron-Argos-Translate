@@ -8,24 +8,10 @@ import TranslateServer from './ipc/translate'
 import PackageHandler from './ipc/package'
 import Store from './ipc/store/store'
 
-// TO-DO: Try implementing 'translate' to get different translation options;
-// allowing for more/better alternative translations
-/*
-import translate from 'translate'
-translate.engine = 'google'
-
-import { Translate } from "translate";
-
-const googleTranslate = Translate({ engine: "google", key: "..." });
-const deepLTranslate = Translate({ engine: "deepl", key: "..." });
-const yandexTranslate = Translate({ engine: "yandex", key: "..." });
-const libreTranslate = Translate({ engine: "libre", url: "", key: "..." });
-*/
-
 // THIS IS A "MAGIC" CONSTANT THAT IS GENERATED FROM FORGE'S WEBPACK,
-// THE "ALL_WINDOWS" PORTION MATCHES THE "forge.config.ts -> vite-plugin -> renderer -> name" parameter.
+// THE "MAIN_WINDOW" PORTION MATCHES THE "forge.config.ts -> vite-plugin -> renderer -> name" parameter.
 // USED TO TELL THE ELECTRON APP WHERE TO FIND THE INDEX.HTML (IF USING LOCALHOST DEVELOPMENT SERVER OR NOT)
-declare const ALL_WINDOWS_VITE_DEV_SERVER_URL: string
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string
 
 const assetFolder = path.join(process.env.NODE_ENV === 'development' ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath)
 const isDarwin = process.platform === 'darwin'
@@ -57,8 +43,8 @@ const createMainWindow = (): MainWindow => {
   })
 
   // LOAD INDEX.HTML
-  if (ALL_WINDOWS_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(ALL_WINDOWS_VITE_DEV_SERVER_URL + '/windows/main/index.html')
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL + '/windows/main/index.html')
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/windows/main/index.html`))
   }
@@ -76,8 +62,8 @@ const createSplashScreenWindow = (): BrowserWindow => {
   })
 
   // LOAD INDEX.HTML
-  if (ALL_WINDOWS_VITE_DEV_SERVER_URL) {
-    splashScreenWindow.loadURL(ALL_WINDOWS_VITE_DEV_SERVER_URL + '/windows/splash/index.html')
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    splashScreenWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL + '/windows/splash/index.html')
   } else {
     splashScreenWindow.loadFile(path.join(__dirname, `../renderer/windows/splash/index.html`))
   }
@@ -93,14 +79,13 @@ app.whenReady().then(async () => {
   const mainWindow: MainWindow = createMainWindow()
   const store: Store = new Store(mainWindow)
 
+  // CHECK FOR INSTALLED LANGUAGE PACKAGES
   const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)
+  packageHandler.initializeConfig()
 
   const port: string = `${await getPort()}`
   const fileLocation: string = packageHandler.languageFileLocation
   const translateServer: TranslateServer = new TranslateServer(store, port, isDevelopment, fileLocation)
-
-  // DOWNLOAD AND INSTALL DEFAULT LANGUAGE PACKAGES (SPANISH AND ENGLISH)
-  packageHandler.installPackages(false, ['en', 'es', 'zt', 'ru'])
 
   mainWindow.on('ready-to-show', async () => {
     await translateServer.open()
@@ -111,9 +96,7 @@ app.whenReady().then(async () => {
     mainWindow.show()
 
     // OPEN DEV TOOLS ON LAUNCH
-    if (isDevelopment) {
-      mainWindow.webContents.openDevTools()
-    }
+    if (isDevelopment) mainWindow.webContents.openDevTools()
   })
 
   // CLOSE TRANSLATE SERVER BEFORE CLOSING APPLICATION
@@ -140,6 +123,3 @@ app.on('activate', () => {
 const getIconPath = (icon: string) => {
   return path.join(assetFolder, `${process.env.NODE_ENV === 'development' ? 'icons/' : ''}${icon}`)
 }
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
