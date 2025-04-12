@@ -10,7 +10,8 @@ npm install
 
 # Create flask server, using instructions in ./src/server/README.md
 
-# Download models, reduce the number of models using instructions in ./src/assets/model-script/README.md
+# Download models
+# Or, reduce the number of models using instructions in ./src/assets/model-script/README.md
 npm run download
 
 # run app
