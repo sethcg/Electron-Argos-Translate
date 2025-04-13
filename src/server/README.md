@@ -1,8 +1,6 @@
 # Description
 
-Flask server translation service, runs as a local server for offline translation using argos translate models.
-
-The models can be found here at the [argospm index](https://www.argosopentech.com/argospm/index/).
+Flask translation server, runs locally for offline translation using the pre-installed argos translate models.
 
 </br>
 

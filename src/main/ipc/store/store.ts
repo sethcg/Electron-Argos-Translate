@@ -38,26 +38,14 @@ export default class Store {
   }
 
   private setEvent = (): void => {
-    ipcMain.on('settings:set', (event, key: string, value?: unknown) => {
-      if (this.window.id === event.sender.id && value) {
-        this.store.set(key, value)
-      }
-    })
+    ipcMain.on('settings:set', (_event, key: string, value?: unknown) => this.store.set(key, value))
   }
 
   private getEvent = (): void => {
-    ipcMain.handle('settings:get', (event, key: string) => {
-      if (this.window.id === event.sender.id) {
-        return this.store.get(key)
-      }
-    })
+    ipcMain.handle('settings:get', (_event, key: string) => this.store.get(key))
   }
 
   private resetEvent = (): void => {
-    ipcMain.handle('settings:reset', (event, key: keyof StoreType) => {
-      if (this.window.id === event.sender.id) {
-        this.store.reset(key)
-      }
-    })
+    ipcMain.handle('settings:reset', (_event, key: keyof StoreType) => this.store.reset(key))
   }
 }

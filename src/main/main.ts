@@ -18,9 +18,7 @@ const isDarwin = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 // HANDLE CREATING/REMOVING SHORTCUTS ON WINDOWS WHEN INSTALLING/UNINSTALLING
-if (started) {
-  app.quit()
-}
+if (started) app.quit()
 
 const createMainWindow = (): MainWindow => {
   const mainWindow = new MainWindow(isDarwin, {
@@ -42,7 +40,7 @@ const createMainWindow = (): MainWindow => {
     autoHideMenuBar: true,
   })
 
-  // LOAD INDEX.HTML
+  // LOAD MAIN WINDOW INDEX.HTML
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL + '/windows/main/index.html')
   } else {
@@ -61,7 +59,7 @@ const createSplashScreenWindow = (): BrowserWindow => {
     icon: getIconPath('icon.png'),
   })
 
-  // LOAD INDEX.HTML
+  // LOAD SPLASH SCREEN INDEX.HTML
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     splashScreenWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL + '/windows/splash/index.html')
   } else {
@@ -79,7 +77,7 @@ app.whenReady().then(async () => {
   const mainWindow: MainWindow = createMainWindow()
   const store: Store = new Store(mainWindow)
 
-  // CHECK FOR INSTALLED LANGUAGE PACKAGES
+  // INITIALIZE THE PRE-INSTALLED LANGUAGE PACKAGES
   const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)
   packageHandler.initializeConfig()
 
@@ -88,10 +86,11 @@ app.whenReady().then(async () => {
   const translateServer: TranslateServer = new TranslateServer(store, port, isDevelopment, fileLocation)
 
   mainWindow.on('ready-to-show', async () => {
+    // OPEN SERVER, AND CACHE TRANSLATORS
     await translateServer.open()
-
     translateServer.setCache()
 
+    // CHANGE SPLASH SCREEN TO MAIN WINDOW
     splashScreenWindow.destroy()
     mainWindow.show()
 
