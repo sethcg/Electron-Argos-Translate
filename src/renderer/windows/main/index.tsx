@@ -1,23 +1,20 @@
 import { WindowBar } from '~components/global/Windowbar.tsx'
-import { Sidebar, NavBarItem } from '~components/global/Sidebar.tsx'
+import { Sidebar } from '~components/global/Sidebar.tsx'
 import { TranslatePage } from '~components/pages/TranslatePage'
+import { ReactElement, useEffect, useState } from 'react'
 
 function App() {
-  // const handleClick = (_event, navItems: NavBarItem[]) => {
-  const handleClick = (navItems: NavBarItem[]) => {
-    console.log(navItems)
-  }
+  const [pageState, setPageState] = useState<ReactElement>(<TranslatePage />)
+  const handlePageChange = (content: ReactElement) => setPageState(content)
+  useEffect(() => {}, [pageState])
 
   return (
     <>
       <div className="flex flex-col w-full min-h-[inherit]">
         <WindowBar />
         <div className="grow flex flex-row">
-          <Sidebar pageChange={handleClick} />
-          <div className="grow flex flex-col">
-            {/* CONTENT AREA */}
-            <TranslatePage />
-          </div>
+          <Sidebar pageChange={handlePageChange} />
+          <div className="grow flex flex-col">{pageState}</div>
         </div>
       </div>
     </>

@@ -1,6 +1,9 @@
 import { ChevronLeftIcon, LanguageIcon, Cog8ToothIcon, ListBulletIcon } from '@heroicons/react/24/outline'
 import { useState, useLayoutEffect, ReactElement, FunctionComponent, useCallback } from 'react'
 import { SidebarItem } from './SidebarItem'
+import { LanguagePage } from '~components/pages/LanguagePage'
+import { SettingsPage } from '~components/pages/SettingsPage'
+import { TranslatePage } from '~components/pages/TranslatePage'
 
 export type NavBarItem = {
   id: number
@@ -15,35 +18,41 @@ export type ActiveItem = {
 }
 
 interface Props {
-  pageChange: (items: NavBarItem[]) => void
+  pageChange: (content: ReactElement) => void
 }
 
-export const Sidebar: FunctionComponent<Props> = () => {
+export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
   const [expanded, setExpanded] = useState(false)
   const [navItems, setNavItems] = useState([
     {
       id: 1,
       icon: <LanguageIcon strokeWidth={2} className={'size-8'} />,
       text: 'Translate',
+      content: <TranslatePage />,
       active: true,
     },
     {
       id: 2,
       icon: <ListBulletIcon strokeWidth={2} className={'size-8'} />,
       text: 'Languages',
+      content: <LanguagePage />,
       active: false,
     },
     {
       id: 3,
       icon: <Cog8ToothIcon strokeWidth={2} className={'size-8'} />,
       text: 'Settings',
+      content: <SettingsPage />,
       active: false,
     },
   ])
 
   const handleNavItemUpdate = useCallback(
     (id: number, active: boolean) => {
-      setNavItems(prevItems => prevItems.map(item => (item.id === id ? { ...item, active } : { ...item, active: false })))
+      const updatedItems = navItems.map(item => (item.id === id ? { ...item, active } : { ...item, active: false }))
+      const activeItem = updatedItems.filter(item => item.active)[0]
+      setNavItems(updatedItems)
+      pageChange(activeItem.content)
     },
     [setNavItems]
   )
