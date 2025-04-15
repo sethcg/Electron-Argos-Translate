@@ -27,7 +27,6 @@ const createMainWindow = (): MainWindow => {
     height: 800,
     minWidth: 700,
     minHeight: 400,
-    backgroundColor: '#242424',
     icon: getIconPath('icon.png'),
     show: false,
     frame: false,
@@ -58,6 +57,10 @@ const createSplashScreenWindow = (): BrowserWindow => {
     frame: false,
     transparent: true,
     icon: getIconPath('icon.png'),
+    webPreferences: {
+      preload: path.join(__dirname, `../renderer/windows/splash/preload.js`),
+    },
+    autoHideMenuBar: true,
   })
 
   // LOAD SPLASH SCREEN INDEX.HTML
@@ -74,9 +77,9 @@ const createSplashScreenWindow = (): BrowserWindow => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
+  const store: Store = new Store()
   const splashScreenWindow: BrowserWindow = createSplashScreenWindow()
   const mainWindow: MainWindow = createMainWindow()
-  const store: Store = new Store(mainWindow)
 
   // INITIALIZE THE PRE-INSTALLED LANGUAGE PACKAGES
   const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)

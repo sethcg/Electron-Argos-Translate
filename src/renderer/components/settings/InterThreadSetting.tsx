@@ -33,24 +33,31 @@ export const InterThreadSetting: FunctionComponent = () => {
 
   return (
     <div className="w-full flex px-4 self-start">
-      <Field className={'grow'}>
-        <Label className="text-sm/6 font-medium text-white">Inter-threads</Label>
-        <Description className="text-sm/6 text-white/50">Maximum number of threads for parallel translations.</Description>
-        <div className="flex flex-col gap-4 justify-center items-center text-white text-base mt-1">
+      <Field className={'grow flex flex-col gap-2'}>
+        <Label className="text-xl font-bold">Inter-threads</Label>
+        <Description className="text-sm italic text-charcoal-700 dark:text-charcoal-200">
+          Maximum number of threads for parallel translations.
+        </Description>
+        <div className="flex flex-col gap-4 justify-center items-center mt-1">
           <Input
             value={interThreadNum}
+            maxLength={availableThreadNum.toString().length}
             onChange={event => setInterThreadNum(parseInt(event.target.value))}
             className={`${clsx(
-              'w-96 self-start block rounded-lg border-none bg-white/5 py-1.5 px-3',
-              'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+              'self-start block rounded-md py-1.5 px-3 border-none focus:outline-none text-md',
+              'dark:bg-charcoal-400/70 bg-charcoal-50'
             )}`}
           />
           <div
-            className={`flex flex-row gap-1 justify-center items-center self-start rounded-full bg-red-100 border border-red-400 text-red-700 text-sm px-2 py-1 ${showError ? '' : 'hidden'}`}
+            className={`${clsx(
+              `${showError ? '' : 'hidden'}`,
+              'flex flex-row gap-1 border-2 justify-center items-center self-start rounded px-2 py-1 text-sm',
+              'bg-red-100 border-red-600/80'
+            )}`}
           >
-            <strong className="font-extrabold">Error: </strong>
-            <span className="block sm:inline">
-              The installed CPU only has <span className="font-bold underline">{availableThreadNum}</span> threads available.
+            <strong className="font-bold text-red-700">Error: </strong>
+            <span className="block sm:inline text-red-800/90">
+              the installed CPU only has a maximum of <span className="font-bold underline">{availableThreadNum}</span> threads available.
             </span>
           </div>
         </div>

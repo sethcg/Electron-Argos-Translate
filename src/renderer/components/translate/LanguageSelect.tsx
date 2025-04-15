@@ -1,6 +1,7 @@
 import { FunctionComponent, useState, useEffect } from 'react'
 import { LanguagePackage } from '~shared/types'
 import UnfoldMoreRoundedIcon from '@mui/icons-material/UnfoldMoreRounded'
+import clsx from 'clsx'
 
 interface Props {
   className?: string
@@ -76,35 +77,31 @@ export const LanguageSelect: FunctionComponent<Props> = ({
   }, [isSource, setSelectState, storeKey])
 
   return (
-    <div className={`ps-2 flex flex-row gap-4 justify-start items-center text-neutral-950 text-lg font-roboto font-semibold ${className}`}>
-      <span className=" text-white mb-2 z-10">{title}</span>
-      <div className="relative w-50">
+    <div className={`ps-2 pe-8 flex flex-row gap-4 justify-start items-center text-lg font-semibold ${className}`}>
+      <span className="mb-2 z-10">{title}</span>
+      <div className="relative grow">
         <button
-          onDoubleClick={() => {
-            setExpanded(false)
-          }}
-          onAuxClick={() => {
-            setExpanded(false)
-          }}
-          type="button"
-          onClick={() => {
-            setExpanded(true)
-          }}
-          className={`w-full mb-2 cursor-default rounded-md bg-neutral-600 py-[2px] ps-2 text-left focus:outline-2 focus:-outline-offset-2 focus:outline-slate-500`}
+          onDoubleClick={() => setExpanded(false)}
+          onAuxClick={() => setExpanded(false)}
+          onClick={() => setExpanded(true)}
+          className={`${className} ${clsx(
+            'block w-full max-w-72 mb-2 cursor-default rounded-md text-left ps-4 py-[1px]',
+            'bg-primary-500 focus:outline-primary-600 dar:focus:outline-primary-400/40 focus:outline-2 focus:-outline-offset-2'
+          )}`}
         >
           <div className="flex flex-row justify-between items-center">
-            <span className="block truncate text-white">{selectState.name}</span>
+            <span className="block truncate">{selectState.name}</span>
             <UnfoldMoreRoundedIcon sx={{ fontSize: 24 }} />
           </div>
         </button>
         <ul
-          onMouseLeave={() => {
-            setExpanded(false)
-          }}
-          onBlur={() => {
-            setExpanded(false)
-          }}
-          className={`${expanded ? '' : 'hidden'} absolute z-100 max-h-56 w-full overflow-auto rounded-md bg-neutral-600 py-1 focus:outline-hidden`}
+          onMouseLeave={() => setExpanded(false)}
+          onBlur={() => setExpanded(false)}
+          className={`${className} ${clsx(
+            `${expanded ? '' : 'hidden'}`,
+            'absolute z-100 max-h-56 w-full max-w-72 overflow-auto rounded-md py-1 focus:outline-hidden',
+            'bg-primary-500/60'
+          )}`}
           role="listbox"
         >
           {languages.map((item: SimpleLanguage, index: number) => (
@@ -113,7 +110,11 @@ export const LanguageSelect: FunctionComponent<Props> = ({
                 selectChange(item)
                 setExpanded(false)
               }}
-              className={`${expanded && selectState.code == item.code ? 'hidden' : ''} relative cursor-default py-[2px] px-2  hover:bg-slate-500 select-none`}
+              className={`${clsx(
+                `${expanded && selectState.code == item.code ? 'hidden' : ''}`,
+                'relative cursor-default py-[1px] px-2 select-none border-2',
+                'hover:bg-primary-400 hover:border-charcoal-800 dark:hover:bg-primary-600/50 dark:hover:border-charcoal-100 border-transparent'
+              )}`}
               key={index}
             >
               <span className={`ml-2 block truncate font-normal `}>{item.name}</span>

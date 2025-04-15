@@ -2,6 +2,7 @@ import { FunctionComponent, RefObject } from 'react'
 import { Button } from '@headlessui/react'
 import { SimpleLanguage } from './LanguageSelect'
 import SwapHorizRoundedIcon from '@mui/icons-material/SwapHorizRounded'
+import clsx from 'clsx'
 
 interface Props {
   className?: string
@@ -59,7 +60,10 @@ export const LanguageSwapButton: FunctionComponent<Props> = ({
   return (
     <>
       <Button
-        className={`${className} flex justify-center items-center size-[36px] p-2 rounded-full text-white hover:bg-gray-500 hover:text-neutral-950`}
+        className={`${className} ${clsx(
+          'flex justify-center items-center size-[36px] p-2 rounded-full',
+          'hover:bg-primary-500 dark:hover:bg-primary-400 hover:text-neutral-50 dark:hover:text-neutral-950'
+        )}`}
         onClick={swapLanguages}
       >
         <SwapHorizRoundedIcon sx={{ fontSize: 32 }} />

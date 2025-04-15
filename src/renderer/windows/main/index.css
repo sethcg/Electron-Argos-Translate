@@ -3,26 +3,68 @@
 @import "@fontsource-variable/noto-sans-sc";
 @import "@fontsource-variable/noto-serif-sc";
 
-#root {
-  /* DEFAULT WINDOW PROPERTIES */
-  font-family: var(--font-sans);
-  background-color: var(--color-neutral-800);
-  min-height: 100vh;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: 'Noto Sans SC Variable', sans-serif;
   --font-serif: 'Noto Serif SC Variable', serif;
-
-  /* CUSTOM DEFAULTS */
   --font-roboto: "Roboto Flex Variable", sans-serif;
+
+  --color-charcoal-950: oklch(0.08 0 0); /* #020202 */
+  --color-charcoal-900: oklch(0.13 0 0); /* #070707 */
+  --color-charcoal-800: oklch(0.19 0 0); /* #141414 */
+  --color-charcoal-700: oklch(0.25 0 0); /* #222222 */
+  --color-charcoal-600: oklch(0.35 0 0); /* #3b3b3b */
+  --color-charcoal-500: oklch(0.41 0 0); /* #4a4a4a */
+  --color-charcoal-400: oklch(0.49 0 0); /* #616161 */
+  --color-charcoal-300: oklch(0.56 0 0); /* #757575 */
+  --color-charcoal-200: oklch(0.76 0 0); /* #b2b2b2 */
+  --color-charcoal-100: oklch(0.87 0 0); /* #d4d4d4 */
+  --color-charcoal-50: oklch(0.975 0 0); /* #f7f7f7 */
+
+  --color-scrollbar-track: var(--color-charcoal-400);
+  --color-scrollbar-thumb: var(--color-charcoal-700);
+  --color-scrollbar-hover: var(--color-charcoal-800);
+
+  --color-primary-600: oklch(0.55 0.1 172); /* #19846b */
+  --color-primary-500: oklch(0.65 0.1 172); /* #42a388 */
+  --color-primary-400: oklch(0.75 0.1 172); /* #64c3a7 */
 }
 
-.splash-screen {
-  font-family: var(--font-roboto);
-  border-radius: var(--radius-2xl);
+@layer base {
+  .dark {
+    --color-scrollbar-track: var(--color-charcoal-400);
+    --color-scrollbar-thumb: var(--color-charcoal-200);
+    --color-scrollbar-hover: var(--color-charcoal-100);
+
+    --color-primary-600: oklch(0.35 0.1 172); /* #004935 */
+    --color-primary-500: oklch(0.45 0.1 172); /* #00664f */
+    --color-primary-400: oklch(0.55 0.1 172); /* #19846b */
+  }
+  
+  .splash-screen {
+    font-family: var(--font-roboto);
+    border-radius: var(--radius-2xl);
+  }
+
+  .window-drag {
+    -webkit-app-region: drag; /* window draggable */
+  }
 }
 
-.window-drag {
-  -webkit-app-region: drag;
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 14px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-scrollbar-track);
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-thumb);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-scrollbar-hover);
+  }
 }

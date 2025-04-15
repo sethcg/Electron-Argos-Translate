@@ -7,6 +7,7 @@ import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded'
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded'
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded'
+import clsx from 'clsx'
 
 export type NavBarItem = {
   id: number
@@ -74,7 +75,12 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
 
   return (
     <div className={`w-min-[64px] w-max-[196px] transition-all ${expanded ? 'w-[196px]' : 'w-[64px]'}`}>
-      <nav className="flex h-full flex-col items-center justify-between bg-neutral-900 border-r-2 border-neutral-950 shadow-sm">
+      <nav
+        className={`${clsx(
+          'flex h-full flex-col items-center justify-between border-r-2 shadow-sm',
+          'bg-charcoal-200 border-charcoal-300 dark:bg-charcoal-700 dark:border-charcoal-800'
+        )}`}
+      >
         <ul className="flex flex-col gap-2 p-2 overflow-hidden items-center justify-between">
           {navItems.map((item: NavBarItem) => (
             <SidebarItem
@@ -90,7 +96,10 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
         </ul>
         <div className={`hidden md:flex w-full py-2 ${expanded ? 'px-2 justify-end' : 'justify-center'}`}>
           <button
-            className="flex size-[32px] justify-center items-center rounded-lg bg-gradient-to-tr from-0% from-gray-700 to-gray-600 p-1.5 hover:from-gray-500 hover:to-gray-500"
+            className={`${clsx(
+              'flex size-[32px] justify-center items-center rounded-xl bg-primary-500/50 hover:bg-primary-500/90',
+              'text-charcoal-900 hover:text-charcoal-950 dark:text-charcoal-100 dark:hover:text-charcoal-50'
+            )}`}
             onClick={() => setExpanded((current: boolean) => !current)}
           >
             <ChevronLeftRoundedIcon

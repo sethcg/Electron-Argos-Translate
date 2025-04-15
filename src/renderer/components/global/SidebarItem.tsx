@@ -18,11 +18,7 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, handleUp
         return (
           <button
             className={`relative flex flex-row cursor-pointer items-center rounded-md p-2 
-          ${
-            active
-              ? 'text-neutral-950 bg-gradient-to-tr from-0% from-gray-700 to-gray-600'
-              : 'text-white hover:bg-gray-500 hover:text-neutral-900'
-          }
+          ${active ? 'bg-primary-500' : 'hover:bg-primary-500/60 hover:text-charcoal-900'}
           `}
             onClick={() => {
               handleUpdate(id, true)

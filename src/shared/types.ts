@@ -15,6 +15,7 @@ export type LanguagePackage = {
 }
 
 export type StoreType = {
+  dark_mode: boolean
   language: {
     source_code: string /* ISO language code */
     target_code: string /* ISO language code */

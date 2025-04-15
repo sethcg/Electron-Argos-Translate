@@ -1,9 +1,10 @@
-import { BrowserWindow, ipcMain } from 'electron'
+import { ipcMain } from 'electron'
 import { StoreType } from '~shared/types'
 import ElectronStore from 'electron-store'
 
 export default class Store {
   defaults: StoreType = {
+    dark_mode: true,
     language: {
       source_code: 'en',
       target_code: 'es',
@@ -15,10 +16,7 @@ export default class Store {
   }
   store: ElectronStore<StoreType>
 
-  window: BrowserWindow
-
-  constructor(window: BrowserWindow) {
-    this.window = window
+  constructor() {
     this.store = new ElectronStore<StoreType>({ defaults: this.defaults })
 
     // SETUP STORE RELATED IPC EVENTS
