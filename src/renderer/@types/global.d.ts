@@ -9,6 +9,9 @@ export declare global {
         get(key: string): Promise<unknown>
         reset(key: string): void
       }
+      computer: {
+        getAvailableThreads(): Promise<number>
+      }
     }
     api: {
       translate(source: string, target: string, value: string): Promise<TranslateResponse | FetchError>

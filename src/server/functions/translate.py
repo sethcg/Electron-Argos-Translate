@@ -1,5 +1,4 @@
 from html import unescape
-from typing import List
 from flask import jsonify
 from functions import helpers
 from functions import package
@@ -9,7 +8,7 @@ class InstalledTranslate:
     package_key: str
     cached_translation: CachedTranslation
 
-def get_installed_languages(str_package_path: str, str_sentencizer_path: str) -> list[Language]:
+def get_installed_languages(str_package_path: str, str_sentencizer_path: str, inter_threads: int) -> list[Language]:
     # GET LOCALLY INSTALLED LANGUAGE PACKAGES
     packages: list[package.Package] = package.get_installed_packages(str_package_path)
     installed_translates: list[InstalledTranslate] = []
@@ -32,7 +31,7 @@ def get_installed_languages(str_package_path: str, str_sentencizer_path: str) ->
         contain = list(filter(lambda x: x.package_key == package_key, installed_translates))
         translation_to_add: CachedTranslation
         if len(contain) == 0:
-            translation_to_add = CachedTranslation(PackageTranslation(from_lang, to_lang, pkg, sentencizer))
+            translation_to_add = CachedTranslation(PackageTranslation(from_lang, to_lang, pkg, sentencizer, inter_threads))
             saved_cache = InstalledTranslate()
             saved_cache.package_key = package_key
             saved_cache.cached_translation = translation_to_add
@@ -66,12 +65,12 @@ def get_installed_languages(str_package_path: str, str_sentencizer_path: str) ->
                         translation_2.to_lang.translations_to.append(composite_translation)
     return languages
 
-def setup_cached_languages(str_package_path: str, str_sentencizer_path: str):
+def setup_cached_languages(str_package_path: str, str_sentencizer_path: str, inter_threads: int):
     # GET THE INSTALLED PACKAGES, SETTING THE CACHE FOR FASTER TRANSLATE TIMES
     str_sentencizer_path = str_sentencizer_path
     str_package_path = str_package_path
     global installed_languages 
-    installed_languages = get_installed_languages(str_package_path, str_sentencizer_path)
+    installed_languages = get_installed_languages(str_package_path, str_sentencizer_path, inter_threads)
 
 def translate(q: str, source: str, target: str, num_alternatives: int):
     try:
@@ -85,5 +84,6 @@ def translate(q: str, source: str, target: str, num_alternatives: int):
         alternatives = helpers.filter_unique([unescape(helpers.improve_translation_formatting(q, hypotheses[i].value)) for i in range(1, len(hypotheses))], translated_text)
 
         return jsonify({"text": translated_text, "alternatives": alternatives})
-    except:
+    except Exception as exception: 
+        # print(str(exception))
         return jsonify({"error": "Error during the translation process"})

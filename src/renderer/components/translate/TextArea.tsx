@@ -1,5 +1,5 @@
 import { Textarea } from '@headlessui/react'
-import { ChangeEvent, FunctionComponent, RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import clsx from 'clsx'
 
 interface Props {
@@ -12,15 +12,24 @@ interface Props {
 
 export const SourceTextArea: FunctionComponent<Props> = ({ className, textRef, charMax = 2000, translateCallback }) => {
   const [charCount, setCharCount] = useState<number>(0)
+  const [text, setText] = useState<string>('')
+
+  // PREVENT SPAMMING THE FLASK SERVER,
+  // CHANGE AFTER DONE TYPING
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCharCount(text.length)
+      if (translateCallback) translateCallback()
+    }, 250)
+    return () => clearTimeout(timer)
+  }, [text])
 
   return (
     <div className="relative size-full">
       <Textarea
         ref={textRef}
-        onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-          setCharCount(event.target.value.length)
-          if (translateCallback) translateCallback()
-        }}
+        value={text}
+        onChange={event => setText(event.target.value)}
         spellCheck={false}
         maxLength={charMax}
         className={`${className} ${clsx(

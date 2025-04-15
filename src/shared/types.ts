@@ -15,10 +15,12 @@ export type LanguagePackage = {
 }
 
 export type StoreType = {
-  version: number
   language: {
     source_code: string /* ISO language code */
     target_code: string /* ISO language code */
+  }
+  translate: {
+    inter_threads: number /* Maximum number of translation threads */
   }
   packages: LanguagePackage[]
 }

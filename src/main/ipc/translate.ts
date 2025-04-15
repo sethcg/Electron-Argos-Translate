@@ -70,9 +70,11 @@ export default class TranslateServer {
     const sentencizerFileLocation: string = this.isDevelopment
       ? path.join(app.getAppPath(), 'src/assets/xx_sent_ud_sm')
       : path.join(process.resourcesPath, '/xx_sent_ud_sm')
+    const interThreads = (await this.store.get('translate.inter_threads')) as number
     const params = new URLSearchParams([
       ['languagePath', this.languageFileLocation],
       ['sentencizerPath', sentencizerFileLocation],
+      ['interThreads', `${interThreads}`],
     ])
     await fetch(`http://${this.host}:${this.port}/api/setup?${params}`).then(() => {
       console.log(`SERVER SETUP CALL TOOK: ${Math.round(performance.now() - start)} ms`)

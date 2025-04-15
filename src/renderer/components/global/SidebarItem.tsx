@@ -13,7 +13,7 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, handleUp
   useEffect(() => {}, [expanded])
 
   return (
-    <li className={`font-roboto font-extrabold text-xl ${expanded ? 'mx-2' : ''}`}>
+    <li className={`font-roboto font-bold text-xl ${expanded ? 'mx-2' : ''}`}>
       {useMemo(() => {
         return (
           <button
@@ -28,7 +28,7 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, handleUp
               handleUpdate(id, true)
             }}
           >
-            <span className="flex size-8 justify-center">{icon}</span>
+            {icon}
             <span className={`overflow-hidden text-start transition-all ${expanded ? 'pl-4 w-32' : 'w-0'}`}>{text}</span>
           </button>
         )

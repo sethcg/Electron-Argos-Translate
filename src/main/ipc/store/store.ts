@@ -4,10 +4,12 @@ import ElectronStore from 'electron-store'
 
 export default class Store {
   defaults: StoreType = {
-    version: 1,
     language: {
       source_code: 'en',
       target_code: 'es',
+    },
+    translate: {
+      inter_threads: 1,
     },
     packages: [],
   }

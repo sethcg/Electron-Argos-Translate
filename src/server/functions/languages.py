@@ -120,12 +120,13 @@ class ITranslation:
 class PackageTranslation(ITranslation):
     """A Translation that is installed with a package"""
 
-    def __init__(self, from_lang: Language, to_lang: Language, pkg: package.Package, sentencizer: SpacySentencizerSmall):
+    def __init__(self, from_lang: Language, to_lang: Language, pkg: package.Package, sentencizer: SpacySentencizerSmall, inter_threads: int):
         self.from_lang = from_lang
         self.to_lang = to_lang
         self.pkg = pkg
         self.translator = None
         self.sentencizer = sentencizer
+        self.inter_threads = inter_threads
 
     def hypotheses(self, input_text: str, num_hypotheses: int = 4) -> list[Hypothesis]:
         if self.translator is None:
@@ -134,7 +135,7 @@ class PackageTranslation(ITranslation):
                 model_path,
                 # "cpu" or "cuda"
                 device = "cpu",
-                inter_threads = 1,
+                inter_threads = self.inter_threads,
                 intra_threads = 0,
             )
         paragraphs = ITranslation.split_into_paragraphs(input_text)

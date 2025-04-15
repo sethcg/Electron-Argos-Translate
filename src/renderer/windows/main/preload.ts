@@ -11,6 +11,9 @@ contextBridge.exposeInMainWorld('main', {
     get: async (key: string) => await ipcRenderer.invoke('settings:get', key),
     reset: (key: keyof StoreType) => ipcRenderer.send('settings:reset', key),
   },
+  computer: {
+    getAvailableThreads: async () => await ipcRenderer.invoke('availableThreads:get'),
+  },
 })
 
 contextBridge.exposeInMainWorld('api', {

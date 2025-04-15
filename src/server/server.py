@@ -28,8 +28,10 @@ def setupDefaultTranslator():
     str_sentencizer_path = args.get('sentencizerPath', default = None, type = str)
     if(str_sentencizer_path is None or len(str_sentencizer_path) == 0):
         return jsonify({"error": "No sentencizer path provided"})
+    
+    inter_threads = args.get('interThreads', default = 1, type = int)
 
-    setup_cached_languages(str_package_path, str_sentencizer_path)
+    setup_cached_languages(str_package_path, str_sentencizer_path, inter_threads)
     return jsonify({"success": True})
 
 # TRANSLATE THE WORD OR PHRASE FROM SOURCE LANGUAGE TO TARGET LANGUAGE

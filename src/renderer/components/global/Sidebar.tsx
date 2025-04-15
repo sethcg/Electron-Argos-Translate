@@ -1,9 +1,12 @@
-import { ChevronLeftIcon, LanguageIcon, Cog8ToothIcon, ListBulletIcon } from '@heroicons/react/24/outline'
 import { useState, useLayoutEffect, ReactElement, FunctionComponent, useCallback } from 'react'
 import { SidebarItem } from './SidebarItem'
 import { LanguagePage } from '~components/pages/LanguagePage'
 import { SettingsPage } from '~components/pages/SettingsPage'
 import { TranslatePage } from '~components/pages/TranslatePage'
+import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded'
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded'
+import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'
+import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded'
 
 export type NavBarItem = {
   id: number
@@ -26,21 +29,21 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
   const [navItems, setNavItems] = useState([
     {
       id: 1,
-      icon: <LanguageIcon strokeWidth={2} className={'size-8'} />,
+      icon: <TranslateRoundedIcon sx={{ fontSize: 32 }} />,
       text: 'Translate',
       content: <TranslatePage />,
       active: true,
     },
     {
       id: 2,
-      icon: <ListBulletIcon strokeWidth={2} className={'size-8'} />,
+      icon: <FormatListBulletedRoundedIcon sx={{ fontSize: 32 }} />,
       text: 'Languages',
       content: <LanguagePage />,
       active: false,
     },
     {
       id: 3,
-      icon: <Cog8ToothIcon strokeWidth={2} className={'size-8'} />,
+      icon: <SettingsRoundedIcon sx={{ fontSize: 32 }} />,
       text: 'Settings',
       content: <SettingsPage />,
       active: false,
@@ -87,12 +90,14 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
         </ul>
         <div className={`hidden md:flex w-full py-2 ${expanded ? 'px-2 justify-end' : 'justify-center'}`}>
           <button
-            className="w-[36px] rounded-lg bg-gradient-to-tr from-0% from-gray-700 to-gray-600 p-1.5 hover:from-gray-500 hover:to-gray-500"
+            className="flex size-[32px] justify-center items-center rounded-lg bg-gradient-to-tr from-0% from-gray-700 to-gray-600 p-1.5 hover:from-gray-500 hover:to-gray-500"
             onClick={() => setExpanded((current: boolean) => !current)}
           >
-            <span className="h-6 w-6 transition-all">
-              <ChevronLeftIcon className={`size-6 duration-300 ${expanded ? 'rotate-0' : 'rotate-180'}`} strokeWidth={2.5} />
-            </span>
+            <ChevronLeftRoundedIcon
+              sx={{ fontSize: 32 }}
+              className={`transition-all duration-300 ${expanded ? 'rotate-0' : 'rotate-180'}`}
+              strokeWidth={2.5}
+            />
             <span className={`overflow-hidden text-start transition-all`} />
           </button>
         </div>

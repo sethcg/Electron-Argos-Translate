@@ -7,6 +7,7 @@ import MainWindow from './ipc/window'
 import TranslateServer from './ipc/translate'
 import PackageHandler from './ipc/package'
 import Store from './ipc/store/store'
+import ComputerInfo from './ipc/computer'
 
 // THIS IS A "MAGIC" CONSTANT THAT IS GENERATED FROM FORGE'S WEBPACK,
 // THE "MAIN_WINDOW" PORTION MATCHES THE "forge.config.ts -> vite-plugin -> renderer -> name" parameter.
@@ -84,6 +85,9 @@ app.whenReady().then(async () => {
   const port: string = `${await getPort()}`
   const fileLocation: string = packageHandler.languageFileLocation
   const translateServer: TranslateServer = new TranslateServer(store, port, isDevelopment, fileLocation)
+
+  // SETUP COMPUTER SPECIFICATION RELATED IPC EVENTS
+  ComputerInfo.getAvailableThreadsEvent()
 
   mainWindow.on('ready-to-show', async () => {
     // OPEN SERVER, AND CACHE TRANSLATORS

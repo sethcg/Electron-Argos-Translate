@@ -1,6 +1,6 @@
 import { FunctionComponent, useState, useEffect } from 'react'
-import { ChevronUpDownIcon } from '@heroicons/react/24/outline'
 import { LanguagePackage } from '~shared/types'
+import UnfoldMoreRoundedIcon from '@mui/icons-material/UnfoldMoreRounded'
 
 interface Props {
   className?: string
@@ -76,7 +76,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({
   }, [isSource, setSelectState, storeKey])
 
   return (
-    <div className={`ps-4 flex flex-row gap-4 justify-start items-center text-neutral-950 text-lg font-roboto font-semibold ${className}`}>
+    <div className={`ps-2 flex flex-row gap-4 justify-start items-center text-neutral-950 text-lg font-roboto font-semibold ${className}`}>
       <span className=" text-white mb-2 z-10">{title}</span>
       <div className="relative w-50">
         <button
@@ -90,11 +90,11 @@ export const LanguageSelect: FunctionComponent<Props> = ({
           onClick={() => {
             setExpanded(true)
           }}
-          className={`w-full mb-2 cursor-default rounded-md bg-neutral-600 py-[2px] px-2 text-left focus:outline-2 focus:-outline-offset-2 focus:outline-slate-500`}
+          className={`w-full mb-2 cursor-default rounded-md bg-neutral-600 py-[2px] ps-2 text-left focus:outline-2 focus:-outline-offset-2 focus:outline-slate-500`}
         >
           <div className="flex flex-row justify-between items-center">
-            <span className="block truncate text-white ">{selectState.name}</span>
-            <ChevronUpDownIcon className="size-5 text-neutral-950" strokeWidth={2.5} />
+            <span className="block truncate text-white">{selectState.name}</span>
+            <UnfoldMoreRoundedIcon sx={{ fontSize: 24 }} />
           </div>
         </button>
         <ul
@@ -113,10 +113,10 @@ export const LanguageSelect: FunctionComponent<Props> = ({
                 selectChange(item)
                 setExpanded(false)
               }}
-              className={`${expanded && selectState.code == item.code ? 'hidden' : ''} relative cursor-default py-[2px] px-2 text-neutral-950 hover:bg-slate-500 select-none`}
+              className={`${expanded && selectState.code == item.code ? 'hidden' : ''} relative cursor-default py-[2px] px-2  hover:bg-slate-500 select-none`}
               key={index}
             >
-              <span className={`ml-2 block truncate text-md font-normal text-neutral-950`}>{item.name}</span>
+              <span className={`ml-2 block truncate font-normal `}>{item.name}</span>
             </li>
           ))}
         </ul>
