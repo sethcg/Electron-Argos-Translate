@@ -10,6 +10,8 @@
   --font-serif: 'Noto Serif SC Variable', serif;
   --font-roboto: "Roboto Flex Variable", sans-serif;
 
+  --content-max-height: calc(100vh - 32px);
+
   --color-charcoal-950: oklch(0.08 0 0); /* #020202 */
   --color-charcoal-900: oklch(0.13 0 0); /* #070707 */
   --color-charcoal-800: oklch(0.19 0 0); /* #141414 */
@@ -41,7 +43,7 @@
     --color-primary-500: oklch(0.45 0.1 172); /* #00664f */
     --color-primary-400: oklch(0.55 0.1 172); /* #19846b */
   }
-  
+
   .splash-screen {
     font-family: var(--font-roboto);
     border-radius: var(--radius-2xl);

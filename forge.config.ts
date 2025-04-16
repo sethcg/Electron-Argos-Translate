@@ -37,7 +37,7 @@ const config: ForgeConfig = {
         {
           entry: './src/renderer/windows/splash/preload.ts',
           config: './viteconfig/splash/vite.preload.config.ts',
-        }
+        },
       ],
       renderer: [
         {

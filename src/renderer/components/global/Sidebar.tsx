@@ -51,7 +51,7 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
     },
   ])
 
-  const handleNavItemUpdate = useCallback(
+  const updateCallback = useCallback(
     (id: number, active: boolean) => {
       const updatedItems = navItems.map(item => (item.id === id ? { ...item, active } : { ...item, active: false }))
       const activeItem = updatedItems.filter(item => item.active)[0]
@@ -90,7 +90,7 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
               text={item.text}
               expanded={expanded}
               active={item.active}
-              handleUpdate={handleNavItemUpdate}
+              updateCallback={updateCallback}
             />
           ))}
         </ul>

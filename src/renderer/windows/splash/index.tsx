@@ -4,7 +4,7 @@ function App() {
   const [darkMode, setDarkMode] = useState<string>('')
   useEffect(() => {
     async function getDarkMode() {
-      const isDarkMode: boolean = await window.main.store.get('dark_mode') as boolean
+      const isDarkMode: boolean = (await window.main.store.get('dark_mode')) as boolean
       setDarkMode(isDarkMode ? 'dark' : '')
     }
     getDarkMode()

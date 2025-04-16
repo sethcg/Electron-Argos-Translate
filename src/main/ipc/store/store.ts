@@ -13,6 +13,7 @@ export default class Store {
       inter_threads: 1,
     },
     packages: [],
+    languages: [],
   }
   store: ElectronStore<StoreType>
 

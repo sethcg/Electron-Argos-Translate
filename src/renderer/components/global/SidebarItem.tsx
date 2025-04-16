@@ -6,10 +6,10 @@ interface Props {
   text: string
   expanded: boolean
   active: boolean
-  handleUpdate: (id: number, active: boolean) => void
+  updateCallback: (id: number, active: boolean) => void
 }
 
-export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, handleUpdate, active, expanded = false }) => {
+export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, updateCallback, active, expanded = false }) => {
   useEffect(() => {}, [expanded])
 
   return (
@@ -20,15 +20,13 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, handleUp
             className={`relative flex flex-row cursor-pointer items-center rounded-md p-2 
           ${active ? 'bg-primary-500' : 'hover:bg-primary-500/60 hover:text-charcoal-900'}
           `}
-            onClick={() => {
-              handleUpdate(id, true)
-            }}
+            onClick={() => updateCallback(id, true)}
           >
             {icon}
             <span className={`overflow-hidden text-start transition-all ${expanded ? 'pl-4 w-32' : 'w-0'}`}>{text}</span>
           </button>
         )
-      }, [active, expanded, handleUpdate, icon, id, text])}
+      }, [active, expanded, updateCallback, icon, id, text])}
     </li>
   )
 }

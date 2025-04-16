@@ -14,6 +14,12 @@ export type LanguagePackage = {
   filename: string
 }
 
+export type Language = {
+  code: string /* ISO language code */
+  name: string
+  enabled: boolean
+}
+
 export type StoreType = {
   dark_mode: boolean
   language: {
@@ -24,4 +30,5 @@ export type StoreType = {
     inter_threads: number /* Maximum number of translation threads */
   }
   packages: LanguagePackage[]
+  languages: Language[]
 }

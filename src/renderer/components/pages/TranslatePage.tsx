@@ -1,18 +1,18 @@
 import { FunctionComponent, useCallback, useRef, useState } from 'react'
-import { LanguageSelect, SimpleLanguage } from '~components/translate/LanguageSelect'
+import { LanguageSelect } from '~components/translate/LanguageSelect'
 import { LanguageSwapButton } from '~components/translate/LanguageSwap'
 import { SourceTextArea, TargetTextArea } from '~components/translate/TextArea'
-import { TranslateResponse } from '~shared/types'
+import { TranslateResponse, Language } from '~shared/types'
 
 export const TranslatePage: FunctionComponent = () => {
   const inputTextRef = useRef<HTMLInputElement>(null)
   const outputTextRef = useRef<HTMLInputElement>(null)
 
-  const [inputSelectState, setInputSelectState] = useState<SimpleLanguage>({ code: '', name: '' })
-  const [outputSelectState, setOutputSelectState] = useState<SimpleLanguage>({ code: '', name: '' })
+  const [inputSelectState, setInputSelectState] = useState<Language>({ code: '', name: '', enabled: false })
+  const [outputSelectState, setOutputSelectState] = useState<Language>({ code: '', name: '', enabled: false })
 
   const translate = useCallback(async (): Promise<void> => {
-    if (inputTextRef.current) {
+    if (inputTextRef.current && inputTextRef.current.value) {
       const source: string = (await window.main.store.get('language.source_code')) as string
       const target: string = (await window.main.store.get('language.target_code')) as string
 
@@ -34,7 +34,6 @@ export const TranslatePage: FunctionComponent = () => {
           <LanguageSelect
             isSource={true}
             title={'Translate from'}
-            storeKey={'language.source_code'}
             selectState={inputSelectState}
             setSelectState={setInputSelectState}
             translateCallback={translate}
@@ -56,7 +55,6 @@ export const TranslatePage: FunctionComponent = () => {
           <LanguageSelect
             isSource={false}
             title={'Translate to'}
-            storeKey={'language.target_code'}
             selectState={outputSelectState}
             setSelectState={setOutputSelectState}
             translateCallback={translate}

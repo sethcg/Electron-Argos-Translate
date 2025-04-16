@@ -1,15 +1,15 @@
 import { FunctionComponent, RefObject } from 'react'
 import { Button } from '@headlessui/react'
-import { SimpleLanguage } from './LanguageSelect'
+import { Language } from '~shared/types'
 import SwapHorizRoundedIcon from '@mui/icons-material/SwapHorizRounded'
 import clsx from 'clsx'
 
 interface Props {
   className?: string
-  inputSelectState: SimpleLanguage
-  outputSelectState: SimpleLanguage
-  setInputSelectState: React.Dispatch<React.SetStateAction<SimpleLanguage>>
-  setOutputSelectState: React.Dispatch<React.SetStateAction<SimpleLanguage>>
+  inputSelectState: Language
+  outputSelectState: Language
+  setInputSelectState: React.Dispatch<React.SetStateAction<Language>>
+  setOutputSelectState: React.Dispatch<React.SetStateAction<Language>>
   inputTextRef: RefObject<HTMLInputElement | null>
   outputTextRef: RefObject<HTMLInputElement | null>
   translateCallback: () => void
@@ -44,7 +44,7 @@ export const LanguageSwapButton: FunctionComponent<Props> = ({
       window.main.store.set('language.target_code', source)
 
       // SWAP LANGUAGES ON THE SELECT BUTTONS
-      const tempSelect: SimpleLanguage = inputSelectState
+      const tempSelect: Language = inputSelectState
       setInputSelectState(outputSelectState)
       setOutputSelectState(tempSelect)
 

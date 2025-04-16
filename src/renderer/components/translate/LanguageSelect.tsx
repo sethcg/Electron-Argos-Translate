@@ -1,43 +1,32 @@
 import { FunctionComponent, useState, useEffect } from 'react'
-import { LanguagePackage } from '~shared/types'
+import { Language } from '~shared/types'
 import UnfoldMoreRoundedIcon from '@mui/icons-material/UnfoldMoreRounded'
 import clsx from 'clsx'
 
 interface Props {
   className?: string
   isSource: boolean
-  storeKey: string
   title: string
-  selectState: SimpleLanguage
-  setSelectState: React.Dispatch<React.SetStateAction<SimpleLanguage>>
+  selectState: Language
+  setSelectState: React.Dispatch<React.SetStateAction<Language>>
   translateCallback: () => void
-}
-
-export type SimpleLanguage = {
-  code: string
-  name: string
 }
 
 export const LanguageSelect: FunctionComponent<Props> = ({
   className = '',
   isSource,
-  storeKey,
   title,
   selectState,
   setSelectState,
   translateCallback,
 }) => {
+  const storeKey = isSource ? 'language.source_code' : 'language.target_code'
   const [expanded, setExpanded] = useState<boolean>(false)
-  const [languages, setLanguages] = useState<SimpleLanguage[]>([{ code: '', name: 'None' }])
+  const [languages, setLanguages] = useState<Language[]>([])
 
-  useEffect(() => {}, [languages])
-  const sortLanguages = (array: SimpleLanguage[]): SimpleLanguage[] => {
-    return array.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
-  }
-
-  const selectChange = (language: SimpleLanguage) => {
+  // useEffect(() => {}, [languages])
+  const selectChange = (language: Language) => {
     setSelectState(language)
-    setLanguages(sortLanguages(languages))
 
     // SOURCE OR TARGET CHANGED
     window.main.store.set(storeKey, language.code)
@@ -47,34 +36,37 @@ export const LanguageSelect: FunctionComponent<Props> = ({
   }
 
   useEffect(() => {
-    async function getPackages() {
-      const selectedCode: string = (await window.main.store.get(storeKey)) as string
+    async function getLanguages() {
+      const selectedSourceCode: string = (await window.main.store.get('language.source_code')) as string
+      const selectedTargetCode: string = (await window.main.store.get('language.target_code')) as string
 
-      const packages: LanguagePackage[] = (await window.main.store.get('packages')) as LanguagePackage[]
-      let packageLanguages: SimpleLanguage[] = packages.map((lang: LanguagePackage) => {
-        const code = isSource ? lang.source_code : lang.target_code
-        const name = isSource ? lang.source_name : lang.target_name
-        return { code, name }
-      })
-      // REMOVE DUPLICATES, AND SORT BY NAME
-      packageLanguages = packageLanguages.filter((a, index, array) => array.findIndex((b: SimpleLanguage) => b.code === a.code) === index)
-      packageLanguages = sortLanguages(packageLanguages)
+      let languagesItems: Language[] = (await window.main.store.get('languages')) as Language[]
 
-      const selectedIndex: number = packageLanguages.findIndex((lang: SimpleLanguage) => lang.code == selectedCode)
-      let selected: SimpleLanguage = packageLanguages[0]
-      if (selectedIndex > 0) {
-        selected = packageLanguages.splice(selectedIndex, 1)[0]
-        setSelectState(selected)
-      }
+      // ERROR NOT ENOUGH LANGUAGES ENABLED
+      if (languagesItems.length < 1) return
+
+      // FILTER OUT DISABLED LANGUAGES
+      languagesItems = languagesItems.filter((lang: Language) => lang.enabled)
+
+      // FILTER OUT SELECTED SOURCE OR TARGET
+      const selectedCode = isSource ? selectedSourceCode : selectedTargetCode
+      const selected: Language = languagesItems.filter((lang: Language) => lang.code == selectedCode)[0]
+      languagesItems = languagesItems.filter((lang: Language) => lang.code != selectedCode)
+
+      console.log(selected)
 
       // SET THE SELECTED LANGUAGE AND LANGUAGE LIST
-      const temp = [selected, ...packageLanguages]
-      if (temp.length > 0) {
-        setLanguages([selected, ...packageLanguages])
+      if (selected) {
+        setSelectState(selected)
+        setLanguages([selected, ...languagesItems])
+      } else if (languagesItems.length > 0) {
+        console.log(languagesItems[0])
+        setSelectState(languagesItems[0])
+        setLanguages([selected, ...languagesItems])
       }
     }
-    getPackages()
-  }, [isSource, setSelectState, storeKey])
+    getLanguages()
+  }, [isSource])
 
   return (
     <div className={`ps-2 pe-8 flex flex-row gap-4 justify-start items-center text-lg font-semibold ${className}`}>
@@ -104,7 +96,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({
           )}`}
           role="listbox"
         >
-          {languages.map((item: SimpleLanguage, index: number) => (
+          {languages.map((item: Language, index: number) => (
             <li
               onClick={() => {
                 selectChange(item)

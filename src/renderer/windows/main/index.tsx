@@ -23,7 +23,7 @@ function App() {
         <WindowBar />
         <div className="grow flex flex-row dark:bg-charcoal-600 bg-charcoal-100">
           <Sidebar pageChange={handlePageChange} />
-          <div className="grow flex flex-col">{pageState}</div>
+          <div className="grow flex flex-col max-h-(--content-max-height)">{pageState}</div>
         </div>
       </div>
     </>
