@@ -22,10 +22,8 @@ export type Language = {
 
 export type StoreType = {
   dark_mode: boolean
-  language: {
-    source_code: string /* ISO language code */
-    target_code: string /* ISO language code */
-  }
+  source_language: Language | undefined
+  target_language: Language | undefined
   translate: {
     inter_threads: number /* Maximum number of translation threads */
   }
