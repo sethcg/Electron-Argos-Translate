@@ -6,8 +6,8 @@ export type TranslateResponse = {
 export type LanguagePackage = {
   id: number
   package_version: string
-  source_code: string /* ISO language code */
-  target_code: string /* ISO language code */
+  source_code: string
+  target_code: string
   source_name: string
   target_name: string
   link: string
@@ -15,9 +15,10 @@ export type LanguagePackage = {
 }
 
 export type Language = {
-  code: string /* ISO language code */
+  code: string
   name: string
   enabled: boolean
+  installed: boolean
 }
 
 export type StoreType = {

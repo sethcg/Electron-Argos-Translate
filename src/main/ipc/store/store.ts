@@ -5,8 +5,8 @@ import ElectronStore from 'electron-store'
 export default class Store {
   defaults: StoreType = {
     dark_mode: true,
-    source_language: { code: '', name: 'None', enabled: false },
-    target_language: { code: '', name: 'None', enabled: false },
+    source_language: { code: '', name: 'None', enabled: false, installed: false },
+    target_language: { code: '', name: 'None', enabled: false, installed: false },
     translate: {
       inter_threads: 1,
     },
@@ -33,7 +33,12 @@ export default class Store {
   }
 
   public reset = (key: keyof StoreType): void => {
-    return this.store.reset(key)
+    this.store.reset(key)
+  }
+
+  public resetThenSet = (key: keyof StoreType, value?: unknown): void => {
+    this.store.reset(key)
+    this.store.set(key as string, value)
   }
 
   private setEvent = (): void => {

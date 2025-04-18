@@ -14,6 +14,10 @@ contextBridge.exposeInMainWorld('main', {
   computer: {
     getAvailableThreads: async () => await ipcRenderer.invoke('availableThreads:get'),
   },
+  package: {
+    deletePackage: async (code: string) => await ipcRenderer.invoke('package:delete', code),
+    downloadPackage: async (code: string) => await ipcRenderer.invoke('package:download', code),
+  },
 })
 
 contextBridge.exposeInMainWorld('api', {

@@ -12,6 +12,10 @@ export declare global {
       computer: {
         getAvailableThreads(): Promise<number>
       }
+      package: {
+        deletePackage(code: string): Promise<boolean>
+        downloadPackage(code: string): Promise<boolean>
+      }
     }
     api: {
       translate(source: string, target: string, value: string): Promise<TranslateResponse | FetchError>
