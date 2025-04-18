@@ -58,6 +58,7 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
       setNavItems(updatedItems)
       pageChange(activeItem.content)
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setNavItems]
   )
 
@@ -79,8 +80,7 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
         className={`${clsx(
           'flex h-full flex-col items-center justify-between border-r-2 shadow-sm',
           'bg-charcoal-200 border-charcoal-300 dark:bg-charcoal-700 dark:border-charcoal-800'
-        )}`}
-      >
+        )}`}>
         <ul className="flex flex-col gap-2 p-2 overflow-hidden items-center justify-between">
           {navItems.map((item: NavBarItem) => (
             <SidebarItem
@@ -100,8 +100,7 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
               'flex size-[32px] justify-center items-center rounded-xl bg-primary-500/50 hover:bg-primary-500/90',
               'text-charcoal-900 hover:text-charcoal-950 dark:text-charcoal-100 dark:hover:text-charcoal-50'
             )}`}
-            onClick={() => setExpanded((current: boolean) => !current)}
-          >
+            onClick={() => setExpanded((current: boolean) => !current)}>
             <ChevronLeftRoundedIcon
               sx={{ fontSize: 32 }}
               className={`transition-all duration-300 ${expanded ? 'rotate-0' : 'rotate-180'}`}

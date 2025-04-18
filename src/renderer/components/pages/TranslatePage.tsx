@@ -13,7 +13,7 @@ export const TranslatePage: FunctionComponent = () => {
   const [charCount, setCharCount] = useState<number>(0)
   const [sourceText, setSourceText] = useState<string>('')
 
-  const translate = async (): Promise<void> => {
+  const translate = useCallback(async (): Promise<void> => {
     if (sourceText.length > 0) {
       const source: Language | undefined = (await window.main.store.get('source_language')) as Language | undefined
       const target: Language | undefined = (await window.main.store.get('target_language')) as Language | undefined
@@ -27,7 +27,7 @@ export const TranslatePage: FunctionComponent = () => {
       // NO SOURCE, THEN SET TARGET TO DEFAULT VALUE
       targetTextRef.current.value = ''
     }
-  }
+  }, [targetTextRef, sourceText])
 
   const swap = useCallback(async (): Promise<void> => {
     if (!(sourceText.length <= 0 && targetTextRef.current?.value)) return
@@ -42,6 +42,7 @@ export const TranslatePage: FunctionComponent = () => {
       const targetText: string = targetTextRef.current.value
       setSourceText(targetText)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export const TranslatePage: FunctionComponent = () => {
       await translate()
     }, 250)
     return () => clearTimeout(timer)
-  }, [sourceText])
+  }, [sourceText, translate])
 
   return (
     <div className="grow flex flex-col size-full px-2 py-4">

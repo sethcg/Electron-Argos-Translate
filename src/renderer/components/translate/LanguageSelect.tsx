@@ -57,7 +57,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
       setlanguageOptions([{ code: '', name: 'None', enabled: true }])
     }
     getLanguages()
-  }, [selectedLanguage])
+  }, [isSource, selectedLanguage])
 
   return (
     <div className={`grow flex flex-row gap-4 justify-start items-center text-lg font-semibold`}>
@@ -70,8 +70,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
           className={`${clsx(
             'block w-full mb-2 cursor-default rounded-md text-left ps-4 py-[1px]',
             'bg-primary-500 focus:outline-primary-600 dar:focus:outline-primary-400/40 focus:outline-2 focus:-outline-offset-2'
-          )}`}
-        >
+          )}`}>
           <div className="flex flex-row justify-between items-center">
             <span className="">{selectedLanguage.name}</span>
             <UnfoldMoreRoundedIcon sx={{ fontSize: 24 }} />
@@ -85,8 +84,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
             'z-100 max-h-56 absolute w-full overflow-auto rounded-md py-1 focus:outline-hidden',
             'bg-primary-500/60'
           )}`}
-          role="listbox"
-        >
+          role="listbox">
           {languageOptions.map((item: Language, index: number) => (
             <li
               onClick={() => {
@@ -98,8 +96,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
                 'relative cursor-default py-[1px] px-2 select-none border-2',
                 'hover:bg-primary-400 hover:border-charcoal-800 dark:hover:bg-primary-600/50 dark:hover:border-charcoal-100 border-transparent'
               )}`}
-              key={index}
-            >
+              key={index}>
               <span className="ml-2 font-normal">{item.name}</span>
             </li>
           ))}

@@ -28,7 +28,7 @@ export default class TranslateServer {
     // CURRENTLY TAKES AROUND 4-5 SECONDS
 
     const filePath = isDevelopment
-      ? path.join(__dirname, './resources/translate_server.exe')
+      ? path.join(app.getAppPath(), 'dist/translate_server.exe')
       : path.join(process.resourcesPath, '/translate_server.exe')
 
     const args: string[] = ['--host', this.host, '--port', `${this.port}`]

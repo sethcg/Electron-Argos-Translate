@@ -30,8 +30,7 @@ export const LanguageListItem: FunctionComponent<Props> = ({ code, name, updateC
               'size-full flex flex-row justify-start items-center gap-4 rounded-md px-2 py-[6px]',
               'bg-charcoal-700 hover:bg-charcoal-800'
             )}`}
-            onClick={() => updateCallback(code, !enabled, callback)}
-          >
+            onClick={() => updateCallback(code, !enabled, callback)}>
             <Checkbox
               hidden // TO-DO: ADD CHECKBOX/OPTIONS BUTTON FOR CHANGING MULTIPLE ROWS
               checked={selected}
@@ -39,8 +38,7 @@ export const LanguageListItem: FunctionComponent<Props> = ({ code, name, updateC
               className={`${clsx(
                 'flex justify-center items-center rounded-md p-[6px] cursor-pointer',
                 `${selected ? 'bg-charcoal-600' : 'bg-charcoal-50'}`
-              )}`}
-            >
+              )}`}>
               <CheckRoundedIcon sx={{ fontSize: 16 }} className={`${selected ? 'block' : 'hidden'}`} />
             </Checkbox>
             <span className={`grow flex px-2`}>
@@ -51,8 +49,7 @@ export const LanguageListItem: FunctionComponent<Props> = ({ code, name, updateC
               className={`${clsx(
                 'group relative flex h-7 w-14 cursor-pointer rounded-full p-1 transition-colors duration-200 ease-in-out focus:outline-none',
                 `${enabled ? 'dark:bg-emerald-500/30 dark:hover:bg-emerald-500/40' : 'dark:bg-red-500/30 dark:hover:bg-red-500/40'}`
-              )}`}
-            >
+              )}`}>
               <span
                 className={`${clsx(
                   'pointer-events-none inline-block size-5 translate-x-0 rounded-full ring-0 shadow-lg',
@@ -62,7 +59,7 @@ export const LanguageListItem: FunctionComponent<Props> = ({ code, name, updateC
             </Switch>
           </div>
         )
-      }, [code, name, selected, enabled])}
+      }, [code, name, selected, enabled, callback, updateCallback])}
     </li>
   )
 }

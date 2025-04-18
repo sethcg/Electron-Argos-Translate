@@ -14,11 +14,11 @@ export default class MainWindow extends BrowserWindow {
   }
 
   private minimizeWindowEvent = (): void => {
-    ipcMain.on('mainWindow:minimize', _event => this.minimize())
+    ipcMain.on('mainWindow:minimize', () => this.minimize())
   }
 
   private maximizeWindowEvent = (): void => {
-    ipcMain.on('mainWindow:maximize', _event => {
+    ipcMain.on('mainWindow:maximize', () => {
       if (this.isMaximized()) {
         this.restore()
       } else {
@@ -29,7 +29,7 @@ export default class MainWindow extends BrowserWindow {
 
   private closeWindowEvent = (): void => {
     // CLOSE WINDOW, OR HIDE IF ON MAC
-    ipcMain.on('mainWindow:close', _event => {
+    ipcMain.on('mainWindow:close', () => {
       if (this.isDarwin) {
         this.hide()
       } else {

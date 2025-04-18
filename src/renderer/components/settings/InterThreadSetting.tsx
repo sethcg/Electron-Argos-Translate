@@ -53,8 +53,7 @@ export const InterThreadSetting: FunctionComponent = () => {
               `${showError ? '' : 'hidden'}`,
               'flex flex-row gap-1 border-2 justify-center items-center self-start rounded px-2 py-1 text-sm',
               'bg-red-100 border-red-600/80'
-            )}`}
-          >
+            )}`}>
             <strong className="font-bold text-red-700">Error: </strong>
             <span className="block sm:inline text-red-800/90">
               the installed CPU only has a maximum of <span className="font-bold underline">{availableThreadNum}</span> threads available.

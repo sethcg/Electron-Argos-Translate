@@ -10,21 +10,18 @@ export const WindowBar: FunctionComponent = () => {
       className={`${clsx(
         'flex h-[32px] shadow-sm border-b-2',
         'bg-charcoal-300 border-charcoal-500 dark:bg-charcoal-700 dark:border-charcoal-800'
-      )}`}
-    >
+      )}`}>
       <div className="grow window-drag" /> {/* Draggable Bar */}
       <div className="grid grid-cols-3 h-full w-[96px]">
         <button
           className="flex justify-center items-center outline-none hover:bg-charcoal-200 dark:hover:bg-charcoal-600"
-          onClick={window.main.minimizeWindow}
-        >
+          onClick={window.main.minimizeWindow}>
           <HorizontalRuleRoundedIcon sx={{ fontSize: 24 }} />
         </button>
 
         <button
           className="flex justify-center items-center outline-none hover:bg-charcoal-200 dark:hover:bg-charcoal-600"
-          onClick={window.main.maximizeWindow}
-        >
+          onClick={window.main.maximizeWindow}>
           <CropSquareRoundedIcon sx={{ fontSize: 24 }} />
         </button>
 

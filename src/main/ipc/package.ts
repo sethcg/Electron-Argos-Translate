@@ -12,7 +12,6 @@ export default class PackageHandler {
 
   constructor(store: Store) {
     this.store = store
-
     this.languageFileLocation = this.getLanguageFileLocation()
   }
 
@@ -25,7 +24,7 @@ export default class PackageHandler {
 
   private getAvailablePackages = (): LanguagePackage[] => {
     const filePath: string = isDevelopment
-      ? path.join(__dirname, './resources/package-index.json')
+      ? path.join(app.getAppPath(), 'src/assets/package-index.json')
       : path.join(process.resourcesPath, 'package-index.json')
 
     return JSON.parse(readFileSync(filePath, 'utf8'))
