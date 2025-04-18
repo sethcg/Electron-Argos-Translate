@@ -14,7 +14,6 @@ import ComputerInfo from './ipc/computer'
 // USED TO TELL THE ELECTRON APP WHERE TO FIND THE INDEX.HTML (IF USING LOCALHOST DEVELOPMENT SERVER OR NOT)
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string
 
-const assetFolder = path.join(process.env.NODE_ENV === 'development' ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath)
 const isDarwin = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
@@ -58,7 +57,7 @@ const createSplashScreenWindow = (): BrowserWindow => {
     transparent: true,
     icon: getIconPath('icon.png'),
     webPreferences: {
-      preload: path.join(__dirname, `../renderer/windows/splash/preload.js`),
+      preload: path.join(__dirname, `../renderer/windows/main/preload.js`),
     },
     autoHideMenuBar: true,
   })
@@ -82,12 +81,12 @@ app.whenReady().then(async () => {
   const mainWindow: MainWindow = createMainWindow()
 
   // INITIALIZE THE PRE-INSTALLED LANGUAGE PACKAGES
-  const packageHandler: PackageHandler = new PackageHandler(store, isDevelopment)
+  const packageHandler: PackageHandler = new PackageHandler(store)
   packageHandler.initializeConfig()
 
   const port: string = `${await getPort()}`
   const fileLocation: string = packageHandler.languageFileLocation
-  const translateServer: TranslateServer = new TranslateServer(store, port, isDevelopment, fileLocation)
+  const translateServer: TranslateServer = new TranslateServer(store, port, fileLocation)
 
   // SETUP COMPUTER SPECIFICATION RELATED IPC EVENTS
   ComputerInfo.getAvailableThreadsEvent()
@@ -127,5 +126,6 @@ app.on('activate', () => {
 })
 
 const getIconPath = (icon: string) => {
+  const assetFolder = path.join(process.env.NODE_ENV === 'development' ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath)
   return path.join(assetFolder, `${process.env.NODE_ENV === 'development' ? 'icons/' : ''}${icon}`)
 }

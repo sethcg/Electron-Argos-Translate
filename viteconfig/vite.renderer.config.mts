@@ -5,14 +5,16 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config
 export default defineConfig({
-  root: 'src/renderer',
+  root:'src/renderer',
   build: {
-    outDir: '.vite/renderer',
     rollupOptions: {
       input: {
-        main_window: 'src/renderer/windows/main/index.html',
-        splash_screen: 'src/renderer/windows/splash/index.html',
+        'windows/main': 'src/renderer/windows/main/index.html',
+        'windows/splash': 'src/renderer/windows/splash/index.html',
       },
+      output: {
+        dir: '.vite/renderer'
+      }
     },
   },
   resolve: {

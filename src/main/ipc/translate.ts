@@ -5,17 +5,17 @@ import { ChildProcess, execFile, ExecFileOptions } from 'node:child_process'
 import fetch, { Response, FetchError } from 'node-fetch'
 import Store from './store/store'
 
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 export default class TranslateServer {
-  isDevelopment: boolean
   languageFileLocation: string
   host: string = '127.0.0.1'
   port: string = '8080'
   store: Store
 
-  constructor(store: Store, port: string, isDevelopment: boolean, fileLocation: string) {
+  constructor(store: Store, port: string, fileLocation: string) {
     this.port = port
     this.store = store
-    this.isDevelopment = isDevelopment
     this.languageFileLocation = fileLocation
 
     // SETUP TRANSLATE RELATED IPC EVENTS
@@ -27,9 +27,9 @@ export default class TranslateServer {
     // TO-DO: FIND SOLUTION TO SPEED UP SERVER START UP,
     // CURRENTLY TAKES AROUND 4-5 SECONDS
 
-    const filePath = this.isDevelopment
+    const filePath = isDevelopment
       ? path.join(__dirname, './resources/translate_server.exe')
-      : path.join(process.resourcesPath, 'translate_server.exe')
+      : path.join(process.resourcesPath, '/translate_server.exe')
 
     const args: string[] = ['--host', this.host, '--port', `${this.port}`]
     const options: ExecFileOptions = { timeout: 15000 /* TIMEOUT AFTER 15 SECONDS */ }
@@ -67,7 +67,7 @@ export default class TranslateServer {
   public setCache = async (): Promise<void> => {
     // CACHE THE INSTALLED TRANSLATORS, SO THE FIRST TRANSLATE CALL IS NOT ABNORMALLY SLOW
     const start = performance.now()
-    const sentencizerFileLocation: string = this.isDevelopment
+    const sentencizerFileLocation: string = isDevelopment
       ? path.join(app.getAppPath(), 'src/assets/xx_sent_ud_sm')
       : path.join(process.resourcesPath, '/xx_sent_ud_sm')
     const interThreads = (await this.store.get('translate.inter_threads')) as number

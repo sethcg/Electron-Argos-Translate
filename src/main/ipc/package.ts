@@ -4,29 +4,29 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { Language, LanguagePackage } from '~shared/types'
 import Store from './store/store'
 
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 export default class PackageHandler {
   store: Store
-  isDevelopment: boolean
   languageFileLocation: string
 
-  constructor(store: Store, isDevelopment: boolean) {
+  constructor(store: Store) {
     this.store = store
-    this.isDevelopment = isDevelopment
 
     this.languageFileLocation = this.getLanguageFileLocation()
   }
 
   private getLanguageFileLocation = (): string => {
-    const languageFileLocation: string = this.isDevelopment
+    const languageFileLocation: string = isDevelopment
       ? path.join(app.getAppPath(), 'src/assets/models')
-      : path.join(process.resourcesPath, '/')
+      : path.join(process.resourcesPath, '/models')
     return languageFileLocation
   }
 
   private getAvailablePackages = (): LanguagePackage[] => {
-    const filePath: string = this.isDevelopment
+    const filePath: string = isDevelopment
       ? path.join(__dirname, './resources/package-index.json')
-      : path.join(process.resourcesPath, '/package-index.json')
+      : path.join(process.resourcesPath, 'package-index.json')
 
     return JSON.parse(readFileSync(filePath, 'utf8'))
   }
