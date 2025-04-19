@@ -19,6 +19,7 @@ export type Language = {
   name: string
   enabled: boolean
   installed: boolean
+  downloading: boolean
 }
 
 export type StoreType = {

@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { app, ipcMain } from 'electron'
-import { readFileSync, readdirSync, rmSync, existsSync, mkdirSync } from 'node:fs'
+import { mkdir, access, readdir, readFile, rm } from 'node:fs/promises'
 import { Language, LanguagePackage } from '~shared/types'
 import AdmZip from 'adm-zip'
 import Store from './store/store'
@@ -33,30 +33,33 @@ export default class PackageHandler {
     return languageFileLocation
   }
 
-  private getAvailablePackages = (): LanguagePackage[] => {
+  private getAvailablePackages = async (): Promise<LanguagePackage[]> => {
     const filePath: string = isDevelopment
       ? path.join(app.getAppPath(), 'src/assets/package-index.json')
       : path.join(process.resourcesPath, 'package-index.json')
 
-    return JSON.parse(readFileSync(filePath, 'utf8'))
+    return readFile(filePath, 'utf8').then((text: string) => {
+      return JSON.parse(text)
+    })
   }
 
-  private getInstalledPackages = (availablePackages: LanguagePackage[]): LanguagePackage[] => {
-    const files: string[] = readdirSync(this.languageFileLocation)
-    return availablePackages.filter((lang: LanguagePackage) => files.includes(lang.filename))
+  private getInstalledPackages = async (availablePackages: LanguagePackage[]): Promise<LanguagePackage[]> => {
+    return readdir(this.languageFileLocation).then((files: string[]) => {
+      return availablePackages.filter((lang: LanguagePackage) => files.includes(lang.filename))
+    })
   }
 
   public initializeConfig = async (): Promise<void> => {
-    const availablePackages: LanguagePackage[] = this.getAvailablePackages()
-    const installedPackages: LanguagePackage[] = this.getInstalledPackages(availablePackages)
+    const availablePackages: LanguagePackage[] = await this.getAvailablePackages()
+    const installedPackages: LanguagePackage[] = await this.getInstalledPackages(availablePackages)
 
     this.store.resetThenSet('packages', availablePackages)
 
     let languages = availablePackages.map((language: LanguagePackage) => {
       if (installedPackages.map((languagePackage: LanguagePackage) => languagePackage.target_code).includes(language.target_code)) {
-        return { code: language.target_code, name: language.target_name, enabled: true, installed: true }
+        return { code: language.target_code, name: language.target_name, enabled: true, installed: true, downloading: false }
       } else {
-        return { code: language.target_code, name: language.target_name, enabled: false, installed: false }
+        return { code: language.target_code, name: language.target_name, enabled: false, installed: false, downloading: false }
       }
     })
 
@@ -70,6 +73,11 @@ export default class PackageHandler {
   private downloadLanguagePackageEvent = (): void => {
     ipcMain.handle('package:download', async (_, code: string): Promise<void> => {
       const start = performance.now()
+      const languages: Language[] = (await this.store.get('languages')) as Language[]
+      const index: number = languages.findIndex((lang: Language) => lang.code == code)
+      languages[index].downloading = true
+      this.store.set('languages', languages)
+
       const availablePackages: LanguagePackage[] = this.store.get('packages') as LanguagePackage[]
       const sourcePackage: LanguagePackage = availablePackages.filter((language: LanguagePackage) => language.source_code == code)[0]
       const targetPackage: LanguagePackage = availablePackages.filter((language: LanguagePackage) => language.target_code == code)[0]
@@ -96,9 +104,9 @@ export default class PackageHandler {
           let currentFolder = ''
           for (let index = 0; index < folders.length; index++) {
             currentFolder += `/${folders[index]}`
-            if (!existsSync(`${this.languageFileLocation}/${currentFolder}`)) {
-              mkdirSync(`${this.languageFileLocation}/${currentFolder}`)
-            }
+            await access(`${this.languageFileLocation}/${currentFolder}`).catch(() =>
+              mkdir(`${this.languageFileLocation}/${currentFolder}`)
+            )
           }
 
           // CHECK FOR FILE, IF PRESENT ADD TO TARGET PATH
@@ -109,10 +117,9 @@ export default class PackageHandler {
       }
 
       // SET THE CONFIG
-      const languages: Language[] = (await this.store.get('languages')) as Language[]
-      const index: number = languages.findIndex((lang: Language) => lang.code == code)
       languages[index].enabled = true
       languages[index].installed = true
+      languages[index].downloading = false
       this.store.set('languages', languages)
 
       // SEND OUT THE IPC RENDERER EVENT
@@ -131,7 +138,7 @@ export default class PackageHandler {
       const packages: LanguagePackage[] = [sourcePackage, targetPackage]
       for (let index = 0; index < packages.length; index++) {
         const filePath = path.join(this.languageFileLocation, packages[index].filename)
-        rmSync(filePath, { recursive: true })
+        rm(filePath, { recursive: true })
       }
 
       // SET THE CONFIG
@@ -139,6 +146,7 @@ export default class PackageHandler {
       const index: number = languages.findIndex((lang: Language) => lang.code == code)
       languages[index].enabled = false
       languages[index].installed = false
+      languages[index].downloading = false
       this.store.set('languages', languages)
 
       // SEND OUT THE IPC RENDERER EVENT

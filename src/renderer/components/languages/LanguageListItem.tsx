@@ -10,13 +10,14 @@ interface Props {
   name: string
   isEnabled: boolean
   isInstalled: boolean
+  isDownloading: boolean
   enableCallback: (code: string, enabled: boolean, callback: (enabled: boolean) => void) => void
 }
 
-export const LanguageListItem: FunctionComponent<Props> = ({ code, name, enableCallback, isEnabled, isInstalled }) => {
+export const LanguageListItem: FunctionComponent<Props> = ({ code, name, enableCallback, isEnabled, isInstalled, isDownloading }) => {
   const [enabled, setEnabled] = useState<boolean>(isEnabled)
   const [installed, setInstalled] = useState<boolean>(isInstalled)
-  const [downloading, setDownloading] = useState<boolean>(false)
+  const [downloading, setDownloading] = useState<boolean>(isDownloading)
 
   useEffect(() => {}, [enabled, installed])
   const setEnabledCallback = useCallback((enabled: boolean) => {
@@ -51,7 +52,6 @@ export const LanguageListItem: FunctionComponent<Props> = ({ code, name, enableC
   }, [])
 
   // TO-DO: ADD FAVORITE FEATURE; ALLOWING USERS TO SELECT LANGUAGES AS FAVORITES
-  // TO-DO: ADD VISUAL FOR DOWNLOAD, SO USER IS AWARE OF THE PROCESS
   return (
     <li className={`font-bold text-xl rounded-lg mx-2 border-2 border-charcoal-50 dark:border-charcoal-950`}>
       <div className={`${clsx('size-full flex flex-row justify-start items-center gap-4 rounded-md px-2 py-[6px]', 'bg-charcoal-700')}`}>

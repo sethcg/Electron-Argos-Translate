@@ -10,11 +10,14 @@ npm install
 
 # Create flask server, using instructions in ./src/server/README.md
 
-# Download models
-# Or, reduce the number of models using instructions in ./src/assets/model-script/README.md
+# Download argo-translate language packages
+# Or, change of pre-installed language packages using instructions in ./src/assets/model-script/README.md
 npm run download
 
-# run app
-npm start
+# Run application
+npm run start
+
+# Package application
+npm run package
 
 ```

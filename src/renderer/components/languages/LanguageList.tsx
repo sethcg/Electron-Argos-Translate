@@ -9,10 +9,8 @@ export const LanguageList: FunctionComponent = () => {
     const getLanguages = async () => {
       const languages: Language[] = (await window.main.store.get('languages')) as Language[]
 
-      const globalListeners = 2
-      // SET MAX LISTENERS TO AVOID NODE WARNING MESSAGES,
-      // TAKING ACCOUNT FOR GLOBAL LISTENERS IN "./src/renderer/windows/main/index.tsx"
-      window.main.package.setMaxPackageListeners(languages.length * 2 + globalListeners)
+      // SET MAX LISTENERS TO AVOID NODE WARNING MESSAGES
+      window.main.package.setMaxPackageListeners(languages.length * 2)
 
       // ON COMPONENT MOUNT REMOVE OLD PACKAGE LISTENERS
       window.main.package.removePackageListeners('package:deleteComplete')
@@ -41,6 +39,7 @@ export const LanguageList: FunctionComponent = () => {
           isEnabled={item.enabled}
           enableCallback={enableCallback}
           isInstalled={item.installed}
+          isDownloading={item.downloading}
         />
       ))}
     </ul>

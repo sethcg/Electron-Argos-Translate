@@ -56,8 +56,8 @@ export const TranslatePage: FunctionComponent = () => {
 
   return (
     <div className="grow flex flex-col size-full px-2 py-4">
-      <div className="flex max-[900px]:flex-col flex-row grow px-4">
-        <div className="flex flex-col min-[900px]:max-w-2xl max-h-96 grow">
+      <div className="flex max-[960px]:flex-col flex-row grow px-4">
+        <div className="flex flex-col min-[960px]:max-w-2xl max-h-96 grow">
           <LanguageSelect isSource={true} title={'Translate from'} callback={translate} />
           <div className="relative size-full">
             {/* SOURCE TEXT AREA */}
@@ -78,7 +78,7 @@ export const TranslatePage: FunctionComponent = () => {
         <div className="flex m-4 size-10 justify-center">
           <LanguageSwapButton callback={swap} />
         </div>
-        <div className="flex flex-col min-[900px]:max-w-2xl max-h-96 grow">
+        <div className="flex flex-col min-[960px]:max-w-2xl max-h-96 grow">
           <LanguageSelect isSource={false} title={'Translate to'} callback={translate} />
           <TargetTextArea textRef={targetTextRef} />
         </div>
