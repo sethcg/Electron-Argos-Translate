@@ -15,8 +15,14 @@ contextBridge.exposeInMainWorld('main', {
     getAvailableThreads: async () => await ipcRenderer.invoke('availableThreads:get'),
   },
   package: {
+    setMaxPackageListeners: (languageCount: number) => ipcRenderer.setMaxListeners(languageCount),
+    removePackageListeners: (channel: string) => ipcRenderer.removeAllListeners(channel),
     deletePackage: async (code: string) => await ipcRenderer.invoke('package:delete', code),
+    deleteComplete: (callback: (languageCode: string) => void) =>
+      ipcRenderer.on('package:deleteComplete', (_, code: string) => callback(code)),
     downloadPackage: async (code: string) => await ipcRenderer.invoke('package:download', code),
+    downloadComplete: (callback: (languageCode: string) => void) =>
+      ipcRenderer.on('package:downloadComplete', (_, code: string) => callback(code)),
   },
 })
 

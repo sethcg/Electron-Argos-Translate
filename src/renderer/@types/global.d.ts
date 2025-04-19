@@ -13,8 +13,12 @@ export declare global {
         getAvailableThreads(): Promise<number>
       }
       package: {
-        deletePackage(code: string): Promise<boolean>
-        downloadPackage(code: string): Promise<boolean>
+        setMaxPackageListeners: (languageCount: number) => void
+        removePackageListeners: (channel: string) => void
+        deletePackage(code: string): Promise<void>
+        deleteComplete: (callback: (languageCode: string) => void) => Electron.IpcRenderer
+        downloadPackage(code: string): Promise<void>
+        downloadComplete: (callback: (languageCode: string) => void) => Electron.IpcRenderer
       }
     }
     api: {

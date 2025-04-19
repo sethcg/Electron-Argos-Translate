@@ -8,6 +8,16 @@ export const LanguageList: FunctionComponent = () => {
   useEffect(() => {
     const getLanguages = async () => {
       const languages: Language[] = (await window.main.store.get('languages')) as Language[]
+
+      const globalListeners = 2
+      // SET MAX LISTENERS TO AVOID NODE WARNING MESSAGES,
+      // TAKING ACCOUNT FOR GLOBAL LISTENERS IN "./src/renderer/windows/main/index.tsx"
+      window.main.package.setMaxPackageListeners(languages.length * 2 + globalListeners)
+
+      // ON COMPONENT MOUNT REMOVE OLD PACKAGE LISTENERS
+      window.main.package.removePackageListeners('package:deleteComplete')
+      window.main.package.removePackageListeners('package:downloadComplete')
+
       setLanguageList(languages)
     }
     getLanguages()
@@ -21,25 +31,6 @@ export const LanguageList: FunctionComponent = () => {
     callback(enabled)
   }
 
-  const installCallback = async (code: string, installed: boolean, callback: (installed: boolean) => void) => {
-    const isRemove: boolean = installed
-    const index: number = languageList.findIndex((lang: Language) => lang.code == code)
-
-    if (isRemove) {
-      await window.main.package.deletePackage(code)
-      languageList[index].enabled = false
-      languageList[index].installed = false
-    } else {
-      await window.main.package.downloadPackage(code)
-      languageList[index].enabled = false
-      languageList[index].installed = true
-    }
-
-    setLanguageList(languageList)
-    window.main.store.set('languages', languageList)
-    callback(!installed)
-  }
-
   return (
     <ul className="grow flex flex-col max-w-3xl my-6 gap-2 overflow-y-auto rounded-md">
       {languageList.map((item: Language, index: number) => (
@@ -50,7 +41,6 @@ export const LanguageList: FunctionComponent = () => {
           isEnabled={item.enabled}
           enableCallback={enableCallback}
           isInstalled={item.installed}
-          installCallback={installCallback}
         />
       ))}
     </ul>

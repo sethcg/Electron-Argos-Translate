@@ -80,13 +80,12 @@ app.whenReady().then(async () => {
   const splashScreenWindow: BrowserWindow = createSplashScreenWindow()
   const mainWindow: MainWindow = createMainWindow()
 
-  // INITIALIZE THE PRE-INSTALLED LANGUAGE PACKAGES
-  const packageHandler: PackageHandler = new PackageHandler(store)
-  packageHandler.initializeConfig()
-
   const port: string = `${await getPort()}`
-  const fileLocation: string = packageHandler.languageFileLocation
-  const translateServer: TranslateServer = new TranslateServer(store, port, fileLocation)
+  const translateServer: TranslateServer = new TranslateServer(store, port)
+
+  // INITIALIZE THE PRE-INSTALLED LANGUAGE PACKAGES
+  const packageHandler: PackageHandler = new PackageHandler(store, mainWindow, translateServer)
+  packageHandler.initializeConfig()
 
   // SETUP COMPUTER SPECIFICATION RELATED IPC EVENTS
   ComputerInfo.getAvailableThreadsEvent()

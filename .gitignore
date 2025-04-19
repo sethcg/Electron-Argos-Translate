@@ -35,5 +35,5 @@ build/
 **/__pycache__
 
 # Argos Translate Models
-src/assets/models/translate*/
+src/assets/models/*
 *.argosmodel

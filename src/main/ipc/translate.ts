@@ -13,13 +13,20 @@ export default class TranslateServer {
   port: string = '8080'
   store: Store
 
-  constructor(store: Store, port: string, fileLocation: string) {
+  constructor(store: Store, port: string) {
     this.port = port
     this.store = store
-    this.languageFileLocation = fileLocation
+    this.languageFileLocation = this.getLanguageFileLocation()
 
     // SETUP TRANSLATE RELATED IPC EVENTS
     this.translateEvent()
+  }
+
+  private getLanguageFileLocation = (): string => {
+    const languageFileLocation: string = isDevelopment
+      ? path.join(app.getAppPath(), 'src/assets/models')
+      : path.join(process.resourcesPath, '/models')
+    return languageFileLocation
   }
 
   public open = async (): Promise<void> => {

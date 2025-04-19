@@ -1,7 +1,7 @@
 import { WindowBar } from '~components/global/Windowbar.tsx'
 import { Sidebar } from '~components/global/Sidebar.tsx'
 import { TranslatePage } from '~components/pages/TranslatePage'
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useCallback, useEffect, useState } from 'react'
 
 function App() {
   const [darkMode, setDarkMode] = useState<string>('')
@@ -14,8 +14,7 @@ function App() {
   }, [])
 
   const [pageState, setPageState] = useState<ReactElement>(<TranslatePage />)
-  const handlePageChange = (content: ReactElement) => setPageState(content)
-  useEffect(() => {}, [pageState])
+  const handlePageChange = useCallback((content: ReactElement) => setPageState(content), [])
 
   return (
     <>

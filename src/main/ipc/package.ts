@@ -1,18 +1,24 @@
 import path from 'node:path'
 import { app, ipcMain } from 'electron'
-import { readFileSync, readdirSync, renameSync, rmdirSync } from 'node:fs'
+import { readFileSync, readdirSync, rmSync, existsSync, mkdirSync } from 'node:fs'
 import { Language, LanguagePackage } from '~shared/types'
 import AdmZip from 'adm-zip'
 import Store from './store/store'
+import MainWindow from './window'
+import TranslateServer from './translate'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 export default class PackageHandler {
   store: Store
+  mainWindow: MainWindow
+  translateServer: TranslateServer
   languageFileLocation: string
 
-  constructor(store: Store) {
+  constructor(store: Store, mainWindow: MainWindow, translateServer: TranslateServer) {
     this.store = store
+    this.mainWindow = mainWindow
+    this.translateServer = translateServer
     this.languageFileLocation = this.getLanguageFileLocation()
 
     // SETUP LANGUAGE PACKAGE RELATED IPC EVENTS
@@ -59,13 +65,11 @@ export default class PackageHandler {
     languages = languages.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
 
     this.store.resetThenSet('languages', languages)
-
-    console.log(`LANGUAGES AVAILABLE: ${availablePackages.length / 2}`)
-    console.log(`LANGUAGES INSTALLED: ${installedPackages.length / 2}`)
   }
 
   private downloadLanguagePackageEvent = (): void => {
-    ipcMain.handle('package:download', async (_, code: string): Promise<boolean> => {
+    ipcMain.handle('package:download', async (_, code: string): Promise<void> => {
+      const start = performance.now()
       const availablePackages: LanguagePackage[] = this.store.get('packages') as LanguagePackage[]
       const sourcePackage: LanguagePackage = availablePackages.filter((language: LanguagePackage) => language.source_code == code)[0]
       const targetPackage: LanguagePackage = availablePackages.filter((language: LanguagePackage) => language.target_code == code)[0]
@@ -77,21 +81,49 @@ export default class PackageHandler {
 
         const response = await fetch(downloadLink)
         const buffer = await response.arrayBuffer()
-        const zip = new AdmZip(Buffer.from(buffer))
-        const folderName = zip.getEntries()[0].entryName.replace(/(\\)|(\/)/g, '')
-        zip.extractAllTo(this.languageFileLocation, true)
 
-        // RENAME THE FOLDER, BECAUSE IT IS NOT ALWAYS MATCHING THE PACKAGE INDEX JSON
-        if (folderName != languagePackage.filename) {
-          renameSync(`${this.languageFileLocation}/${folderName}`, `${this.languageFileLocation}/${languagePackage.filename}`)
+        const zip = new AdmZip(Buffer.from(buffer))
+        const zipEntries = zip.getEntries()
+        const folderName = zipEntries[0].entryName.replace(/(\\)|(\/)/g, '')
+        for (let index = 0; index < zipEntries.length; index++) {
+          const zipEntry: AdmZip.IZipEntry = zipEntries[index]
+
+          // GET THE FOLDER NAMES, AND CHECK IF THEY EXIST ADDING THOSE THAT DO NOT
+          const folders = zipEntry.entryName
+            .replace(folderName, languagePackage.filename)
+            .replace(/(.+)(\/)(.*)/, '$1')
+            .split('/')
+          let currentFolder = ''
+          for (let index = 0; index < folders.length; index++) {
+            currentFolder += `/${folders[index]}`
+            if (!existsSync(`${this.languageFileLocation}/${currentFolder}`)) {
+              mkdirSync(`${this.languageFileLocation}/${currentFolder}`)
+            }
+          }
+
+          // CHECK FOR FILE, IF PRESENT ADD TO TARGET PATH
+          if (!zipEntry.entryName.match(/(?=[^/]+$)(.*)/)) continue
+          const targetPath = `${this.languageFileLocation.replace(/(\\)/, '/')}/${folders.join('/')}/`
+          zip.extractEntryTo(zipEntry, targetPath, false, true)
         }
       }
-      return true
+
+      // SET THE CONFIG
+      const languages: Language[] = (await this.store.get('languages')) as Language[]
+      const index: number = languages.findIndex((lang: Language) => lang.code == code)
+      languages[index].enabled = true
+      languages[index].installed = true
+      this.store.set('languages', languages)
+
+      // SEND OUT THE IPC RENDERER EVENT
+      await this.translateServer.setCache()
+      this.mainWindow.webContents.send('package:downloadComplete', code)
+      console.log(`LANGUAGE DOWNLOAD TOOK: ${Math.round(performance.now() - start)} ms`)
     })
   }
 
   private deleteLanguagePackageEvent = (): void => {
-    ipcMain.handle('package:delete', async (_, code: string): Promise<boolean> => {
+    ipcMain.handle('package:delete', async (_, code: string): Promise<void> => {
       const availablePackages: LanguagePackage[] = this.store.get('packages') as LanguagePackage[]
       const sourcePackage: LanguagePackage = availablePackages.filter((language: LanguagePackage) => language.source_code == code)[0]
       const targetPackage: LanguagePackage = availablePackages.filter((language: LanguagePackage) => language.target_code == code)[0]
@@ -99,9 +131,18 @@ export default class PackageHandler {
       const packages: LanguagePackage[] = [sourcePackage, targetPackage]
       for (let index = 0; index < packages.length; index++) {
         const filePath = path.join(this.languageFileLocation, packages[index].filename)
-        rmdirSync(filePath, { recursive: true })
+        rmSync(filePath, { recursive: true })
       }
-      return true
+
+      // SET THE CONFIG
+      const languages: Language[] = (await this.store.get('languages')) as Language[]
+      const index: number = languages.findIndex((lang: Language) => lang.code == code)
+      languages[index].enabled = false
+      languages[index].installed = false
+      this.store.set('languages', languages)
+
+      // SEND OUT THE IPC RENDERER EVENT
+      this.mainWindow.webContents.send('package:deleteComplete', code)
     })
   }
 }
