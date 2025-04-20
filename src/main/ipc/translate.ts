@@ -5,7 +5,7 @@ import { ChildProcess, execFile, ExecFileOptions } from 'node:child_process'
 import fetch, { Response, FetchError } from 'node-fetch'
 import Store from './store/store'
 
-const isDevelopment = process.env.NODE_ENV === 'development'
+const isDevelopment: boolean = process.env.NODE_ENV === 'development'
 
 export default class TranslateServer {
   languageFileLocation: string
@@ -34,7 +34,7 @@ export default class TranslateServer {
     // TO-DO: FIND SOLUTION TO SPEED UP SERVER START UP,
     // CURRENTLY TAKES AROUND 4-5 SECONDS
 
-    const filePath = isDevelopment
+    const filePath: string = isDevelopment
       ? path.join(app.getAppPath(), 'dist/translate_server.exe')
       : path.join(process.resourcesPath, '/translate_server.exe')
 
@@ -43,14 +43,14 @@ export default class TranslateServer {
     const serverProcess: ChildProcess = execFile(filePath, args, options)
 
     // WAIT FOR SERVER TO BE AVAILABLE
-    const start = performance.now()
+    const start: number = performance.now()
     await this.ping(serverProcess)
     console.log(`SERVER STARTUP TOOK: ${Math.round(performance.now() - start)} ms`)
   }
 
   public close = async (): Promise<void> => {
     await fetch(`http://${this.host}:${this.port}/api/pid`).then(async response => {
-      const pid = (await response.json()) as number
+      const pid: number = (await response.json()) as number
       process.kill(pid)
     })
   }
@@ -60,7 +60,7 @@ export default class TranslateServer {
     return await new Promise(resolve => setTimeout(resolve, 125)).then(async () => {
       return await fetch(`http://${this.host}:${this.port}/api/pid`)
         .then(async response => {
-          const pid = (await response.json()) as number
+          const pid: number = (await response.json()) as number
           console.log(`SERVER CHILD PROCESS ID: ${pid}`)
           if (!serverProcess.killed) serverProcess.kill()
           return response.ok
@@ -73,7 +73,7 @@ export default class TranslateServer {
 
   public setCache = async (): Promise<void> => {
     // CACHE THE INSTALLED TRANSLATORS, SO THE FIRST TRANSLATE CALL IS NOT ABNORMALLY SLOW
-    const start = performance.now()
+    const start: number = performance.now()
     const sentencizerFileLocation: string = isDevelopment
       ? path.join(app.getAppPath(), 'src/assets/xx_sent_ud_sm')
       : path.join(process.resourcesPath, '/xx_sent_ud_sm')
@@ -92,7 +92,7 @@ export default class TranslateServer {
     ipcMain.handle(
       'flaskApi:translate',
       async (_, source: string, target: string, value: string): Promise<TranslateResponse | undefined> => {
-        const start = performance.now()
+        const start: number = performance.now()
         const params = new URLSearchParams([
           ['q', value],
           ['source', source],

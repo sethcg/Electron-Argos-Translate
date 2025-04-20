@@ -3,15 +3,14 @@ import { Field, Label, Description, Input } from '@headlessui/react'
 import clsx from 'clsx'
 
 export const InterThreadSetting: FunctionComponent = () => {
-  const settingKey = 'translate.inter_threads'
-  const [showError, setShowError] = useState(false)
+  const [showError, setShowError] = useState<boolean>(false)
   const [availableThreadNum, setAvailableThreadNum] = useState<number>(0)
 
   const [interThreadNum, setInterThreadNum] = useState<number>(0)
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer: NodeJS.Timeout = setTimeout(() => {
       if (interThreadNum && interThreadNum <= 16 && interThreadNum > 0) {
-        window.main.store.set(settingKey, interThreadNum)
+        window.main.store.set('translate.inter_threads', interThreadNum)
         setShowError(false)
         return
       }
@@ -22,7 +21,7 @@ export const InterThreadSetting: FunctionComponent = () => {
 
   useEffect(() => {
     async function getSystemInfo() {
-      const currentThreads: number = (await window.main.store.get(settingKey)) as number
+      const currentThreads: number = (await window.main.store.get('translate.inter_threads')) as number
       const availableThreads: number = await window.main.computer.getAvailableThreads()
 
       setInterThreadNum(currentThreads)

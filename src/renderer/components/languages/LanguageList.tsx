@@ -21,11 +21,12 @@ export const LanguageList: FunctionComponent = () => {
     getLanguages()
   }, [])
 
-  const enableCallback = (code: string, enabled: boolean, callback: (enabled: boolean) => void) => {
-    const index: number = languageList.findIndex((lang: Language) => lang.code == code)
-    languageList[index].enabled = enabled
-    setLanguageList(languageList)
-    window.main.store.set('languages', languageList)
+  const enableCallback = async (code: string, enabled: boolean, callback: (enabled: boolean) => void) => {
+    const languages: Language[] = (await window.main.store.get('languages')) as Language[]
+    const index: number = languages.findIndex((lang: Language) => lang.code == code)
+    languages[index].enabled = enabled
+    setLanguageList(languages)
+    window.main.store.set('languages', languages)
     callback(enabled)
   }
 
@@ -39,7 +40,6 @@ export const LanguageList: FunctionComponent = () => {
           isEnabled={item.enabled}
           enableCallback={enableCallback}
           isInstalled={item.installed}
-          isDownloading={item.downloading}
         />
       ))}
     </ul>

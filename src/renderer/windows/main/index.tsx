@@ -14,14 +14,14 @@ function App() {
   }, [])
 
   const [pageState, setPageState] = useState<ReactElement>(<TranslatePage />)
-  const handlePageChange = useCallback((content: ReactElement) => setPageState(content), [])
+  const changePage = useCallback((content: ReactElement) => setPageState(content), [])
 
   return (
     <>
       <div className={`${darkMode} flex flex-col w-full min-h-screen text-charcoal-950 dark:text-charcoal-50`}>
         <WindowBar />
         <div className="grow flex flex-row dark:bg-charcoal-600 bg-charcoal-100">
-          <Sidebar pageChange={handlePageChange} />
+          <Sidebar callback={changePage} />
           <div className="grow flex flex-col max-h-(--content-max-height)">{pageState}</div>
         </div>
       </div>

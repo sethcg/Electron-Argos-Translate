@@ -9,7 +9,7 @@ import clsx from 'clsx'
 export const TranslatePage: FunctionComponent = () => {
   const targetTextRef = useRef<HTMLInputElement>(null)
 
-  const charMax = 2000
+  const charMax: number = 2000
   const [charCount, setCharCount] = useState<number>(0)
   const [sourceText, setSourceText] = useState<string>('')
 

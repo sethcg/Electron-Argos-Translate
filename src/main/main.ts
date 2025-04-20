@@ -14,14 +14,19 @@ import ComputerInfo from './ipc/computer'
 // USED TO TELL THE ELECTRON APP WHERE TO FIND THE INDEX.HTML (IF USING LOCALHOST DEVELOPMENT SERVER OR NOT)
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string
 
-const isDarwin = process.platform === 'darwin'
-const isDevelopment = process.env.NODE_ENV === 'development'
+const isDarwin: boolean = process.platform === 'darwin'
+const isDevelopment: boolean = process.env.NODE_ENV === 'development'
+
+const getIconPath = (icon: string) => {
+  const assetFolder: string = path.join(isDevelopment ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath)
+  return path.join(assetFolder, `${isDevelopment ? 'icons/' : ''}${icon}`)
+}
 
 // HANDLE CREATING/REMOVING SHORTCUTS ON WINDOWS WHEN INSTALLING/UNINSTALLING
 if (started) app.quit()
 
 const createMainWindow = (): MainWindow => {
-  const mainWindow = new MainWindow(isDarwin, {
+  const mainWindow: MainWindow = new MainWindow(isDarwin, {
     width: 1000,
     height: 800,
     minWidth: 700,
@@ -50,7 +55,7 @@ const createMainWindow = (): MainWindow => {
 }
 
 const createSplashScreenWindow = (): BrowserWindow => {
-  const splashScreenWindow = new BrowserWindow({
+  const splashScreenWindow: BrowserWindow = new BrowserWindow({
     width: 320,
     height: 320,
     frame: false,
@@ -85,7 +90,7 @@ app.whenReady().then(async () => {
 
   // INITIALIZE THE PRE-INSTALLED LANGUAGE PACKAGES
   const packageHandler: PackageHandler = new PackageHandler(store, mainWindow, translateServer)
-  packageHandler.initializeConfig()
+  packageHandler.setConfig()
 
   // SETUP COMPUTER SPECIFICATION RELATED IPC EVENTS
   ComputerInfo.getAvailableThreadsEvent()
@@ -123,8 +128,3 @@ app.on('activate', () => {
     createMainWindow()
   }
 })
-
-const getIconPath = (icon: string) => {
-  const assetFolder = path.join(process.env.NODE_ENV === 'development' ? path.join(app.getAppPath(), 'src/assets') : process.resourcesPath)
-  return path.join(assetFolder, `${process.env.NODE_ENV === 'development' ? 'icons/' : ''}${icon}`)
-}

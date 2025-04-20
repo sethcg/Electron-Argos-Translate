@@ -19,7 +19,6 @@ export type Language = {
   name: string
   enabled: boolean
   installed: boolean
-  downloading: boolean
 }
 
 export type StoreType = {
@@ -29,6 +28,5 @@ export type StoreType = {
   translate: {
     inter_threads: number /* Maximum number of translation threads */
   }
-  packages: LanguagePackage[]
   languages: Language[]
 }

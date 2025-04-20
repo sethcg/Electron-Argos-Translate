@@ -5,12 +5,11 @@ import ElectronStore from 'electron-store'
 export default class Store {
   defaults: StoreType = {
     dark_mode: true,
-    source_language: { code: '', name: 'None', enabled: false, installed: false, downloading: false },
-    target_language: { code: '', name: 'None', enabled: false, installed: false, downloading: false },
+    source_language: { code: '', name: 'None', enabled: false, installed: false },
+    target_language: { code: '', name: 'None', enabled: false, installed: false },
     translate: {
       inter_threads: 1,
     },
-    packages: [],
     languages: [],
   }
   store: ElectronStore<StoreType>
@@ -42,14 +41,14 @@ export default class Store {
   }
 
   private setEvent = (): void => {
-    ipcMain.on('settings:set', (_event, key: string, value?: unknown) => this.store.set(key, value))
+    ipcMain.on('settings:set', (_, key: string, value?: unknown) => this.store.set(key, value))
   }
 
   private getEvent = (): void => {
-    ipcMain.handle('settings:get', (_event, key: string) => this.store.get(key))
+    ipcMain.handle('settings:get', (_, key: string) => this.store.get(key))
   }
 
   private resetEvent = (): void => {
-    ipcMain.handle('settings:reset', (_event, key: keyof StoreType) => this.store.reset(key))
+    ipcMain.handle('settings:reset', (_, key: keyof StoreType) => this.store.reset(key))
   }
 }

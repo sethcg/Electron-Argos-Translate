@@ -9,57 +9,53 @@ import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBullete
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded'
 import clsx from 'clsx'
 
-export type NavBarItem = {
+export type SidebarItem = {
   id: number
-  icon: ReactElement
   text: string
-  active: boolean
-}
-
-export type ActiveItem = {
-  id: number
+  icon: ReactElement
+  content: ReactElement
   active: boolean
 }
 
 interface Props {
-  pageChange: (content: ReactElement) => void
+  callback: (content: ReactElement) => void
 }
 
-export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
-  const [expanded, setExpanded] = useState(false)
-  const [navItems, setNavItems] = useState([
+export const Sidebar: FunctionComponent<Props> = ({ callback }) => {
+  const [expanded, setExpanded] = useState<boolean>(false)
+  const [sidebarItems, setSidebarItems] = useState<SidebarItem[]>([
     {
       id: 1,
-      icon: <TranslateRoundedIcon sx={{ fontSize: 32 }} />,
       text: 'Translate',
+      icon: <TranslateRoundedIcon sx={{ fontSize: 32 }} />,
       content: <TranslatePage />,
       active: true,
     },
     {
       id: 2,
-      icon: <FormatListBulletedRoundedIcon sx={{ fontSize: 32 }} />,
       text: 'Languages',
+      icon: <FormatListBulletedRoundedIcon sx={{ fontSize: 32 }} />,
       content: <LanguagePage />,
       active: false,
     },
     {
       id: 3,
-      icon: <SettingsRoundedIcon sx={{ fontSize: 32 }} />,
       text: 'Settings',
+      icon: <SettingsRoundedIcon sx={{ fontSize: 32 }} />,
       content: <SettingsPage />,
       active: false,
     },
   ])
 
-  const updateCallback = useCallback(
+  const updateSidebar = useCallback(
     (id: number, active: boolean) => {
-      const updatedItems = navItems.map(item => (item.id === id ? { ...item, active } : { ...item, active: false }))
-      const activeItem = updatedItems.filter(item => item.active)[0]
-      setNavItems(updatedItems)
-      pageChange(activeItem.content)
+      const updated = sidebarItems.map(item => (item.id === id ? { ...item, active } : { ...item, active: false }))
+      const activeItem = updated.filter(item => item.active)[0]
+      setSidebarItems(updated)
+      callback(activeItem.content)
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setNavItems]
+    [setSidebarItems]
   )
 
   // WHEN THE WINDOW GETS TOO SMALL, HIDE EXPANDED SIDEBAR
@@ -82,7 +78,7 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
           'bg-charcoal-200 border-charcoal-300 dark:bg-charcoal-700 dark:border-charcoal-800'
         )}`}>
         <ul className="flex flex-col gap-2 p-2 overflow-hidden items-center justify-between">
-          {navItems.map((item: NavBarItem) => (
+          {sidebarItems.map((item: SidebarItem) => (
             <SidebarItem
               key={item.id}
               id={item.id}
@@ -90,7 +86,7 @@ export const Sidebar: FunctionComponent<Props> = ({ pageChange }) => {
               text={item.text}
               expanded={expanded}
               active={item.active}
-              updateCallback={updateCallback}
+              callback={updateSidebar}
             />
           ))}
         </ul>

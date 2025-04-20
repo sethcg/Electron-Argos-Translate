@@ -10,7 +10,8 @@ interface Props {
 }
 
 export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, callback }) => {
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>({ code: '', name: 'None', enabled: false })
+  const defaultLanguage: Language = { code: '', name: 'None', enabled: false, installed: false }
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(defaultLanguage)
   const [languageOptions, setlanguageOptions] = useState<Language[]>([selectedLanguage])
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -33,7 +34,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
           if (languagesItems.some((lang: Language) => lang.code == source.code)) {
             setSelectedLanguage(source)
           } else {
-            setSelectedLanguage({ code: '', name: 'None', enabled: false })
+            setSelectedLanguage(defaultLanguage)
           }
           languagesItems = languagesItems.filter((lang: Language) => lang.code != source?.code)
           setlanguageOptions([selectedLanguage, ...languagesItems])
@@ -45,7 +46,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
           if (languagesItems.some((lang: Language) => lang.code == target.code)) {
             setSelectedLanguage(target)
           } else {
-            setSelectedLanguage({ code: '', name: 'None', enabled: false })
+            setSelectedLanguage(defaultLanguage)
           }
           languagesItems = languagesItems.filter((lang: Language) => lang.code != target?.code)
           setlanguageOptions([selectedLanguage, ...languagesItems])
@@ -54,9 +55,10 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
       }
 
       // IF NO LANGUAGES ENABLED, DEFAULT TO NONE
-      setlanguageOptions([{ code: '', name: 'None', enabled: true }])
+      setlanguageOptions([defaultLanguage])
     }
     getLanguages()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSource, selectedLanguage])
 
   return (
