@@ -5,8 +5,20 @@ import ElectronStore from 'electron-store'
 export default class Store {
   defaults: StoreType = {
     dark_mode: true,
-    source_language: { code: '', name: 'None', enabled: false, installed: false },
-    target_language: { code: '', name: 'None', enabled: false, installed: false },
+    source_language: {
+      code: '',
+      name: 'None',
+      enabled: false,
+      installed: false,
+      favorited: false,
+    },
+    target_language: {
+      code: '',
+      name: 'None',
+      enabled: false,
+      installed: false,
+      favorited: false,
+    },
     translate: {
       inter_threads: 1,
     },

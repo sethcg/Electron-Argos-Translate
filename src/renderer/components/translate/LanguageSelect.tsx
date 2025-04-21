@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, callback }) => {
-  const defaultLanguage: Language = { code: '', name: 'None', enabled: false, installed: false }
+  const defaultLanguage: Language = { code: '', name: 'None', enabled: false, installed: false, favorited: false }
   const [selectedLanguage, setSelectedLanguage] = useState<Language>(defaultLanguage)
   const [languageOptions, setlanguageOptions] = useState<Language[]>([selectedLanguage])
   const [expanded, setExpanded] = useState<boolean>(false)
@@ -26,30 +26,34 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
     async function getLanguages() {
       // GET ENABLED LANGUAGES
       let languagesItems = (await window.main.store.get('languages')) as Language[]
-      languagesItems = languagesItems.filter((lang: Language) => lang.enabled)
+      languagesItems = languagesItems.filter((lang: Language) => lang.enabled && lang.installed)
 
       if (isSource) {
         const source: Language | undefined = (await window.main.store.get('source_language')) as Language | undefined
         if (source) {
-          if (languagesItems.some((lang: Language) => lang.code == source.code)) {
-            setSelectedLanguage(source)
-          } else {
-            setSelectedLanguage(defaultLanguage)
-          }
-          languagesItems = languagesItems.filter((lang: Language) => lang.code != source?.code)
-          setlanguageOptions([selectedLanguage, ...languagesItems])
+          const selectedLanguage = languagesItems.some((lang: Language) => lang.code == source.code) ? source : defaultLanguage
+          setSelectedLanguage(selectedLanguage)
+
+          languagesItems = languagesItems.filter((lang: Language) => lang.code != source.code)
+
+          // SORT BY FAVORITED
+          const languageOptions = [selectedLanguage, ...languagesItems]
+          languageOptions.sort((a: Language, b: Language) => (a.favorited === b.favorited ? 0 : a ? -1 : 1))
+          setlanguageOptions(languageOptions)
           return
         }
       } else {
         const target: Language | undefined = (await window.main.store.get('target_language')) as Language | undefined
         if (target) {
-          if (languagesItems.some((lang: Language) => lang.code == target.code)) {
-            setSelectedLanguage(target)
-          } else {
-            setSelectedLanguage(defaultLanguage)
-          }
-          languagesItems = languagesItems.filter((lang: Language) => lang.code != target?.code)
-          setlanguageOptions([selectedLanguage, ...languagesItems])
+          const selectedLanguage = languagesItems.some((lang: Language) => lang.code == target.code) ? target : defaultLanguage
+          setSelectedLanguage(selectedLanguage)
+
+          languagesItems = languagesItems.filter((lang: Language) => lang.code != target.code)
+
+          // SORT BY FAVORITED
+          const languageOptions = [selectedLanguage, ...languagesItems]
+          languageOptions.sort((a: Language, b: Language) => (a.favorited === b.favorited ? 0 : a ? -1 : 1))
+          setlanguageOptions(languageOptions)
           return
         }
       }
@@ -59,7 +63,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
     }
     getLanguages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSource, selectedLanguage])
+  }, [selectedLanguage])
 
   return (
     <div className={`grow flex flex-row gap-4 justify-start items-center text-lg font-semibold`}>
@@ -87,7 +91,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
             'bg-primary-500/60'
           )}`}
           role="listbox">
-          {languageOptions.map((item: Language, index: number) => (
+          {languageOptions.map((item: Language) => (
             <li
               onClick={() => {
                 setLanguage(item)
@@ -98,7 +102,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
                 'relative cursor-default py-[1px] px-2 select-none border-2',
                 'hover:bg-primary-400 hover:border-charcoal-800 dark:hover:bg-primary-600/50 dark:hover:border-charcoal-100 border-transparent'
               )}`}
-              key={index}>
+              key={item.code}>
               <span className="ml-2 font-normal">{item.name}</span>
             </li>
           ))}

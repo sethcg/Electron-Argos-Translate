@@ -19,6 +19,7 @@ export type Language = {
   name: string
   enabled: boolean
   installed: boolean
+  favorited: boolean
 }
 
 export type StoreType = {

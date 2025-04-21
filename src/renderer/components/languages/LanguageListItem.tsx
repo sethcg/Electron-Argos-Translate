@@ -1,4 +1,5 @@
-import { FunctionComponent, useCallback, useState, useEffect } from 'react'
+import { FunctionComponent, useState, useEffect } from 'react'
+import { FavoriteColumn } from './LanguageListItem/FavoriteColumn'
 import { EnableColumn } from './LanguageListItem/EnableColumn'
 import { DownloadColumn } from './LanguageListItem/DownloadColumn'
 import { Language } from '~shared/types'
@@ -9,30 +10,43 @@ interface Props {
   name: string
   isEnabled: boolean
   isInstalled: boolean
+  isFavorited: boolean
   enableCallback: (code: string, enabled: boolean, callback: (enabled: boolean) => void) => void
+  favoriteCallback: (code: string, favorite: boolean, callback: (favorite: boolean) => void) => void
 }
 
-export const LanguageListItem: FunctionComponent<Props> = ({ code, name, enableCallback, isEnabled, isInstalled }) => {
-  const localStorageKey: string = `downloading:${code}`
-  const isDownloading: boolean = localStorage.getItem(localStorageKey) === 'true'
+export const LanguageListItem: FunctionComponent<Props> = ({
+  code,
+  name,
+  isEnabled,
+  isInstalled,
+  isFavorited,
+  enableCallback,
+  favoriteCallback,
+}) => {
   const [enabled, setEnabled] = useState<boolean>(isEnabled)
   const [installed, setInstalled] = useState<boolean>(isInstalled)
+  const [favorite, setFavorite] = useState<boolean>(isFavorited)
+
+  const localStorageKey: string = `downloading:${code}`
+  const isDownloading: boolean = localStorage.getItem(localStorageKey) === 'true'
   const [downloading, setDownloading] = useState<boolean>(isDownloading)
 
-  useEffect(() => {}, [enabled, installed])
-  const handleEnable = useCallback(async (enabled: boolean) => {
+  useEffect(() => {}, [enabled, favorite, installed])
+  const handleEnable = async (enabled: boolean) => {
     // WHEN DISABLING A LANGUAGE, SET SOURCE/TARGET TO DEFAULT IF NECESSARY
     if (!enabled) {
       const source: Language | undefined = (await window.main.store.get('source_language')) as Language | undefined
       const target: Language | undefined = (await window.main.store.get('target_language')) as Language | undefined
 
-      const defaultLanguage: Language = { code: '', name: 'None', enabled: false, installed: false }
+      const defaultLanguage: Language = { code: '', name: 'None', enabled: false, installed: false, favorited: false }
       if (source && source.code === code) window.main.store.set('source_language', defaultLanguage)
       if (target && target.code === code) window.main.store.set('target_language', defaultLanguage)
     }
     setEnabled(enabled)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
+
+  const handleFavorite = async (favorite: boolean) => setFavorite(favorite)
 
   const handleInstall = (code: string, installed: boolean) => {
     const isRemove: boolean = installed
@@ -68,6 +82,11 @@ export const LanguageListItem: FunctionComponent<Props> = ({ code, name, enableC
   return (
     <li className={`font-bold text-xl rounded-lg mx-2 border-2 border-charcoal-50 dark:border-charcoal-950`}>
       <div className={`${clsx('size-full flex flex-row justify-start items-center gap-4 rounded-md px-2 py-[6px]', 'bg-charcoal-700')}`}>
+        <FavoriteColumn
+          favorited={favorite}
+          disabled={!installed || downloading}
+          callback={() => favoriteCallback(code, !favorite, handleFavorite)}
+        />
         <EnableColumn
           enabled={enabled}
           installed={installed}

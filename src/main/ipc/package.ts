@@ -31,7 +31,7 @@ export default class PackageHandler {
     this.availablePackages = await this.getAvailablePackages()
 
     let requireConfigChange: boolean = false
-    let languages: Language[] = (await this.store.get('languages')) as Language[]
+    const languages: Language[] = (await this.store.get('languages')) as Language[]
     const availablePackagesLength: number = this.availablePackages.length
     for (let index = 0; index < availablePackagesLength; index++) {
       const availablePackage: LanguagePackage = this.availablePackages[index]
@@ -39,16 +39,24 @@ export default class PackageHandler {
       const languageFoundInConfig: boolean = languages.some((language: Language) => availablePackage.target_code === language.code)
       if (!languageFoundInConfig) {
         requireConfigChange = true
+
         let installed: boolean = false
         await access(path.join(this.languageFileLocation, availablePackage.filename), constants.F_OK)
           .then(() => (installed = true))
           .catch(() => (installed = false))
-        languages.push({ code: availablePackage.target_code, name: availablePackage.target_name, enabled: installed, installed: installed })
+
+        languages.push({
+          code: availablePackage.target_code,
+          name: availablePackage.target_name,
+          enabled: installed,
+          installed: installed,
+          favorited: false,
+        })
       }
     }
     if (requireConfigChange) {
       // SORT BY LANGUAGE NAME
-      languages = languages.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
+      languages.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
       this.store.resetThenSet('languages', languages)
     }
   }
