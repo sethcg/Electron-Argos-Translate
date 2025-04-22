@@ -40,6 +40,19 @@ export default class PackageHandler {
       if (!languageFoundInConfig) {
         requireConfigChange = true
 
+        // ADD THE ENGLISH LANGUAGE BY DEFAULT
+        // SINCE THE ARGOS-TRANSLATE MODELS ARE ALL ENGLISH TO [OTHER LANGUAGE]
+        if (availablePackage.target_code === 'en') {
+          languages.push({
+            code: availablePackage.target_code,
+            name: availablePackage.target_name,
+            enabled: true,
+            installed: true,
+            favorited: false,
+          })
+          continue
+        }
+
         let installed: boolean = false
         await access(path.join(this.languageFileLocation, availablePackage.filename), constants.F_OK)
           .then(() => (installed = true))
@@ -73,9 +86,27 @@ export default class PackageHandler {
     return readFile(filePath, 'utf8').then((text: string) => JSON.parse(text))
   }
 
+  private setLanguageConfig = async (code: string, enabled: boolean, installed: boolean) => {
+    // SET THE CONFIG
+    const languages: Language[] = (await this.store.get('languages')) as Language[]
+    const index: number = languages.findIndex((lang: Language) => lang.code == code)
+    languages[index].enabled = enabled
+    languages[index].installed = installed
+    this.store.set('languages', languages)
+  }
+
   private downloadLanguagePackageEvent = (): void => {
     ipcMain.handle('package:download', async (_, code: string): Promise<void> => {
       const start: number = performance.now()
+
+      // TO "DOWNLOAD" ENGLISH MEANS TO ENABLE,
+      // SINCE THE ARGOS-TRANSLATE MODELS ARE ALL ENGLISH TO [OTHER LANGUAGE]
+      if (code == 'en') {
+        await this.setLanguageConfig(code, true, true)
+        this.mainWindow.webContents.send('package:downloadComplete', code)
+        return
+      }
+
       const packages: LanguagePackage[] = this.availablePackages.filter(
         (languagePackage: LanguagePackage) => languagePackage.source_code == code || languagePackage.target_code == code
       )
@@ -125,11 +156,7 @@ export default class PackageHandler {
       }
 
       // SET THE CONFIG
-      const languages: Language[] = (await this.store.get('languages')) as Language[]
-      const index: number = languages.findIndex((lang: Language) => lang.code == code)
-      languages[index].enabled = true
-      languages[index].installed = true
-      this.store.set('languages', languages)
+      await this.setLanguageConfig(code, true, true)
 
       // SEND OUT THE IPC RENDERER EVENT
       await this.translateServer.setCache()
@@ -140,9 +167,19 @@ export default class PackageHandler {
 
   private deleteLanguagePackageEvent = (): void => {
     ipcMain.handle('package:delete', async (_, code: string): Promise<void> => {
+      const start: number = performance.now()
+      // TO "REMOVE" ENGLISH MEANS TO DISABLE,
+      // SINCE THE ARGOS-TRANSLATE MODELS ARE ALL ENGLISH TO [OTHER LANGUAGE]
+      if (code == 'en') {
+        await this.setLanguageConfig(code, false, false)
+        this.mainWindow.webContents.send('package:deleteComplete', code)
+        return
+      }
+
       const packages: LanguagePackage[] = this.availablePackages.filter(
         (languagePackage: LanguagePackage) => languagePackage.source_code == code || languagePackage.target_code == code
       )
+
       for (let index = 0; index < packages.length; index++) {
         const filePath: string = path.join(this.languageFileLocation, packages[index].filename)
         await access(filePath, constants.F_OK)
@@ -153,14 +190,11 @@ export default class PackageHandler {
       }
 
       // SET THE CONFIG
-      const languages: Language[] = (await this.store.get('languages')) as Language[]
-      const index: number = languages.findIndex((lang: Language) => lang.code == code)
-      languages[index].enabled = false
-      languages[index].installed = false
-      this.store.set('languages', languages)
+      await this.setLanguageConfig(code, false, false)
 
       // SEND OUT THE IPC RENDERER EVENT
       this.mainWindow.webContents.send('package:deleteComplete', code)
+      console.log(`LANGUAGE DELETE TOOK: ${Math.round(performance.now() - start)} ms`)
     })
   }
 }

@@ -13,6 +13,8 @@
   --content-max-height: calc(100vh - 32px);
 
   --animate-spin: spin 2.5s linear infinite;
+  --animate-sidebar-expand: sidebar-expand 0.9s forwards;
+  --animate-sidebar-shrink: sidebar-shrink 0.9s forwards;
 
   --color-charcoal-950: oklch(0.08 0 0); /* #020202 */
   --color-charcoal-900: oklch(0.13 0 0); /* #070707 */
@@ -44,6 +46,15 @@
     --color-primary-600: oklch(0.35 0.1 172); /* #004935 */
     --color-primary-500: oklch(0.45 0.1 172); /* #00664f */
     --color-primary-400: oklch(0.55 0.1 172); /* #19846b */
+  }
+
+  @keyframes sidebar-expand  {
+    to { transform: rotate(180deg); }
+  }
+
+  @keyframes sidebar-shrink  {
+    from { transform: rotate(180deg); }
+    to { transform: rotate(0deg); }
   }
 
   .splash-screen {

@@ -68,7 +68,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
   return (
     <div className={`grow flex flex-row gap-4 justify-start items-center text-lg font-semibold`}>
       <span className="mb-2">{title}</span>
-      <div className="relative grow max-w-56 w-56">
+      <div className="relative max-w-56 grow">
         <button
           onDoubleClick={() => setExpanded(false)}
           onAuxClick={() => setExpanded(false)}

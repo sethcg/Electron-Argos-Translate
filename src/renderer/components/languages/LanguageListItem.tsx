@@ -78,7 +78,6 @@ export const LanguageListItem: FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // TO-DO: ADD FAVORITE FEATURE COLUMN; ALLOWING USERS TO SELECT LANGUAGES AS FAVORITES
   return (
     <li className={`font-bold text-xl rounded-lg mx-2 border-2 border-charcoal-50 dark:border-charcoal-950`}>
       <div className={`${clsx('size-full flex flex-row justify-start items-center gap-4 rounded-md px-2 py-[6px]', 'bg-charcoal-700')}`}>
@@ -96,7 +95,12 @@ export const LanguageListItem: FunctionComponent<Props> = ({
         <span className={`grow flex items-center px-2 h-[40px]`}>
           <span className={`${installed ? '' : 'text-charcoal-700 dark:text-charcoal-200'}`}>{name}</span>
         </span>
-        <DownloadColumn installed={installed} downloading={downloading} callback={() => handleInstall(code, installed)} />
+        <DownloadColumn
+          installed={installed}
+          favorited={favorite}
+          downloading={downloading}
+          callback={() => handleInstall(code, installed)}
+        />
       </div>
     </li>
   )

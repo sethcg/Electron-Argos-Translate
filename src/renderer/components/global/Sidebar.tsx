@@ -71,7 +71,7 @@ export const Sidebar: FunctionComponent<Props> = ({ callback }) => {
   }, [setExpanded])
 
   return (
-    <div className={`w-min-[64px] w-max-[196px] transition-all ${expanded ? 'w-[196px]' : 'w-[64px]'}`}>
+    <div className={`w-min-[64px] w-max-[196px] transition-all duration-700 ${expanded ? 'w-[196px]' : 'w-[64px]'}`}>
       <nav
         className={`${clsx(
           'flex h-full flex-col items-center justify-between border-r-2 shadow-sm',
@@ -90,7 +90,7 @@ export const Sidebar: FunctionComponent<Props> = ({ callback }) => {
             />
           ))}
         </ul>
-        <div className={`hidden md:flex w-full py-2 ${expanded ? 'px-2 justify-end' : 'justify-center'}`}>
+        <div className={`hidden md:flex w-full py-2 transition-all duration-400 justify-end ${expanded ? 'px-2 justify-end' : 'pe-4'}`}>
           <button
             className={`${clsx(
               'flex size-[32px] justify-center items-center rounded-xl bg-primary-500/50 hover:bg-primary-500/90',
@@ -99,10 +99,9 @@ export const Sidebar: FunctionComponent<Props> = ({ callback }) => {
             onClick={() => setExpanded((current: boolean) => !current)}>
             <ChevronLeftRoundedIcon
               sx={{ fontSize: 32 }}
-              className={`transition-all duration-300 ${expanded ? 'rotate-0' : 'rotate-180'}`}
+              className={`transition-all ${expanded ? 'animate-sidebar-expand' : 'animate-sidebar-shrink'}`}
               strokeWidth={2.5}
             />
-            <span className={`overflow-hidden text-start transition-all`} />
           </button>
         </div>
       </nav>

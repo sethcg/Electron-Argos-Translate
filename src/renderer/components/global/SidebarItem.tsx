@@ -13,7 +13,7 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, active, 
   useEffect(() => {}, [expanded])
 
   return (
-    <li className={`font-roboto font-bold text-xl ${expanded ? 'mx-2' : ''}`}>
+    <li className={`font-roboto font-bold text-xl transition-all duration-700 ${expanded ? 'mx-2' : ''}`}>
       {useMemo(() => {
         return (
           <button
@@ -22,7 +22,7 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, active, 
           `}
             onClick={() => callback(id, true)}>
             {icon}
-            <span className={`overflow-hidden text-start transition-all ${expanded ? 'pl-4 w-32' : 'w-0'}`}>{text}</span>
+            <span className={`overflow-hidden text-start transition-all duration-700 ${expanded ? 'pl-4 w-32' : 'w-0'}`}>{text}</span>
           </button>
         )
       }, [id, text, icon, active, expanded, callback])}

@@ -2,15 +2,17 @@ import { FunctionComponent } from 'react'
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded'
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded'
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded'
+import BlockRoundedIcon from '@mui/icons-material/BlockRounded'
 import clsx from 'clsx'
 
 interface Props {
   installed: boolean
+  favorited: boolean
   downloading: boolean
   callback: () => void
 }
 
-export const DownloadColumn: FunctionComponent<Props> = ({ downloading, installed, callback }) => {
+export const DownloadColumn: FunctionComponent<Props> = ({ installed, favorited, downloading, callback }) => {
   return (
     <>
       <div
@@ -28,19 +30,23 @@ export const DownloadColumn: FunctionComponent<Props> = ({ downloading, installe
       </div>
       <div className="group relative size-[40px]">
         <button
-          disabled={downloading}
+          disabled={favorited || downloading}
           onClick={callback}
           className={`${clsx(
             'flex flex-row justify-center items-center cursor-pointer rounded-md p-1 gap-[1px] transition-all duration-200 ease-in-out focus:outline-none',
             `${
-              installed
-                ? 'dark:bg-red-500/30 dark:hover:bg-red-500/40'
-                : downloading
-                  ? 'dark:bg-amber-500/30 dark:hover:bg-amber-500/40'
-                  : 'dark:bg-emerald-500/30 dark:hover:bg-emerald-500/40'
+              favorited
+                ? 'dark:bg-amber-500/30 dark:hover:bg-amber-500/40'
+                : installed
+                  ? 'dark:bg-red-500/30 dark:hover:bg-red-500/40'
+                  : downloading
+                    ? 'dark:bg-amber-500/30 dark:hover:bg-amber-500/40'
+                    : 'dark:bg-emerald-500/30 dark:hover:bg-emerald-500/40'
             }`
           )}`}>
-          {installed ? (
+          {favorited ? (
+            <BlockRoundedIcon sx={{ fontSize: 32 }} />
+          ) : installed ? (
             <DeleteForeverRoundedIcon sx={{ fontSize: 32 }} />
           ) : downloading ? (
             <AccessTimeRoundedIcon sx={{ fontSize: 32 }} />
@@ -52,9 +58,9 @@ export const DownloadColumn: FunctionComponent<Props> = ({ downloading, installe
           className={`${clsx(
             'absolute right-12 top-1.5 scale-0 rounded px-2 py-1 text-sm group-hover:scale-100 transition-opacity',
             `${downloading ? 'hidden' : ''}`,
-            `${installed ? 'bg-red-500/20' : 'bg-emerald-500/20'}`
+            `${favorited ? 'bg-amber-500/20' : installed ? 'bg-red-500/20' : 'bg-emerald-500/20'}`
           )}`}>
-          <span>{installed ? 'Delete' : 'Download'}</span>
+          <span>{favorited ? 'Favorite' : installed ? 'Delete' : 'Download'}</span>
         </span>
       </div>
     </>

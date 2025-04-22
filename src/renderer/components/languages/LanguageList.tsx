@@ -31,9 +31,6 @@ export const LanguageList: FunctionComponent = () => {
 
   const favoriteCallback = useCallback(
     async (code: string, favorite: boolean, callback: (favorite: boolean) => void) => {
-      window.main.package.removePackageListeners('package:deleteComplete')
-      window.main.package.removePackageListeners('package:downloadComplete')
-
       // UPDATE THE CONFIG
       const configLanguages: Language[] = (await window.main.store.get('languages')) as Language[]
       const configIndex: number = configLanguages.findIndex((lang: Language) => lang.code == code)
