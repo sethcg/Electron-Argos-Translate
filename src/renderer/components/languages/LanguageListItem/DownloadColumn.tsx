@@ -19,7 +19,7 @@ export const DownloadColumn: FunctionComponent<Props> = ({ installed, favorited,
         className={`${clsx(
           'flex flex-row justify-center items-center gap-[3px] px-[10px] py-[5px] rounded-lg',
           `${downloading ? '' : 'hidden'}`,
-          'dark:bg-amber-500/30'
+          'bg-amber-500/60 dark:bg-amber-500/30'
         )}`}>
         <span className="text-sm font-roboto">Downloading</span>
         <div className="pt-3 flex flex-row gap-[3px]">
@@ -33,15 +33,15 @@ export const DownloadColumn: FunctionComponent<Props> = ({ installed, favorited,
           disabled={favorited || downloading}
           onClick={callback}
           className={`${clsx(
-            'flex flex-row justify-center items-center cursor-pointer rounded-md p-1 gap-[1px] transition-all duration-200 ease-in-out focus:outline-none',
+            'flex flex-row justify-center items-center cursor-pointer rounded-md p-1 gap-[1px] transition-[background-color] duration-200 ease-in-out focus:outline-none',
             `${
               favorited
-                ? 'dark:bg-amber-500/30 dark:hover:bg-amber-500/40'
+                ? 'bg-amber-500/60 hover:bg-amber-500/70 dark:bg-amber-500/30 dark:hover:bg-amber-500/40'
                 : installed
-                  ? 'dark:bg-red-500/30 dark:hover:bg-red-500/40'
+                  ? 'bg-red-500/60 hover:bg-red-500/70 dark:bg-red-500/30 dark:hover:bg-red-500/40'
                   : downloading
-                    ? 'dark:bg-amber-500/30 dark:hover:bg-amber-500/40'
-                    : 'dark:bg-emerald-500/30 dark:hover:bg-emerald-500/40'
+                    ? 'bg-amber-500/60 dark:bg-amber-500/30'
+                    : 'bg-emerald-500/60 hover:bg-emerald-500/70 dark:bg-emerald-500/30 dark:hover:bg-emerald-500/40'
             }`
           )}`}>
           {favorited ? (
@@ -58,7 +58,7 @@ export const DownloadColumn: FunctionComponent<Props> = ({ installed, favorited,
           className={`${clsx(
             'absolute right-12 top-1.5 scale-0 rounded px-2 py-1 text-sm group-hover:scale-100 transition-opacity',
             `${downloading ? 'hidden' : ''}`,
-            `${favorited ? 'bg-amber-500/20' : installed ? 'bg-red-500/20' : 'bg-emerald-500/20'}`
+            `${favorited ? 'bg-amber-500/50 dark:bg-amber-500/20' : installed ? 'bg-red-500/50 dark:bg-red-500/20' : 'bg-emerald-500/60 dark:bg-emerald-500/20'}`
           )}`}>
           <span>{favorited ? 'Favorite' : installed ? 'Delete' : 'Download'}</span>
         </span>

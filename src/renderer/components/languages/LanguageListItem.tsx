@@ -79,8 +79,12 @@ export const LanguageListItem: FunctionComponent<Props> = ({
   }, [])
 
   return (
-    <li className={`font-bold text-xl rounded-lg mx-2 border-2 border-charcoal-50 dark:border-charcoal-950`}>
-      <div className={`${clsx('size-full flex flex-row justify-start items-center gap-4 rounded-md px-2 py-[6px]', 'bg-charcoal-700')}`}>
+    <li className={`font-bold text-xl rounded-lg mx-2 border-2 border-charcoal-50/50 dark:border-charcoal-950`}>
+      <div
+        className={`${clsx(
+          'size-full flex flex-row justify-start items-center gap-4 rounded-md px-2 py-[6px]',
+          'bg-charcoal-200 dark:bg-charcoal-700'
+        )}`}>
         <FavoriteColumn
           favorited={favorite}
           disabled={!installed || downloading}
@@ -93,7 +97,7 @@ export const LanguageListItem: FunctionComponent<Props> = ({
           callback={() => enableCallback(code, !enabled, handleEnable)}
         />
         <span className={`grow flex items-center px-2 h-[40px]`}>
-          <span className={`${installed ? '' : 'text-charcoal-700 dark:text-charcoal-200'}`}>{name}</span>
+          <span className={`${installed ? '' : 'text-charcoal-950 dark:text-charcoal-200'}`}>{name}</span>
         </span>
         <DownloadColumn
           installed={installed}

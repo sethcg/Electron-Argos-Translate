@@ -66,7 +66,7 @@ export const LanguageSelect: FunctionComponent<Props> = ({ isSource, title, call
   }, [selectedLanguage])
 
   return (
-    <div className={`grow flex flex-row gap-4 justify-start items-center text-lg font-semibold`}>
+    <div className={'grow flex flex-row gap-4 justify-start items-center text-lg font-semibold transition-colors duration-700'}>
       <span className="mb-2">{title}</span>
       <div className="relative max-w-56 grow">
         <button

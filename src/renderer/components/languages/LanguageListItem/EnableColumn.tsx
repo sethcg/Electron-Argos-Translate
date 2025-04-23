@@ -16,14 +16,18 @@ export const EnableColumn: FunctionComponent<Props> = ({ enabled, disabled, inst
       disabled={disabled}
       onChange={callback}
       className={`${clsx(
-        'group relative flex h-7 w-14 cursor-pointer rounded-full p-1 transition-colors duration-200 ease-in-out focus:outline-none',
-        `${installed ? 'dark:bg-red-500/30 dark:hover:bg-red-500/40 data-checked:dark:bg-emerald-500/30 data-checked:dark:hover:bg-emerald-500/40' : 'dark:bg-charcoal-600 dark:hover:bg-charcoal-600'}`
+        'group relative cursor-pointer flex h-7 w-14 rounded-full p-1 transition-[background-color] duration-200 ease-in-out focus:outline-none',
+        `${
+          installed
+            ? 'bg-red-500/55 hover:bg-red-500/65 data-checked:bg-emerald-500/60 data-checked:hover:bg-emerald-500/80 dark:bg-red-500/30 dark:hover:bg-red-500/40 data-checked:dark:bg-emerald-500/30 data-checked:dark:hover:bg-emerald-500/40'
+            : 'bg-charcoal-100 dark:bg-charcoal-600'
+        }`
       )}`}>
       <span
         className={`${clsx(
           'pointer-events-none inline-block size-5 translate-x-0 rounded-full ring-0 shadow-lg',
           'transition duration-200 ease-in-out group-data-[checked]:translate-x-7',
-          `${installed ? 'bg-white' : 'bg-charcoal-400'}`
+          `${installed ? 'bg-charcoal-700 dark:bg-charcoal-50' : 'bg-charcoal-400 dark:bg-charcoal-400'}`
         )}`}
       />
     </Switch>

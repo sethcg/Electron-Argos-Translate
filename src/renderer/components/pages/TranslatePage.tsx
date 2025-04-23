@@ -19,7 +19,7 @@ export const TranslatePage: FunctionComponent = () => {
       const target: Language | undefined = (await window.main.store.get('target_language')) as Language | undefined
 
       if (source && target && targetTextRef.current) {
-        const translation: TranslateResponse | undefined = await window.api.translate(source.code, target.code, sourceText)
+        const translation: TranslateResponse | undefined = await window.main.translate(source.code, target.code, sourceText)
         const text: string = translation?.text ?? ''
         targetTextRef.current.value = text
       }
@@ -59,7 +59,7 @@ export const TranslatePage: FunctionComponent = () => {
       <div className="flex max-[960px]:flex-col flex-row grow px-4">
         <div className="flex flex-col min-[960px]:max-w-2xl max-h-96 grow">
           <LanguageSelect isSource={true} title={'Translate from'} callback={translate} />
-          <div className="relative size-full">
+          <div className="relative size-full transition-colors duration-700">
             {/* SOURCE TEXT AREA */}
             <Textarea
               value={sourceText}

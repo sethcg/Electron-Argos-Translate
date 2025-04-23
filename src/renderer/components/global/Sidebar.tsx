@@ -1,8 +1,9 @@
-import { useState, useLayoutEffect, ReactElement, FunctionComponent, useCallback } from 'react'
+import { useState, useLayoutEffect, ReactElement, FunctionComponent, useCallback, useEffect } from 'react'
 import { SidebarItem } from './SidebarItem'
 import { LanguagePage } from '~components/pages/LanguagePage'
 import { SettingsPage } from '~components/pages/SettingsPage'
 import { TranslatePage } from '~components/pages/TranslatePage'
+import { DarkModeToggle } from './DarkModeToggle'
 import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded'
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded'
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'
@@ -59,6 +60,7 @@ export const Sidebar: FunctionComponent<Props> = ({ callback }) => {
   )
 
   // WHEN THE WINDOW GETS TOO SMALL, HIDE EXPANDED SIDEBAR
+  useEffect(() => {}, [expanded])
   useLayoutEffect(() => {
     function updateSize() {
       if (window.innerWidth < 800) {
@@ -71,10 +73,11 @@ export const Sidebar: FunctionComponent<Props> = ({ callback }) => {
   }, [setExpanded])
 
   return (
-    <div className={`w-min-[64px] w-max-[196px] transition-all duration-700 ${expanded ? 'w-[196px]' : 'w-[64px]'}`}>
+    <div className={`w-min-[64px] w-max-[196px] transition-[width] duration-700 ${expanded ? 'w-[196px]' : 'w-[64px]'}`}>
       <nav
         className={`${clsx(
           'flex h-full flex-col items-center justify-between border-r-2 shadow-sm',
+          'transition-colors duration-700',
           'bg-charcoal-200 border-charcoal-300 dark:bg-charcoal-700 dark:border-charcoal-800'
         )}`}>
         <ul className="flex flex-col gap-2 p-2 overflow-hidden items-center justify-between">
@@ -90,17 +93,18 @@ export const Sidebar: FunctionComponent<Props> = ({ callback }) => {
             />
           ))}
         </ul>
-        <div className={`hidden md:flex w-full py-2 transition-all duration-400 justify-end ${expanded ? 'px-2 justify-end' : 'pe-4'}`}>
+        <div className={`hidden md:flex w-full py-2 transition-[padding] duration-400 justify-end ${expanded ? 'px-2' : 'pe-2.5'}`}>
+          <DarkModeToggle expanded={expanded} />
           <button
             className={`${clsx(
-              'flex size-[32px] justify-center items-center rounded-xl bg-primary-500/50 hover:bg-primary-500/90',
+              'flex size-[36px] m-[4px] justify-center items-center rounded-xl',
+              'bg-primary-500 hover:bg-primary-600 dark:bg-primary-500/50 dark:hover:bg-primary-500/90',
               'text-charcoal-900 hover:text-charcoal-950 dark:text-charcoal-100 dark:hover:text-charcoal-50'
             )}`}
             onClick={() => setExpanded((current: boolean) => !current)}>
             <ChevronLeftRoundedIcon
-              sx={{ fontSize: 32 }}
-              className={`transition-all ${expanded ? 'animate-sidebar-expand' : 'animate-sidebar-shrink'}`}
-              strokeWidth={2.5}
+              sx={{ fontSize: 36 }}
+              className={`transition-[rotate] ${expanded ? 'animate-sidebar-expand' : 'animate-sidebar-shrink'}`}
             />
           </button>
         </div>

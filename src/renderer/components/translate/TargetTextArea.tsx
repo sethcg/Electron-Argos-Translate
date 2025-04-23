@@ -8,7 +8,7 @@ interface Props {
 
 export const TargetTextArea: FunctionComponent<Props> = ({ textRef }) => {
   return (
-    <div className="relative size-full">
+    <div className={'relative size-full transition-colors duration-700'}>
       <Textarea
         ref={textRef}
         disabled

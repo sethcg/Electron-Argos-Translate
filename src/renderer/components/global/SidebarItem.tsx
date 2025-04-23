@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement, useEffect, useMemo } from 'react'
+import { FunctionComponent, ReactElement, useEffect, CSSProperties, useMemo } from 'react'
 
 interface Props {
   id: number
@@ -13,8 +13,11 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, active, 
   useEffect(() => {}, [expanded])
 
   return (
-    <li className={`font-roboto font-bold text-xl transition-all duration-700 ${expanded ? 'mx-2' : ''}`}>
+    <li className={`font-roboto font-bold text-xl transition-[margin] duration-700 ${expanded ? 'mx-2' : ''}`}>
       {useMemo(() => {
+        // Special style to include two transition properties on the expanded sidebar
+        const transitionStyle: CSSProperties = { transitionProperty: 'width, padding' } as CSSProperties
+
         return (
           <button
             className={`relative flex flex-row cursor-pointer items-center rounded-md p-2 
@@ -22,10 +25,12 @@ export const SidebarItem: FunctionComponent<Props> = ({ id, icon, text, active, 
           `}
             onClick={() => callback(id, true)}>
             {icon}
-            <span className={`overflow-hidden text-start transition-all duration-700 ${expanded ? 'pl-4 w-32' : 'w-0'}`}>{text}</span>
+            <span style={transitionStyle} className={`overflow-hidden text-start duration-700 ${expanded ? 'pl-4 w-32' : 'w-0'}`}>
+              {text}
+            </span>
           </button>
         )
-      }, [id, text, icon, active, expanded, callback])}
+      }, [active, icon, expanded, text, callback, id])}
     </li>
   )
 }

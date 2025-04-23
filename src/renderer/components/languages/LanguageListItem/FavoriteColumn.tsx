@@ -16,7 +16,14 @@ export const FavoriteColumn: FunctionComponent<Props> = ({ favorited, disabled, 
         <button
           onClick={callback}
           disabled={disabled}
-          className={`${clsx('cursor-pointer', `${favorited && !disabled ? 'dark:text-amber-400/90 dark:hover:text-amber-400/60' : 'dark:text-charcoal-500 dark:hover:text-charcoal-400'}`)}`}>
+          className={`${clsx(
+            'cursor-pointer',
+            `${
+              favorited && !disabled
+                ? 'text-amber-400/90 hover:text-amber-400/60 dark:text-amber-400/90 dark:hover:text-amber-400/60'
+                : 'text-charcoal-600 hover:text-charcoal-400 dark:text-charcoal-500 dark:hover:text-charcoal-400'
+            }`
+          )}`}>
           {favorited && !disabled ? <StarRoundedIcon sx={{ fontSize: 32 }} /> : <StarBorderRoundedIcon sx={{ fontSize: 32 }} />}
         </button>
       </div>

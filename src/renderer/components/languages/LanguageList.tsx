@@ -10,11 +10,13 @@ export const LanguageList: FunctionComponent = () => {
       let languages: Language[] = (await window.main.store.get('languages')) as Language[]
 
       // SET MAX LISTENERS TO AVOID NODE WARNING MESSAGES
-      window.main.package.setMaxPackageListeners(languages.length * 2)
+      // TAKING INTO ACCOUNT THE OTHER GLOBAL LISTENERS: "darkMode", ...
+      const globalListenerCount = 1
+      window.main.setMaxListeners(languages.length * 2 + globalListenerCount)
 
       // ON COMPONENT MOUNT REMOVE OLD PACKAGE LISTENERS
-      window.main.package.removePackageListeners('package:deleteComplete')
-      window.main.package.removePackageListeners('package:downloadComplete')
+      window.main.removeListeners('package:deleteComplete')
+      window.main.removeListeners('package:downloadComplete')
 
       // SORT FAVORITE LANGUAGES BY LANGUAGE NAME
       const favoriteLanguages: Language[] = languages.filter((langauge: Language) => langauge.favorited)

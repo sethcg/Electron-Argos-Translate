@@ -33,8 +33,8 @@ export const InterThreadSetting: FunctionComponent = () => {
   return (
     <div className="w-full flex px-4 self-start">
       <Field className={'grow flex flex-col gap-2'}>
-        <Label className="text-xl font-bold">Inter-threads</Label>
-        <Description className="text-sm italic text-charcoal-700 dark:text-charcoal-200">
+        <Label className="text-xl font-bold transition-colors duration-700">Inter-threads</Label>
+        <Description className="text-sm italic transition-colors duration-700 text-charcoal-700 dark:text-charcoal-200">
           Maximum number of threads for parallel translations.
         </Description>
         <div className="flex flex-col gap-4 justify-center items-center mt-1">
@@ -44,6 +44,7 @@ export const InterThreadSetting: FunctionComponent = () => {
             onChange={event => setInterThreadNum(parseInt(event.target.value))}
             className={`${clsx(
               'self-start block rounded-md py-1.5 px-3 border-none focus:outline-none text-md',
+              'transition-colors duration-500',
               'dark:bg-charcoal-400/70 bg-charcoal-50'
             )}`}
           />

@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import started from 'electron-squirrel-startup'
 import getPort from 'get-port'
 
@@ -84,6 +84,11 @@ app.whenReady().then(async () => {
   const store: Store = new Store()
   const splashScreenWindow: BrowserWindow = createSplashScreenWindow()
   const mainWindow: MainWindow = createMainWindow()
+
+  // COLOR SCHEME (DARK/LIGHT MODE) IPC EVENTS
+  ipcMain.handle('colorScheme:change', async (_, isDarkMode: boolean): Promise<void> => {
+    mainWindow.webContents.send('colorScheme:changed', isDarkMode)
+  })
 
   const port: string = `${await getPort()}`
   const translateServer: TranslateServer = new TranslateServer(store, port)
