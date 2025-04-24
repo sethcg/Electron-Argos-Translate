@@ -18,8 +18,9 @@ function App() {
     // SET DARK MODE TOGGLE LISTENER
     window.main.removeListeners('colorScheme:changed')
     window.main.setMaxListeners(1)
-    window.main.colorSchemeChanged((isDarkMode: boolean) => {
+    window.main.colorSchemeChanged(async (isDarkMode: boolean) => {
       setIsDarkMode(isDarkMode)
+      window.main.store.set('dark_mode', isDarkMode)
     })
   }, [])
 

@@ -59,7 +59,7 @@ export const TranslatePage: FunctionComponent = () => {
       <div className="flex max-[960px]:flex-col flex-row grow px-4">
         <div className="flex flex-col min-[960px]:max-w-2xl max-h-96 grow">
           <LanguageSelect isSource={true} title={'Translate from'} callback={translate} />
-          <div className="relative size-full transition-colors duration-700">
+          <div className="relative size-full">
             {/* SOURCE TEXT AREA */}
             <Textarea
               value={sourceText}
@@ -68,11 +68,16 @@ export const TranslatePage: FunctionComponent = () => {
               maxLength={2000}
               className={`${clsx(
                 'absolute block size-full resize-none rounded-md border-none py-1.5 px-3 text-sm',
+                'transition-colors duration-800',
                 'dark:bg-charcoal-400/70 bg-charcoal-50',
                 'focus:outline-none'
               )}`}
             />
-            <span className="absolute select-none text-sm pb-[5px] pr-[10px] bottom-0 right-0">{`${charCount} / ${charMax}`}</span>
+            <span
+              className={`${clsx(
+                'absolute select-none text-sm pb-[5px] pr-[10px] bottom-0 right-0',
+                'transition-[color] duration-800'
+              )}`}>{`${charCount} / ${charMax}`}</span>
           </div>
         </div>
         <div className="flex m-4 size-10 justify-center">

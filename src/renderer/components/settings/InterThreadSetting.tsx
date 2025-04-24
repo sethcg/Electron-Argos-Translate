@@ -44,7 +44,7 @@ export const InterThreadSetting: FunctionComponent = () => {
             onChange={event => setInterThreadNum(parseInt(event.target.value))}
             className={`${clsx(
               'self-start block rounded-md py-1.5 px-3 border-none focus:outline-none text-md',
-              'transition-colors duration-500',
+              'transition-colors duration-800',
               'dark:bg-charcoal-400/70 bg-charcoal-50'
             )}`}
           />

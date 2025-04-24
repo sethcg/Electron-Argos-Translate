@@ -8,7 +8,7 @@ export const WindowBar: FunctionComponent = () => {
   return (
     <div
       className={`${clsx(
-        'flex h-[32px] shadow-sm border-b-2 transition-[background-color] duration-700',
+        'flex h-[32px] shadow-sm border-b-2 transition-colors duration-700',
         'bg-charcoal-300 border-charcoal-500 dark:bg-charcoal-700 dark:border-charcoal-800'
       )}`}>
       <div className="grow window-drag" /> {/* Draggable Bar */}

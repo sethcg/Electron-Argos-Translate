@@ -17,7 +17,7 @@ export const FavoriteColumn: FunctionComponent<Props> = ({ favorited, disabled, 
           onClick={callback}
           disabled={disabled}
           className={`${clsx(
-            'cursor-pointer',
+            'cursor-pointer transition-colors duration-700',
             `${
               favorited && !disabled
                 ? 'text-amber-400/90 hover:text-amber-400/60 dark:text-amber-400/90 dark:hover:text-amber-400/60'

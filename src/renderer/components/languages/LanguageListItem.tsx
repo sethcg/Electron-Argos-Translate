@@ -83,6 +83,7 @@ export const LanguageListItem: FunctionComponent<Props> = ({
       <div
         className={`${clsx(
           'size-full flex flex-row justify-start items-center gap-4 rounded-md px-2 py-[6px]',
+          'transition-[background-color] duration-700',
           'bg-charcoal-200 dark:bg-charcoal-700'
         )}`}>
         <FavoriteColumn
@@ -97,7 +98,7 @@ export const LanguageListItem: FunctionComponent<Props> = ({
           callback={() => enableCallback(code, !enabled, handleEnable)}
         />
         <span className={`grow flex items-center px-2 h-[40px]`}>
-          <span className={`${installed ? '' : 'text-charcoal-950 dark:text-charcoal-200'}`}>{name}</span>
+          <span className={`transition-colors duration-700 ${installed ? '' : 'text-charcoal-950 dark:text-charcoal-200'}`}>{name}</span>
         </span>
         <DownloadColumn
           installed={installed}

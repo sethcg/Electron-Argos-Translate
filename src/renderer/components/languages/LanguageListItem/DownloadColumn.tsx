@@ -18,14 +18,15 @@ export const DownloadColumn: FunctionComponent<Props> = ({ installed, favorited,
       <div
         className={`${clsx(
           'flex flex-row justify-center items-center gap-[3px] px-[10px] py-[5px] rounded-lg',
+          'transition-colors duration-700',
           `${downloading ? '' : 'hidden'}`,
           'bg-amber-500/60 dark:bg-amber-500/30'
         )}`}>
         <span className="text-sm font-roboto">Downloading</span>
         <div className="pt-3 flex flex-row gap-[3px]">
-          <div className="size-1 rounded-full bg-charcoal-700 dark:bg-charcoal-50 animate-bounce [animation-delay:-1.6s]"></div>
-          <div className="size-1 rounded-full bg-charcoal-700 dark:bg-charcoal-50 animate-bounce [animation-delay:-2.4s]"></div>
-          <div className="size-1 rounded-full bg-charcoal-700 dark:bg-charcoal-50 animate-bounce [animation-delay:-3.2s]"></div>
+          <div className="size-1 rounded-full bg-charcoal-700 dark:bg-charcoal-50 animate-bounce [animation-delay:-1.6s] transition-colors duration-700"></div>
+          <div className="size-1 rounded-full bg-charcoal-700 dark:bg-charcoal-50 animate-bounce [animation-delay:-2.4s] transition-colors duration-700"></div>
+          <div className="size-1 rounded-full bg-charcoal-700 dark:bg-charcoal-50 animate-bounce [animation-delay:-3.2s] transition-colors duration-700"></div>
         </div>
       </div>
       <div className="group relative size-[40px]">
@@ -33,7 +34,8 @@ export const DownloadColumn: FunctionComponent<Props> = ({ installed, favorited,
           disabled={favorited || downloading}
           onClick={callback}
           className={`${clsx(
-            'flex flex-row justify-center items-center cursor-pointer rounded-md p-1 gap-[1px] transition-[background-color] duration-200 ease-in-out focus:outline-none',
+            'flex flex-row justify-center items-center cursor-pointer rounded-md p-1 gap-[1px] focus:outline-none',
+            'transition-colors duration-700',
             `${
               favorited
                 ? 'bg-amber-500/60 hover:bg-amber-500/70 dark:bg-amber-500/30 dark:hover:bg-amber-500/40'
@@ -57,6 +59,7 @@ export const DownloadColumn: FunctionComponent<Props> = ({ installed, favorited,
         <span
           className={`${clsx(
             'absolute right-12 top-1.5 scale-0 rounded px-2 py-1 text-sm group-hover:scale-100 transition-opacity',
+            'transition-colors duration-700',
             `${downloading ? 'hidden' : ''}`,
             `${favorited ? 'bg-amber-500/50 dark:bg-amber-500/20' : installed ? 'bg-red-500/50 dark:bg-red-500/20' : 'bg-emerald-500/60 dark:bg-emerald-500/20'}`
           )}`}>
