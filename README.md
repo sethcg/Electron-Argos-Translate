@@ -24,14 +24,14 @@ Backend Local Translation Server:
 ----
 ## Translation Demo:
 <details open>
-  <img src="https://github.com/user-attachments/assets/b4f5ea9e-be1f-465e-b96c-f9bf8c9bb892" width="540" height="431">
+  <img src="https://github.com/user-attachments/assets/fdb0bc71-0d50-4e31-b80d-1df1117d50a4" width="540" height="431">
   <br>
 </details>
 
 ----
 ## Language Selection Demo:
 <details close>
-  <img src="https://github.com/user-attachments/assets/fdb0bc71-0d50-4e31-b80d-1df1117d50a4" width="540" height="431">
+  <img src="https://github.com/user-attachments/assets/b4f5ea9e-be1f-465e-b96c-f9bf8c9bb892" width="540" height="431">
   <br>
 </details>
 
