@@ -2,16 +2,25 @@
 
 ## Description:
 
-This is an electron application that can download various Argos-Translate models for offline translation.
-- Choose source and target language, and translation will occur as you type or copy/paste in text. 
-- Languages can be downloaded, favorited, and deleted through the language list interface.
+This is an Electron application that can download various Argos-Translate models for offline translation. Choose a source language and target language, then translation will occur as you type or copy/paste into the text area. On the language list tab, languages can be downloaded, favorited, and deleted as needed to save disk space since each language model can be around 100-300mb on average.
 
 ----
 ## Features
-- Electron-Forge, React, Vite, Typescript
-- Flask-Python Translate Server
+
+Front End Electron App:
+- Electron-Forge
+- React
+- Vite 
+- Typescript
+- Prettier
+- ESLint
+
+Backend Local Translation Server:
+- Python
+- Flask
 - C2Translate
-  
+- PyInstaller 
+
 ----
 ## Translation Demo:
 <details open>
@@ -25,6 +34,10 @@ This is an electron application that can download various Argos-Translate models
   <img src="https://github.com/user-attachments/assets/fdb0bc71-0d50-4e31-b80d-1df1117d50a4" width="540" height="431">
   <br>
 </details>
+
+---
+## :warning: Attention:
+This project was fun to make, but I will likely not be able to respond to issues or pull requests (definitely not quickly). Please if you run into an issue or would like a new feature, clone to repository and improve it yourself.
 
 ---
 ## Developer Notes:
