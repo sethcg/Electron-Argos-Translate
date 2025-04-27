@@ -45,7 +45,7 @@ This project was fun to make, but I will likely not be able to respond to issues
 ```bash
 
 # Clone repository
-git clone https://github.com/sethcg/electron-argos-translate.git
+git clone https://github.com/sethcg/Electron-Argos-Translate.git
 
 # Install dependencies
 npm install
