@@ -9,8 +9,13 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 22.14.0
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
     - run: npm ci
     - run: npm run download
+    - run: pip install pyinstaller
+    - run: pyinstaller ./src/server/server.py --onefile --workpath ./src/server/build --specpath ./src/server --clean --windowed --name translate_server
     - run: npm run make
 
   build_on_mac:
@@ -20,8 +25,13 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 22.14.0
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
     - run: npm ci
     - run: npm run download
+    - run: pip install pyinstaller
+    - run: pyinstaller ./src/server/server.py --onefile --workpath ./src/server/build --specpath ./src/server --clean --windowed --name translate_server
     - run: npm run make
       
   build_on_win:
@@ -31,6 +41,11 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 22.14.0
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
     - run: npm ci
     - run: npm run download
+    - run: pip install pyinstaller
+    - run: pyinstaller ./src/server/server.py --onefile --workpath ./src/server/build --specpath ./src/server --clean --windowed --name translate_server
     - run: npm run make
