@@ -2,7 +2,7 @@ name: Build
 on: [push]
 
 jobs:
-  build_server_on_win:
+  build_server:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
@@ -16,34 +16,46 @@ jobs:
         path: dist/translate_server.exe
 
   build_on_linux:
+    needs: build_server
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: 22.14.0
+    - uses: actions/download-artifact@v4
+      with:
+        path: dist/translate_server.exe
     - run: npm ci
     - run: npm run download
     - run: npm run make
 
   build_on_mac:
+    needs: build_server
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: 22.14.0
+    - uses: actions/download-artifact@v4
+      with:
+        path: dist/translate_server.exe
     - run: npm ci
     - run: npm run download
     - run: npm run make
       
   build_on_win:
+    needs: build_server
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: 22.14.0
+    - uses: actions/download-artifact@v4
+      with:
+        path: dist/translate_server.exe
     - run: npm ci
     - run: npm run download
     - run: npm run make
