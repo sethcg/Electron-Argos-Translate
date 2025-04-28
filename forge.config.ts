@@ -1,3 +1,4 @@
+import path from 'node:path'
 import type { ForgeConfig } from '@electron-forge/shared-types'
 import { MakerSquirrel } from '@electron-forge/maker-squirrel'
 import { MakerZIP } from '@electron-forge/maker-zip'
@@ -22,10 +23,15 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({ setupIcon: '.src/assets/icons/icon.ico' }),
+    new MakerSquirrel(
+      {
+        setupIcon: path.resolve(__dirname, 'src/assets/icons/icon.ico'),
+      },
+      ['win32']
+    ),
     new MakerZIP({}, ['darwin']),
-    new MakerRpm({ options: { icon: '.src/assets/icons/icon.png' } }),
-    new MakerDeb({ options: { icon: '.src/assets/icons/icon.png' } }),
+    new MakerRpm({ options: { icon: path.resolve(__dirname, 'src/assets/icons/icon.ico') } }, ['linux']),
+    new MakerDeb({ options: { icon: path.resolve(__dirname, 'src/assets/icons/icon.ico') } }, ['linux']),
   ],
   plugins: [
     new VitePlugin({
