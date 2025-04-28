@@ -1,6 +1,6 @@
 {
-  "name": "electron-argos-translate",
-  "productName": "electron-argos-translate",
+  "name": "simple-offline-translation",
+  "productName": "simple-offline-translation",
   "version": "1.0.0",
   "author": "sethcg",
   "license": "MIT",

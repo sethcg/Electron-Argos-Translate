@@ -11,15 +11,21 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: '.src/assets/icons/icon',
-    executableName: 'electron-argos-translate',
-    extraResource: ['dist/translate_server.exe', './src/assets/package-index.json', './src/assets/xx_sent_ud_sm', './src/assets/models'],
+    executableName: 'simple-offline-translation',
+    extraResource: [
+      './src/assets/icons/icon.png',
+      'dist/translate_server.exe',
+      './src/assets/package-index.json',
+      './src/assets/xx_sent_ud_sm',
+      './src/assets/models',
+    ],
   },
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({ setupIcon: '.src/assets/icons/icon.ico' }),
     new MakerZIP({}, ['darwin']),
-    new MakerRpm({}),
-    new MakerDeb({}),
+    new MakerRpm({ options: { icon: '.src/assets/icons/icon.png' } }),
+    new MakerDeb({ options: { icon: '.src/assets/icons/icon.png' } }),
   ],
   plugins: [
     new VitePlugin({
