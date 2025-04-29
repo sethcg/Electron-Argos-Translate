@@ -1,9 +1,10 @@
 import path from 'node:path'
 import type { ForgeConfig } from '@electron-forge/shared-types'
 import { MakerSquirrel } from '@electron-forge/maker-squirrel'
-import { MakerZIP } from '@electron-forge/maker-zip'
+import { MakerDMG } from '@electron-forge/maker-dmg'
 import { MakerDeb } from '@electron-forge/maker-deb'
 import { MakerRpm } from '@electron-forge/maker-rpm'
+import { MakerZIP } from '@electron-forge/maker-zip'
 import { VitePlugin } from '@electron-forge/plugin-vite'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
@@ -23,15 +24,12 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel(
-      {
-        setupIcon: path.resolve(__dirname, 'src/assets/icons/icon.ico'),
-      },
-      ['win32']
-    ),
-    new MakerZIP({}, ['darwin']),
+    // prettier-ignore
+    new MakerSquirrel({ setupIcon: path.resolve(__dirname, 'src/assets/icons/icon.ico'), }, ['win32']),
+    new MakerDMG({ icon: path.resolve(__dirname, 'src/assets/icons/icon.png') }, ['darwin']),
     new MakerRpm({ options: { icon: path.resolve(__dirname, 'src/assets/icons/icon.ico') } }, ['linux']),
     new MakerDeb({ options: { icon: path.resolve(__dirname, 'src/assets/icons/icon.ico') } }, ['linux']),
+    new MakerZIP({}),
   ],
   plugins: [
     new VitePlugin({
@@ -69,6 +67,17 @@ const config: ForgeConfig = {
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
+  ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'sethcg',
+          name: 'Electron-Argos-Translate',
+        },
+      },
+    },
   ],
 }
 
