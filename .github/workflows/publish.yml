@@ -31,9 +31,10 @@ jobs:
         path: dist/translate_server.exe
     - run: npm ci
     - run: npm run download
+    - name: Publish
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm run publish
+        GITHUB_TOKEN: ${{ github.token }}
+      run: npm run publish
 
   publish_on_mac:
     needs: build_server
@@ -48,9 +49,10 @@ jobs:
         path: dist/translate_server.exe
     - run: npm ci
     - run: npm run download
+    - name: Publish
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm run publish
+        GITHUB_TOKEN: ${{ github.token }}
+      run: npm run publish
       
   publish_on_win:
     needs: build_server
@@ -65,6 +67,7 @@ jobs:
         path: dist/translate_server.exe
     - run: npm ci
     - run: npm run download
+    - name: Publish
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm run publish
+        GITHUB_TOKEN: ${{ github.token }}
+      run: npm run publish
