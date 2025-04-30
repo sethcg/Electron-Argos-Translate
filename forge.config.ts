@@ -16,10 +16,10 @@ const config: ForgeConfig = {
     executableName: 'simple-offline-translation',
     extraResource: [
       './src/assets/icons/icon.png',
-      'dist/translate_server.exe',
       './src/assets/package-index.json',
       './src/assets/xx_sent_ud_sm',
       './src/assets/models',
+      'dist/translate_server.exe',
     ],
   },
   rebuildConfig: {},
