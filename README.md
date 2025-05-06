@@ -36,10 +36,6 @@ Backend Local Translation Server:
 </details>
 
 ---
-## :warning: Attention:
-This project was fun to make, but I will likely not be able to respond to issues or pull requests (definitely not quickly). Please if you run into an issue or would like a new feature, clone the repository and improve it yourself.
-
----
 ## Developer Notes:
 
 ```bash
@@ -63,6 +59,12 @@ npm run start
 npm run package
 
 ```
+
+---
+
+> [!WARNING]  
+> This project was fun to make, but I will not be able to respond to issues or pull requests often.
+> Please if you run into an issue or would like a new feature, clone the repository and improve it yourself.
 
 ---
 
