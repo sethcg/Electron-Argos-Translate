@@ -5,7 +5,7 @@
 This is an Electron application that can download various Argos-Translate models for offline translation. Choose a source language and target language, then translation will occur as you type or copy/paste into the text area. On the language list tab, languages can be downloaded, favorited, and deleted as needed to save disk space since each language model can be around 100-300mb on average.
 
 ----
-## Features
+## Features:
 
 Front End Electron App:
 - Electron-Forge
@@ -24,6 +24,7 @@ Backend Local Translation Server:
 ----
 ## Translation Demo:
 <details open>
+  <summary>Show</summary>
   <img src="https://github.com/user-attachments/assets/fdb0bc71-0d50-4e31-b80d-1df1117d50a4" width="540" height="431">
   <br>
 </details>
@@ -31,6 +32,7 @@ Backend Local Translation Server:
 ----
 ## Language Selection Demo:
 <details close>
+  <summary>Show</summary>
   <img src="https://github.com/user-attachments/assets/b4f5ea9e-be1f-465e-b96c-f9bf8c9bb892" width="540" height="431">
   <br>
 </details>
