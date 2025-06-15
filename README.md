@@ -72,4 +72,4 @@ npm run package
 
 <br>
 
-> How much better to get wisdom than gold, to get insight rather than silver!
+> How much better it is to get wisdom than gold! And to get understanding is to be chosen above silver.
