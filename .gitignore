@@ -3,6 +3,8 @@ logs
 *.log
 npm-debug.log*
 
+line-count.txt
+
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 

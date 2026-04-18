@@ -62,6 +62,27 @@ npm run package
 
 ```
 
+<details closed>
+<summary><b>Line Count</b></summary>
+<br/>
+
+```bash
+
+# GET LINE COUNT (REQUIRES CLOC TO BE INSTALLED)
+cloc --include-lang=TypeScript,JavaScript,Python --exclude-dir=dist,node_modules,out,.vite --out=line-count.txt .
+
+```
+
+| Language         | Files  | Blank | Comment | Code   |
+|:-----------------|:------:|:-----:|:-------:|:------:|
+| **TypeScript**   | 36     | 197   | 94      | 1553   |
+| **Python**       | 6      | 126   | 147     | 470    |
+| **JavaScript**   | 2      | 11    | 9       | 69     |
+|                                                      |
+| **Total**        | 44     | 334   | 250     | 2092   |
+
+</details>
+
 ---
 
 > [!WARNING]  
