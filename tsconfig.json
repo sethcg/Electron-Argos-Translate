@@ -7,9 +7,8 @@
     "esModuleInterop": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "outDir": "dist",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
@@ -18,13 +17,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "*": ["node_modules/*"],
-      "~shared/*": ["src/shared/*"],
-      "~assets/*": ["src/assets/*"],
-      "~components/*": ["src/renderer/components/*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*"]
 }
